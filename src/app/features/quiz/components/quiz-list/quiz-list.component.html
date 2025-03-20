@@ -1,0 +1,35 @@
+@if(!loaded){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>}
+@else {
+<div class="iContainer">
+    <div class="">
+        <div class="d-flex gap-4 my-3 category-box-holder">
+            @for(category of categories; track $index){
+            <app-category-box [category]="category" />
+            }
+        </div>
+        <div class="table-container">
+            <div class="quiz-table">
+                <app-list-header />
+                <hr class="my-0">
+                @for(quiz of quizzes; track $index){
+                <app-quiz-template [quizData]="{
+                $index: $index,
+                role:user?.role,
+                quiz:quiz
+            }" />
+                }
+                @empty {
+                <p class="mb-0 text-center f-sm py-3">Nothing to see here</p>
+                }
+            </div>
+        </div>
+        <app-pagination [pageCount]="pageCount" [currentPage]="currentFilter.page"
+            (pageChange)="fetchQuizzes($event)" />
+
+
+    </div>
+</div>
+}

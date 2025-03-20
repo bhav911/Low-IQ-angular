@@ -1,0 +1,116 @@
+@if(!loaded){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>
+}
+@else {
+<div>
+    <!-- section1 -->
+    <div class="iContainer section1">
+        <div class="section1-box">
+            <div>
+                @if(user && user.role === 'creator'){
+                <p class="f-3md tag-line">Create, Share, and Inspire with Your Unique Quizzes!</p>
+                <p class="f-sm tag-line-description">Design engaging quizzes on topics you love and share them with the
+                    world. Let your creativity shine!</p>
+
+                }
+                @else {
+                <p class="f-3md tag-line">Learn, Play, and Test Your Knowledge with Fun Quizzes!</p>
+                <p class="f-sm tag-line-description">Challenge yourself with thousands of quizzes across various topics.
+                </p>
+                }
+            </div>
+            <div class="">
+                <img class="section1-image" src="/pngwing-flip.com.png">
+            </div>
+            <!-- <div class="curve">
+                    <svg id="wave" viewBox="0 0 1440 430" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="white"
+                            d="M0,86L60,71.7C120,57,240,29,360,50.2C480,72,600,143,720,200.7C840,258,960,301,1080,293.8C1200,287,1320,229,1440,229.3C1560,229,1680,287,1800,279.5C1920,272,2040,201,2160,157.7C2280,115,2400,100,2520,129C2640,158,2760,229,2880,243.7C3000,258,3120,215,3240,200.7C3360,186,3480,201,3600,207.8C3720,215,3840,215,3960,193.5C4080,172,4200,129,4320,114.7C4440,100,4560,115,4680,114.7C4800,115,4920,100,5040,107.5C5160,115,5280,143,5400,172C5520,201,5640,229,5760,265.2C5880,301,6000,344,6120,365.5C6240,387,6360,387,6480,322.5C6600,258,6720,129,6840,78.8C6960,29,7080,57,7200,114.7C7320,172,7440,258,7560,301C7680,344,7800,344,7920,351.2C8040,358,8160,373,8280,336.8C8400,301,8520,215,8580,172L8640,129L8640,430L8580,430C8520,430,8400,430,8280,430C8160,430,8040,430,7920,430C7800,430,7680,430,7560,430C7440,430,7320,430,7200,430C7080,430,6960,430,6840,430C6720,430,6600,430,6480,430C6360,430,6240,430,6120,430C6000,430,5880,430,5760,430C5640,430,5520,430,5400,430C5280,430,5160,430,5040,430C4920,430,4800,430,4680,430C4560,430,4440,430,4320,430C4200,430,4080,430,3960,430C3840,430,3720,430,3600,430C3480,430,3360,430,3240,430C3120,430,3000,430,2880,430C2760,430,2640,430,2520,430C2400,430,2280,430,2160,430C2040,430,1920,430,1800,430C1680,430,1560,430,1440,430C1320,430,1200,430,1080,430C960,430,840,430,720,430C600,430,480,430,360,430C240,430,120,430,60,430L0,430Z">
+                        </path>
+                    </svg>
+                </div> -->
+        </div>
+        <!-- Curve SVG Design -->
+        <!-- Website Features -->
+    </div>
+
+    <!-- call-to-action -->
+    <div class="call-to-action">
+        <div class="text-center call-to-action-box iContainer">
+            @if(user && user.role === 'creator'){
+            <p class="call-to-action-text f-lg t-l-blue">Ready to Share Your Creativity? Start Creating
+                Amazing Quizzes!</p>
+            }
+            @else {
+            <p class="call-to-action-text f-lg t-l-blue">Ready To Test Your Knowledge? Start Your Journey!
+            </p>
+            }
+            <div class="d-flex justify-content-center gap-2">
+                @if(user && user.role === 'creator'){
+                <button routerLink="/creator/quiz/create-quiz" class="btn p-n-btn">Create A Quiz</button>
+                }@else {
+                <button routerLink="/quizset" class="btn p-n-btn">Take A Quiz</button>
+                }
+                @if(!user){
+                <button routerLink="/account/register" class="btn difficulty-easy">Join now</button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- section2 -->
+    <div class="section2">
+        <div class="iContainer">
+            <div class="featured-box-holder">
+                <div class="b3 featured-item-box">
+                    <div class="featured-item-box-icon-holder">
+                        <img class="featured-item-box-icon" src="/badge.png">
+                    </div>
+                    <div class="featured-item-box-text">
+                        @if(user && user.role === 'creator'){
+                        <p class="f-md mb-0">Create Quizzes And Win Badges!</p>
+                        }@else {
+                        <p class="f-md mb-0">Complete Quiz And Win Badges!</p>
+                        }
+                    </div>
+                </div>
+                <div class="b3 featured-item-box">
+                    <div class="featured-item-box-icon-holder">
+                        <img class="featured-item-box-icon" src="/winner.png">
+                    </div>
+                    <div class="featured-item-box-text">
+                        @if(user && user.role === 'creator'){
+                        <p class="f-md mb-0">Becoming a Star Creator!</p>
+                        }@else {
+                        <p class="f-md mb-0">Climb The Ladder Of LeaderBoard!</p>
+                        }
+                    </div>
+                </div>
+                <div class="b3 featured-item-box">
+                    <div class="featured-item-box-icon-holder">
+                        <img class="featured-item-box-icon" src="/achievement.png">
+                    </div>
+                    <div class="featured-item-box-text">
+                        <p class="f-md mb-0">Create awesome quizzes and get seen!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- call-to-action-for-creator -->
+    @if(!user || (user && user.role === 'player')){
+    <div class="call-to-action call-to-action-for-creator py-5">
+        <div class="text-center call-to-action-box iContainer">
+            <p class="text-primary call-to-action-text f-lg mb-0">Create Quizzes, Inspire Minds, and Get Discovered!</p>
+            <p class="f-md">Be the Brain Behind the Fun! Start Creating Quizzes Today!</p>
+            <div class="d-flex justify-content-center gap-2">
+                <button (click)="redirectUser()" class="btn p-n-btn">Become a Creator!</button>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+}

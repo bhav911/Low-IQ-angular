@@ -1,0 +1,38 @@
+@if(!loaded){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>}
+@else {
+<div class="iContainer mb-5">
+    <div class="">
+        <div class="d-flex gap-4 my-3 category-box-holder">
+            @for(category of categories; track category._id){
+            <app-category-box [category]="category" />
+            }
+        </div>
+        <!-- <app-filter /> -->
+        <div class="mb-4 d-flex gap-2">
+            <button routerLink="/creator/quiz/create-quiz" class="btn p-n-btn f-sm">Add Quiz</button>
+        </div>
+        <div class="table-container">
+            <div class="quiz-table">
+                <creator-list-header />
+                <hr class="my-0">
+                @for(quiz of quizzes; track quiz._id){
+                <creator-quiz-template [quizData]="{
+                $index: $index,
+                role:user?.role,
+                quiz:quiz
+            }" />
+                }
+                @empty {
+                <p class="mb-0 text-center f-sm py-3">Nothing to see here</p>
+                }
+            </div>
+        </div>
+
+        <app-pagination [pageCount]="pageCount" [currentPage]="currentFilter.page"
+            (pageChange)="fetchQuizzes($event)" />
+    </div>
+</div>
+}

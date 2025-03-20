@@ -1,0 +1,28 @@
+.reviews-holder {
+  height: fit-content;
+  background-size: 200% 100%;
+  background-color: rgb(245, 245, 245);
+  animation: loading-placeholder 1.5s infinite;
+  border-radius: 4px;
+  /* Optional, adjust for rounded corners */
+}
+
+.loading-background{
+  height: 80px !important;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%) !important;
+}
+
+/* Animation for gradient */
+@keyframes loading-placeholder {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.more-option:hover{
+  color: rgb(83,83,83)
+}

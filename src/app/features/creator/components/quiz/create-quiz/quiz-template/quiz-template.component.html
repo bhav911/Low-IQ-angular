@@ -1,0 +1,96 @@
+<div class="mx-3" [formGroup]="questionForm">
+
+    <!-- question-field -->
+    <div class="option-text b3 link d-flex rounded-5 p-2 mb-md-3 mb-2">
+        <span class="fw-bold option-number question-icon rounded-circle p-2">{{ $index + 1 }}</span>
+        <div class="w-100">
+            <div class="text-center">
+                @if(question_media_preview){
+                <img class="question-media-image" [src]="question_media_preview">
+                }
+            </div>
+            <textarea #questionField (blur)="invalidQuestion()" formControlName="question" rows="1"
+                class="pt-2 w-100 question-field" [class.px-3]="!question_media_preview" [id]="'question'+$index"
+                placeholder="Question goes here..."></textarea>
+            @if(questionErrorMessage){
+            <div class="px-4">
+                <p class="error-msg f-xs mb-0">{{ questionErrorMessage }}</p>
+            </div>
+            }
+        </div>
+        @if(!isDisabled){
+        <div class="d-flex gap-2 flex-column">
+            <label for="question-media">
+                <i class="new-btn link mt-2 pt-1 pe-3 fa-solid fa-paperclip"></i>
+            </label>
+            @if(question_media_preview){
+            <span class="difficulty-hard link" (click)="removeQuestionMedia()">
+                <i class="fa-solid fa-trash"></i>
+            </span>
+            }
+        </div>
+        <input (change)="questionMediaReceived($event)" accept="image/*" class="d-none" type="file" id="question-media">
+        }
+    </div>
+
+
+
+    <!-- option-fields -->
+    <!-- [ngClass]="{'fa-check correct-answer': qf.correctOption.value === $index}" -->
+    <div class="my-3" formArrayName="options">
+        @for(option of getRange(4); track $index){
+        <div [formGroupName]="$index" class="option-text b3 link d-flex rounded-5 p-2 mb-md-3 mb-2">
+            <i class="fa-solid question-icon option-number rounded-circle" [class]="'fa-'+convertIndexToLetter($index)"
+                [ngClass]="{'fa-check correct-answer': qf.options.at($index).value.isCorrect}"
+                (click)="markAsCorrectOption($index)"></i>
+            <div class="w-100">
+                <input (blur)="invalidOptions($index)" class="py-2 option-field w-100 px-3"
+                    [placeholder]="'Option ' + convertIndexToLetter($index).toUpperCase() + ' goes here...' "
+                    type="text" [id]="'option'+$index" formControlName="option" />
+                @if(optionsErrorMessage.at($index)){
+                <div class="px-3">
+                    <p class="error-msg f-xs mb-0">{{ optionsErrorMessage.at($index) }}</p>
+                </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+
+
+    <!-- extra-options -->
+    <div class="f-sm">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex gap-2 align-items-center">
+                <span class="t-gray">Point</span>
+                <div class="d-flex gap-1 align-items-center">
+                    @if(!isDisabled){
+                    <button class="btn btn-sm point-btn rounded-circle" type="button" (click)="decrementPoint()">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    }
+                    <span class="mx-1 f-md fw-lbold">{{ qf.point.value }}</span>
+                    @if(!isDisabled){
+                    <button class="btn btn-sm point-btn rounded-circle" type="button" (click)="incrementPoint()">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    }
+                </div>
+            </div>
+            @if(!isDisabled){
+            <div class="d-flex gap-2">
+                <div>
+                    <button type="button" class="btn-sm btn clear-btn" (click)="clearQuestion()">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn-sm btn delete-btn" (click)="deleteQuestion()">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

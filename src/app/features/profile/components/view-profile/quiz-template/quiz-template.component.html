@@ -1,0 +1,12 @@
+<div class="card-3d" [class.b-secondary]="index() % 2 == 0">
+    <div class="quizlist-header f-sm">
+        <div class="row-item col-title">
+            <p class="quiz-title" (click)="redirectUser()">{{ quiz().title }}</p>
+        </div>
+        <div class="row-item col-difficulty">
+            <p class="mb-0 ps-3" [ngClass]="'difficulty-' + quiz().difficulty">
+                {{ quiz().difficulty | titlecase}}
+            </p>
+        </div>
+    </div>
+</div>

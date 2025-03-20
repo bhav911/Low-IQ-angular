@@ -1,0 +1,71 @@
+<div class="border b3 p-2 px-sm-3 px-2 mb-sm-3">
+    <div class="d-flex gap-2">
+        <div>
+            <img [routerLink]="'/profile/'+ request().creatorId.username" [src]="request().creatorId.profilePicture?.link"
+                class="profile-image link">
+        </div>
+        <div class="w-100">
+            <div class="d-flex justify-content-between gap-2">
+                <div>
+                    <p [routerLink]="'/profile/'+ request().creatorId.username" class="mb-0 link">{{
+                        request().creatorId.username
+                        }}</p>
+                </div>
+                <div class="d-flex flex-column align-items-end">
+                    <span class="t-gray f-xs text-nowrap">{{ createdAt }}</span>
+                </div>
+            </div>
+            <div>
+                <div class="mb-2 link" (click)="redirectUser()">
+                    <span class="f-md t-blue">{{
+                        request().quizId.title| titlecase }}</span>
+                </div>
+                <div class="t-gray f-xs d-flex justify-content-between align-items-end">
+                    @if(request().messageCount > 0){
+                    <span class="link more-option" (click)="toggleFeedbacksVisibility()">
+                        <i class="fa-regular fa-comment"></i>
+                        Feedbacks
+                    </span>
+                    }
+                    <span class="d-flex gap-2 ms-auto">
+                        @for(type of request().type; track $index){
+                        <span>{{ type.split('-').join(' ') | titlecase
+                            }}</span>
+                        <span class="t-l-gray">|</span>
+                        }
+                        <span class="">
+                            <span [ngClass]="getStatusClass()">{{ request().status | titlecase }}</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(ShowFeedbacks){
+<div class="m-3 reviews-holder p-3 rounded-3" [class.loading-background]="!feedbacksFetched">
+    @for(message of request().conversation; track message._id){
+    <div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column mb-2">
+                <span class="t-blue fw-lbold">{{ message.userId.username }}</span>
+                <span class="t-gray f-xs">{{ message.createdAt }}</span>
+            </div>
+            @if(message.status){
+            <span class="t-gray f-xs"> status:
+                <span [ngClass]="getFeedbackStatusClass(message._id)">
+                    {{ message.status | titlecase }}</span>
+            </span>
+            }
+        </div>
+        <div>
+            <span>{{ message.message }}</span>
+        </div>
+    </div>
+    @if(!$last){
+    <hr class="my-2">
+    }
+    }
+</div>
+}

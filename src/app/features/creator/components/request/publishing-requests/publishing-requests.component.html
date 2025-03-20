@@ -1,0 +1,16 @@
+<div class="container p-0">
+    <div class="w-100 my-3">
+        @for(request of requestList; track request._id){
+        <app-request-template [request]="request" />
+        }
+        @empty {
+        <div class="text-center">
+            <h3>No Quiz Created yet</h3>
+            <p>Create One Now</p>
+            <button class="btn btn-success" routerLink="/creator/quiz/create-quiz">Create</button>
+        </div>
+        }
+        <app-loading-spinner [isFetching]="isFetching" />
+        <div #scrollTracker></div>
+    </div>
+</div>

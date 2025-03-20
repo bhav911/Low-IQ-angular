@@ -1,0 +1,189 @@
+<div class="container mt-2 f-sm">
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+
+        <div class="f-md d-flex justify-content-between mb-2 link" (click)="toggleQuizMeta()">
+            <p class="mb-0">Quiz Details</p>
+            <span [class.rotated]="!hideQuizMeta">
+                <i class="fa-lg fa-solid fa-angle-down "></i>
+            </span>
+        </div>
+        <hr class="mt-0">
+        <!-- quiz-details -->
+        <div class="quiz-meta" [class.hide-meta]="hideQuizMeta">
+            <div class="mb-3">
+                <div class="form-floating">
+                    <input (blur)="invalidQuizTitle()" class="form-control"
+                        [ngClass]="{'is-invalid': titleErrorMessage}" type="text" formControlName="title"
+                        placeholder="" />
+                    <label class="form-label">
+                        Quiz Title
+                    </label>
+                </div>
+                @if(titleErrorMessage){
+                <div class="position-relative">
+                    <p class="error-msg f-xs mb-0">{{ titleErrorMessage }}</p>
+                </div>
+                }
+            </div>
+            <div class="mb-3">
+                <div class="form-floating">
+                    <textarea #descriptionField (blur)="invalidQuizDescription()" class="form-control description-field"
+                        [ngClass]="{'is-invalid': descriptionErrorMessage}" formControlName="description"
+                        placeholder=""></textarea>
+                    <label class="form-label">
+                        Description
+                    </label>
+                    @if(descriptionErrorMessage){
+                    <div class="position-relative">
+                        <p class="error-msg f-xs mb-0">{{ descriptionErrorMessage }}</p>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-floating">
+                    <textarea class="form-control Note" formControlName="note"
+                        placeholder="any sidenote for admin"></textarea>
+                    <label class="form-label">
+                        Note for admin
+                    </label>
+                </div>
+            </div>
+            <div class="d-flex gap-3 my-3 flex-wrap">
+                <div class="position-relative f-sm">
+                    <div>
+                        <button class="form-control filter-btn btn f-sm" type="button"
+                            (click)="!quizId() && toggleRotation(1)" [ngClass]="{'is-invalid': categoryErrorMessage}">
+                            {{ currectCategory | titlecase }}&nbsp;
+                            @if(!quizId()){
+                            <span [class.rotated]="isRotated[1]">
+                                <i class="fa-solid fa-angle-down"></i>
+                            </span>
+                            }
+                        </button>
+                    </div>
+                    <div class="accordion-dropdown p-2" [class.show]="!disableFields && isRotated[1]">
+                        <div class="d-flex dropdown-box flex-column gap-1">
+                            @if(showNewCategoryField){
+                            <div class="d-flex">
+                                <input #newCategoryValue type="text" class="t-blue new-category"
+                                    placeholder="+ New category" />
+                                <div>
+                                    <button type="button" (click)="addNewCategory(newCategoryValue.value)"
+                                        class="btn btn-sm f-sm p-n-btn rounded-3">+</button>
+                                </div>
+                            </div>
+                            }
+                            @for(category of categories; track $index){
+                            <div class="d-flex gap-2 justify-content-between">
+                                <span (click)="updateFilter('category',category._id)"
+                                    class="link category-dropdown-item p-1"
+                                    [ngClass]="{'t-blue':qf['category'].value === category._id}">{{
+                                    category.title.split('-').join(' ') | titlecase
+                                    }}</span>
+                                @if(category.creatorId === 'new'){
+                                <button type="button" class="btn btn-sm" (click)="editNewCategory(category._id)">
+                                    <i class="fa-solid fa-pen fa-sm t-blue"></i>
+                                </button>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="position-relative f-sm">
+                    <div>
+                        <button class="form-control filter-btn btn f-sm" type="button"
+                            (click)="!quizId() && toggleRotation(0)" [ngClass]="{'is-invalid': difficultyErrorMessage}"
+                            [ngClass]="'difficulty-'+quizForm.controls['difficulty'].value">
+                            {{ quizForm.controls['difficulty'].value| titlecase }}&nbsp;
+                            @if(!quizId()){
+                            <span [class.rotated]="isRotated[0]">
+                                <i class="fa-solid fa-angle-down"></i>
+                            </span>
+                            }
+                        </button>
+                    </div>
+                    <div class="accordion-dropdown p-2" [class.show]="isRotated[0]">
+                        <div class="d-flex dropdown-box flex-column gap-1">
+                            <span (click)="updateFilter('difficulty','easy')"
+                                class="difficulty-item p-1 difficulty-easy">Easy</span>
+                            <span (click)="updateFilter('difficulty','medium')"
+                                class="difficulty-item p-1 difficulty-medium">Medium</span>
+                            <span (click)="updateFilter('difficulty','hard')"
+                                class="difficulty-item p-1 difficulty-hard">Hard</span>
+                        </div>
+                    </div>
+                </div>
+                @if(!disableFields){
+                <div>
+                    <button (click)="toggleGeminiPromt()" class="btn p-n-btn" type="button">Use AI
+                        <i class="fa-regular fa-sun"></i>
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+
+        @if(showGeminiPrompt){
+        <div>
+            <textarea #geminiQuizDescription class="w-100 description-field form-control"
+                placeholder="Information related to quiz..."></textarea>
+            <span class="text-danger mb-2 f-xs">*AI can make mistake, make sure you recheck the quiz details</span>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="t-gray">Questions count: </span>
+                    <input class="w-25 form-control object-fit-contain" #geminiNumOfQuestion type="number" value="10" />
+                </div>
+                <button class="ms-2 btn difficulty-easy-bg" type="button"
+                    (click)="generateGeminiQuiz(geminiQuizDescription.value, +geminiNumOfQuestion.value)">
+                    <span [class.submitLoader]="quizGenerationInProcess">
+                        {{ quizGenerationInProcess ? '' : 'Generate' }}
+                    </span>
+                </button>
+            </div>
+        </div>
+        }
+
+
+        <div class="f-md mb-2 mt-4 d-flex justify-content-between">
+            <p class="mb-0">Question Details</p>
+            @if(!disableFields){
+            <span (click)="addQuestion()" class="link new-btn">
+                <i class="fa-solid fa-plus fa-sm me-1"></i>
+                <span>New</span>
+            </span>
+            }
+        </div>
+        <hr class="mt-0">
+        <!-- question-details -->
+        <div>
+            <div class="mb-4 position-relative">
+                @if(activeQuestionIndex() !== null){
+                @if(activeQuestionIndex()! > 0){
+                <div class="link position-absolute start-0 top-0" (click)="swipeQuestion(-1)">
+                    <i class="fa-solid fa-caret-left t-gray fa-xl mt-4 pt-1"></i>
+                </div>
+                }
+                <app-quiz-template [highLightError]="highLightError" [questionForm]="getQuestion()"
+                    [$index]="activeQuestionIndex()!" (deleteChild)="removeChild($event)" />
+                @if(questions.length > activeQuestionIndex()! + 1){
+                <div class="link position-absolute end-0 top-0" (click)="swipeQuestion(+1)">
+                    <i class="fa-solid fa-caret-right t-gray fa-xl mt-4 pt-1"></i>
+                </div>
+                }
+                }
+            </div>
+        </div>
+
+
+
+        <div class="d-flex justify-content-end gap-2 my-4">
+            <button type="submit" class="btn text-center f-sm mb-5 rounded-3 option-number submit-btn">
+                <span [class.submitLoader]="formSubmissionInProcess">
+                    {{ formSubmissionInProcess ? '' : quizId() ? 'Update Quiz' : 'Add Quiz' }}
+                </span>
+            </button>
+        </div>
+    </form>
+</div>

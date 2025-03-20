@@ -1,0 +1,21 @@
+<div class="quiz-item rounded-3 f-sm" [ngClass]="{'b-secondary':(index() % 2 == 0)}">
+    <div class="col-status">
+        @if(user && ((user.role === 'player' && quiz().isAttempted) || (user.role === 'creator' && quiz().quizStatus ===
+        'accepted'))){
+        <div class="icon-holder d-flex justify-content-center align-items-center">
+            <i class="fa-solid fa-check ps-2 ps-sm-0"></i>
+        </div>
+        }
+    </div>
+    <div class="col-title">
+        <p class="t-d-gray mb-0 quiz-title link" [routerLink]="'/quiz/' + quiz()._id + '/details'">{{ quiz().title }}
+        </p>
+    </div>
+    <div class="col-difficulty">
+        <p class="mb-0 ps-3" [ngClass]="{
+            'difficulty-easy': quiz().difficulty ==='easy',
+            'difficulty-medium': quiz().difficulty ==='medium',
+            'difficulty-hard': quiz().difficulty ==='hard',
+        }">{{ quiz().difficulty | titlecase }}</p>
+    </div>
+</div>

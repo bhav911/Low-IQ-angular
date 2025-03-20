@@ -1,0 +1,149 @@
+<div class="mb-4">
+    <div class="d-flex flex-column gap-2 text-wrap comment-item" [formGroup]="subCommentForm">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <img [src]="comment().userId.profilePicture?.link" class="profile-image me-2 link"
+                    [routerLink]="'/profile/' + comment().userId.username">
+                <p class="t-d-gray d-inline mb-0 link f-sm" [routerLink]="'/profile/' + comment().userId.username">{{
+                    comment().userId.username }}</p>
+            </div>
+            <div>
+                <span class="icon-gray f-xs">{{ createdAt }}</span>
+            </div>
+        </div>
+        @if(!showInput){
+        <div>
+            <p class="t-gray mb-0 f-sm" [innerHTML]="comment().text"></p>
+        </div>
+        <div class="d-flex gap-4 align-items-center icon-gray f-xs">
+            <div class="d-flex gap-2 align-items-center">
+                <div>
+                    <i class="fa-regular fa-thumbs-up me-1 highlight" [class.fa-solid]="comment().reaction === 'liked'"
+                        (click)="user && comment().userId._id !== user.userId && updateCommentReaction('liked')"></i>
+                    @if(comment().reactionCount.liked > 0){
+                    <span>{{ comment().reactionCount.liked }}</span>
+                    }
+                </div>
+                <div [class.d-none]="!user">
+                    <i class="fa-regular fa-thumbs-down highlight" [class.fa-solid]="comment().reaction === 'disliked'"
+                        (click)="user && comment().userId._id !== user.userId && updateCommentReaction('disliked')"></i>
+                </div>
+            </div>
+            @if(comment().repliesCount! > 0 && !showSubComments){
+            <div class="highlight" (click)="fetchSubComments()">
+                <i class="fa-regular fa-comment me-1"></i>
+                <span>{{ 'Show ' + comment().repliesCount + ' replies' }}</span>
+            </div>
+            }
+            <div [class.d-none]="!user" class="highlight" (click)="toggleReplyBox()">
+                <i class="fa-solid fa-reply me-1"></i>
+                <span>Reply</span>
+            </div>
+            @if(user){
+            <div class="highlight more-opt more-parent">
+                <i class="fa-solid fa-ellipsis fa-lg" (click)="toggleMoreOption()"></i>
+                @if(showMoreOptions){
+                <div class="more-child" (mouseleave)="toggleDeleteConfirmation(false)">
+                    <div class="border border-secondary-subtle p-1 rounded-2 more-child-parent">
+                        @if(comment().userId._id === user.userId){
+                        <div class="d-flex gap-1 align-items-center dropdown-item" (click)="editcomment()"
+                            (mouseenter)="toggleDeleteConfirmation(false)">
+                            <i class="fa-regular fa-pen-to-square "></i>
+                            <span class="">Edit</span>
+                        </div>
+                        <hr class="my-1">
+                        }
+                        @if(comment().userId._id === user.userId){
+                        <div class="d-flex gap-1 align-items-center dropdown-item"
+                            (mouseenter)="toggleDeleteConfirmation(true)">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span class="">Delete</span>
+                        </div>
+                        <hr class="my-1">
+                        }
+                        <div class="d-flex gap-1 align-items-center dropdown-item"
+                            (mouseenter)="toggleDeleteConfirmation(false)">
+                            <i class="fa-solid fa-warning"></i>
+                            <span class="">Report</span>
+                        </div>
+                    </div>
+                    <div [class.show]="showDeleteOptions"
+                        class="border border-secondary-subtle p-1 rounded-2 more-child-child">
+                        <div class="d-flex gap-1 align-items-center dropdown-item">
+                            <span class="difficulty-hard" (click)="deleteComment()">Confirm</span>
+                        </div>
+                        <hr class="my-1">
+                        <div class="d-flex gap-1 align-items-center dropdown-item">
+                            <span (click)="toggleDeleteConfirmation(false)">Cancel</span>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+        }
+        @else {
+        <div class="d-flex gap-2 align-items-center mb-1">
+            <div class="new-comment-box">
+                <textarea rows="1" appAutoSize class="t-gray f-sm" placeholder="Type here..."
+                    formControlName="editedComment">
+                </textarea>
+            </div>
+        </div>
+        <div class="d-flex gap-2 justify-content-end mb-2">
+            <button type="button" (click)="saveEditedComment()" class="f-sm btn btn-sm p-n-btn">
+                save
+            </button>
+            <button type="button" (click)="toggleInput()" class="f-sm btn btn-sm cancel-btn">
+                cancel
+            </button>
+        </div>
+        }
+        @if(showReplyInput){
+        <div class="ms-md-4 ms-3 mb-2">
+            <div class="d-flex gap-2 mb-2">
+                <div class="mt-2">
+                    <img [src]="user?.profilePicture!.link || '/pngegg.png'" class="profile-image link"
+                        [routerLink]="'/profile/' + user?.userId">
+                </div>
+                <div class="new-comment-box bg-white">
+                    <textarea #subComment rows="1" appAutoSize class="t-gray f-sm bg-white"
+                        [placeholder]="'@'+ comment().userId.username" formControlName="subComment" autofocus>
+                </textarea>
+                </div>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+                <button type="button" (click)="createReply()" class="f-sm btn btn-sm p-n-btn">
+                    reply
+                </button>
+                <button type="button" (click)="toggleReplyBox()" class="f-sm btn btn-sm cancel-btn">
+                    cancel
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+    @if(showSubComments){
+    @for(reply of comment().replies; track reply._id){
+    <div class="ms-md-4 ms-3 mt-2">
+        <app-sub-comment-box (newReply)="addNewSubComment($event)" (deleted)="removeSubComment($event)"
+            [subComment]="reply" [quizId]="quizId()" />
+    </div>
+    }
+    }
+    <div class="ms-5 mt-2">
+        @if(hasMoreComments){
+        <p (click)="fetchSubComments()" class="t-blue link f-xs">
+            <i class="fa-solid fa-angle-down"></i>
+            &nbsp;Load more
+        </p>
+        }
+        @else if(hasMoreComments === false) {
+        <p (click)="hideSubComments()" class="t-blue link f-xs">
+            <i class="fa-solid fa-angle-up"></i>
+            &nbsp;Hide
+        </p>
+        }
+    </div>
+</div>

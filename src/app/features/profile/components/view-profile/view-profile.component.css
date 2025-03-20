@@ -1,0 +1,316 @@
+.data-not-found {
+    height: 70vh;
+}
+
+.data-not-found i {
+    font-size: 2rem;
+}
+
+.profile-image {
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+}
+
+.box-1 {
+    min-width: 300px;
+}
+
+.box-2 {
+    max-width: 965px;
+}
+
+.box-2-1,
+.box-2-2,
+.box-2-3 {
+    overflow: hidden;
+}
+
+.badges-holder {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    text-wrap-mode: nowrap;
+}
+
+badges-holder::-webkit-scrollbar {
+    display: none;
+}
+
+.locked {
+    opacity: 0.4;
+}
+
+.badge-icon {
+    height: 100px;
+}
+
+.see-more {
+    width: 70px;
+}
+
+.achievement-badge {
+    height: 150px;
+}
+
+.backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.achievement-box {
+    max-width: 400px;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+
+.no-data {
+    animation: fadeIn 2.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.user-progress {
+    gap: 40px;
+}
+
+.piechart {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+
+.status-dot-published{
+    background-color: green;
+}
+
+.status-dot-unpublished{
+    background-color: gray;
+}
+
+.status-dot-rejected{
+    background-color: red;
+}
+
+.status-dot-holder{
+    height: 30px;
+    width: 30px;
+}
+
+.status-dot-holder div{
+    height: 10px;
+    width: 10px;
+}
+
+.difficulty-Overall {
+    color: #6B7280;
+}
+
+.progress-box {
+    height: 200px;
+    min-height: 200px;
+}
+
+.progress-difficuty-holder {
+    min-width: 75px;
+    flex-direction: column;
+}
+
+.progress-difficuty {
+    flex-direction: column;
+}
+
+.progress-attempted {
+    max-width: 200px;
+    min-width: 235px;
+}
+
+.progress-difficuty p {
+    margin: 0px;
+}
+
+.show {
+    display: flex !important;
+}
+
+.all-badges-holder {
+    width: calc(100% + 48px);
+    margin: 0px -24px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@media(max-width:1211px) {
+    .user-progress {
+        flex-direction: column-reverse;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+@media(max-width:860px) {
+    .partition {
+        display: none;
+    }
+
+    .see-more,
+    .achievement-wall {
+        display: none !important;
+    }
+
+    .dashboard-holder {
+        flex-direction: column;
+    }
+
+    .box-2 {
+        max-width: 100%;
+    }
+
+    .badges-holder {
+        width: calc(100% + 40px);
+        margin: 0px -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .badges-holder {
+        gap: 40px;
+    }
+
+    .progress-box {
+        width: fit-content;
+        justify-content: start;
+    }
+
+    .user-progress {
+        flex-direction: row;
+        /* align-items: normal; */
+        flex-wrap: nowrap;
+        gap: 20px;
+    }
+
+    .piechart {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media(max-width:780px) {
+    .iContainer {
+        padding: 0px;
+        margin-top: 0px !important;
+    }
+
+    .user-progress {
+        flex-direction: column-reverse;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .progress-box {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .progress-attempted {
+        max-width: 100%;
+    }
+
+    .box-1 {
+        min-width: 0px;
+    }
+
+    .box-2-1,
+    .box-2-2,
+    .box-2-3 {
+        border-radius: 0px !important;
+        border-left: none;
+        border-right: none;
+    }
+
+    .box-2-2,
+    .box-1 {
+        box-shadow: none;
+        border: none;
+    }
+
+    .badges-holder {
+        gap: 30px;
+    }
+
+    .badge-icon {
+        height: 80px;
+    }
+
+    .progress-difficuty {
+        flex-direction: row;
+        gap: 8px;
+        font-size: 13px;
+    }
+
+    .progress-difficuty-holder {
+        min-width: 125px;
+        max-width: 200px;
+        width: 100%;
+    }
+
+    .quiz-table {
+        overflow: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    quiz-table::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media(max-width:720px) {
+    .table-container {
+        margin: 0px -20px;
+        width: calc(100% + 40px);
+    }
+}
+
+@media(max-width:560px) {
+    .progress-difficuty-holder {
+        min-width: 75px;
+    }
+
+    .progress-attempted {
+        min-width: 200px;
+        height: 100%;
+    }
+}
+
+@media(max-width:370px) {
+    .progress-box:not(.piechart) {
+        flex-direction: column;
+        min-height: 270px;
+    }
+
+    .progress-difficuty-holder {
+        flex-direction: row;
+        max-width: 100%;
+    }
+
+    .progress-difficuty {
+        flex-direction: column;
+        gap: 0px;
+        font-size: 13px;
+        min-width: 0px;
+        width: 100%;
+        min-height: 60px;
+    }
+}

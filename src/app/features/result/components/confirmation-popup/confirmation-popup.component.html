@@ -1,0 +1,20 @@
+@if(load){
+<div class="backdrop">
+    <div class="d-flex flex-column bg-white p-sm-4 rounded-3 gap-3 mx-3 mx-sm-5 px-3 py-4">
+        <span class="difficulty-hard f-2md fw-bold">
+            <span><i class="fa-solid fa-triangle-exclamation"></i></span>
+            You have not attempted this quiz yet!
+        </span>
+        <p class="f-sm">If you proceed to see the result then your score for this quiz will
+            <span class="difficulty-hard fw-bold">not be counted</span>
+            and marked
+            <span class="difficulty-hard fw-bold">0</span>
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+            <button class="btn danger-btn f-sm" (click)="proceedToResult()">Proceed</button>
+            <button class="btn p-n-btn f-sm" [routerLink]="'/quiz/'+ quizId +'/details'">Attempt quiz</button>
+            <button class="btn cancel-btn f-sm" (click)="goBack()">Cancel</button>
+        </div>
+    </div>
+</div>
+}

@@ -1,0 +1,40 @@
+@if(message){
+<div class="user-message user-message--error my-3">
+    <span>{{ message }}</span>
+</div>
+}
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-control">
+        <label for="email">Email</label>
+        <input (blur)="invalidEmail()" type="text" name="email" id="email" [formControl]="formControls.email"
+            [ngClass]="{'is-invalid': errorMessage.invalidEmailMessage}">
+        @if(errorMessage.invalidEmailMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidEmailMessage }}</p>
+        </div>
+        }
+    </div>
+    <div class="form-control">
+        <label for="password">Password</label>
+        <input (blur)="invalidEmail()" type="password" name="password" id="password"
+            [formControl]="formControls.password" [ngClass]="{'is-invalid': errorMessage.invalidPasswordMessage}">
+        @if(errorMessage.invalidPasswordMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidPasswordMessage }}</p>
+        </div>
+        }
+    </div>
+
+    <button class="btn btn-primary" type="submit">Login</button>
+
+    <div class="mt-4">
+        <div>
+            <span class="me-1">Don't have an account?</span>
+            <span class="text-primary link"  (click)="redirectToLogin()">Signup</span>
+        </div>
+        <div>
+            <span class="me-1">Forgot password?</span>
+            <span class="text-primary link" routerLink="/reset-password">reset</span>
+        </div>
+    </div>
+</form>

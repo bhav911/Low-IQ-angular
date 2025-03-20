@@ -1,0 +1,9 @@
+<div class="my-3">
+    <div class="d-flex gap-2">
+        @for(page of getRange(pageCount); track $index) {
+        <button (click)="onPageClick(page)" class="btn page-numbers btn-sm border border-secondary-subtle"
+            [class.btn-secondary]="page === currentPage">
+            {{ page}}</button>
+        }
+    </div>
+</div>

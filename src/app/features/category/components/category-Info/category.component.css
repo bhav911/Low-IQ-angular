@@ -1,0 +1,225 @@
+.icon {
+    padding: 20px 20px;
+}
+
+.iContainer {
+    padding: 0px 5%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.progress-box {
+    height: 200px;
+    min-height: 200px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.status-dot-published{
+    background-color: green;
+}
+
+.status-dot-unpublished{
+    background-color: gray;
+}
+
+.status-dot-rejected{
+    background-color: red;
+}
+
+.status-dot-holder{
+    height: 30px;
+    width: 30px;
+}
+
+.status-dot-holder div{
+    height: 10px;
+    width: 10px;
+}
+
+.progress-difficuty-holder {
+    display: flex;
+    gap: 10px;
+    min-width: 75px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.progress-difficuty {
+    border: 1px solid #adb5bd;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-attempted {
+    border: 1px solid #adb5bd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 235px;
+    width: 100%;
+}
+
+.progress-difficuty p {
+    margin: 0px;
+}
+
+.first-box {
+    height: max-content;
+    position: sticky;
+    top: 0px;
+    min-width: 375px;
+    max-width: 375px;
+    display: flex;
+    flex-direction: column;
+}
+
+.second-box {
+    max-width: 900px;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.quiz-table {
+    width: 100%;
+    max-width: 900px;
+    min-width: 500px;
+    overflow-x: auto;
+}
+
+@media(max-width:995px) {
+    .iContainer {
+        flex-direction: column;
+    }
+
+    .first-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 40px;
+        max-width: 100%;
+        position: relative;
+    }
+
+    .category-meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+
+    }
+
+    .user-progress {
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E0E0E0;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .partition {
+        display: none;
+    }
+}
+
+@media(max-width:800px) {
+    .first-box {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+    }
+
+    .user-progress {
+        box-shadow: none;
+        border: none;
+        border-radius: 8px;
+        padding: 20px;
+        padding-top: 0px;
+    }
+
+    .progress-difficuty {
+        flex-direction: row;
+        gap: 8px;
+        font-size: 13px;
+    }
+
+    .progress-difficuty-holder {
+        min-width: 125px;
+    }
+
+    .partition {
+        display: block;
+    }
+}
+
+@media(max-width:560px) {
+    .first-box {
+        min-width: 0px;
+        box-shadow: none;
+        border: none;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .iContainer {
+        padding: 0px 10px;
+    }
+
+    /* .second-box {
+        margin: 0px -30px;
+    } */
+
+    .second-box {
+        margin-left: -10px;
+        width: calc(100% + 20px);
+    }
+
+    .user-progress {
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E0E0E0;
+        padding: 15px;
+    }
+
+    .progress-difficuty-holder {
+        min-width: 75px;
+    }
+
+    .progress-attempted {
+        min-width: 200px;
+        height: 100%;
+    }
+
+    .progress-difficuty {
+        flex-direction: column;
+        gap: 0px;
+        font-size: 13px;
+    }
+}
+
+@media(max-width:370px) {
+    .progress-box {
+        flex-direction: column;
+        min-height: 270px;
+    }
+
+    .progress-difficuty-holder {
+        flex-direction: row;
+    }
+
+    .progress-difficuty {
+        min-width: 0px;
+        width: 100%;
+        min-height: 60px;
+    }
+}

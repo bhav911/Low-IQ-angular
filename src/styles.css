@@ -1,1 +1,455 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Josefin+Sans&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.error-msg {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+}
+
+.iContainer {
+  width: 100%;
+  padding: 0px 10%;
+}
+
+@media(max-width:720px) {
+  .iContainer {
+    padding: 0px 20px;
+  }
+}
+
+/* Media queries for responsiveness */
+
+/* Small screens (mobile) - up to 600px */
+@media (max-width: 600px) {
+  .f-xs {
+    font-size: 11px;
+  }
+
+  .f-xxs {
+    font-size: 8px;
+  }
+
+  .f-sm {
+    font-size: 14px;
+  }
+
+  .f-md {
+    font-size: 16px;
+  }
+
+  .f-2md {
+    font-size: 20px;
+  }
+
+  .f-3md {
+    font-size: 22px;
+  }
+
+  .f-lg {
+    font-size: 25px;
+  }
+
+  .f-2lg {
+    font-size: 30px;
+  }
+}
+
+/* Medium screens (tablets) - 601px to 1024px */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .f-xs {
+    font-size: 12px;
+  }
+
+  .f-xxs {
+    font-size: 9px;
+  }
+
+  .f-sm {
+    font-size: 15px;
+  }
+
+  .f-md {
+    font-size: 18px;
+  }
+
+  .f-2md {
+    font-size: 22px;
+  }
+
+  .f-3md {
+    font-size: 23px;
+  }
+
+  .f-lg {
+    font-size: 28px;
+  }
+
+  .f-2lg {
+    font-size: 33px;
+  }
+}
+
+/* Large screens (desktops) - 1025px and above */
+@media (min-width: 1025px) {
+  .f-xs {
+    font-size: 13px;
+  }
+
+  .f-xxs {
+    font-size: 10px;
+  }
+
+  .f-sm {
+    font-size: 16px;
+  }
+
+  .f-md {
+    font-size: 19px;
+  }
+
+  .f-2md {
+    font-size: 24px;
+  }
+
+  .f-3md {
+    font-size: 25px;
+  }
+
+  .f-lg {
+    font-size: 30px;
+  }
+
+  .f-2lg {
+    font-size: 35px;
+  }
+}
+
+/* Extra large screens (large desktops) - 1440px and above */
+@media (min-width: 1440px) {
+  .f-xs {
+    font-size: 14px;
+  }
+
+  .f-xxs {
+    font-size: 11px;
+  }
+
+  .f-sm {
+    font-size: 17px;
+  }
+
+  .f-md {
+    font-size: 20px;
+  }
+
+  .f-2md {
+    font-size: 26px;
+  }
+
+  .f-3md {
+    font-size: 28px;
+  }
+
+  .f-lg {
+    font-size: 33px;
+  }
+
+  .f-2lg {
+    font-size: 38px;
+  }
+}
+
+
+.fw-lbold {
+  font-weight: 500;
+}
+
+.fw-bold {
+  font-weight: 600;
+}
+
+
+.loader-position {
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  position: fixed;
+  /* Stay fixed in the viewport */
+  top: 0;
+  /* Full height of the screen */
+  left: 0;
+  width: 100vw;
+  /* Full width of the screen */
+  height: 100vh;
+  /* Full height of the screen */
+  z-index: 9999;
+  /* Ensure it stays above other elements */
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Optional background overlay */
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  display: flex;
+  align-items: flex-start;
+  aspect-ratio: 1;
+}
+
+.loader:before,
+.loader:after {
+  content: "";
+  flex: 1;
+  aspect-ratio: 1;
+  --g: conic-gradient(from -90deg at 10px 10px, #000 90deg, #0000 0);
+  /* Change #fff to #000 for black */
+  background: var(--g), var(--g), var(--g);
+  filter: drop-shadow(30px 30px 0 #000);
+  /* Change drop-shadow from #fff to #000 for black */
+  animation: l20 1s infinite;
+}
+
+.loader:after {
+  transform: scaleX(-1);
+}
+
+@keyframes l20 {
+  0% {
+    background-position: 0 0, 10px 10px, 20px 20px
+  }
+
+  33% {
+    background-position: 10px 10px
+  }
+
+  66% {
+    background-position: 0 20px, 10px 10px, 20px 0
+  }
+
+  100% {
+    background-position: 0 0, 10px 10px, 20px 20px
+  }
+}
+
+.b1 {
+  border: 1px solid #E3EAFD;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.b2 {
+  border: 1px solid #D6E9FD;
+  box-shadow: 0 2px 10px #D6E9FD
+}
+
+.b3 {
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E0E0E0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.difficulty-easy {
+  color: #34A853;
+}
+
+.difficulty-medium {
+  color: #FBBC05;
+}
+
+.difficulty-hard {
+  color: #EA4335;
+}
+
+.difficulty-easy-bg {
+  background-color: #E8F5E9;
+  color: #43A047;
+}
+
+.difficulty-easy-bg:hover {
+  background-color: #C8E6C9;
+  color: #2E7D32;
+}
+
+.difficulty-hard-bg {
+  background-color: #FFEBEE;
+  color: #D32F2F;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.difficulty-hard-bg:hover {
+  background-color: #FFCDD2;
+  color: #B71C1C;
+}
+
+.cancel-btn {
+  background-color: #ededed;
+  color: #616161;
+}
+
+.cancel-btn:hover {
+  background-color: #E0E0E0;
+  color: #424242;
+}
+
+.t-l-gray {
+  color: #E5E7EB;
+}
+
+.b-l-gray {
+  background-color: #E5E7EB;
+  color: #374151;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.difficulty-medium-bg {
+  background-color: #FBBC05;
+}
+
+.result-btn {
+  background-color: #1A9988;
+  color: white;
+}
+
+.result-btn:hover {
+  background-color: #117065;
+  color: white;
+}
+
+.attempt-btn {
+  background-color: #1A73E8;
+  color: white;
+}
+
+.btn:active {
+  outline: none;
+  border: none;
+}
+
+.attempt-btn:hover {
+  background-color: #1557BF;
+  color: white;
+}
+
+.quiz-item {
+  color: #333333;
+}
+
+.quiz-item:hover {
+  color: #1557BF;
+}
+
+.quizlist-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.b-secondary {
+  background-color: #F5F5F5;
+}
+
+.t-blue {
+  color: #1A73E8
+}
+
+.t-golden {
+  color: #FFD700;
+}
+
+.t-l-blue {
+  color: #4a88da
+}
+
+.t-gray {
+  color: #6B7280;
+}
+
+.icon-gray {
+  color: #6B7280;
+  font-weight: 300;
+}
+
+.icon-gray .highlight:hover {
+  cursor: pointer;
+  color: #333333;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.t-d-gray {
+  color: #333333;
+}
+
+.p-n-btn {
+  background-color: #E3F2FD;
+  color: #1A73E8;
+}
+
+.p-n-btn:disabled {
+  background-color: #cfd8dc; /* Muted blue/grey */
+  color: #6e90a0; /* Softer text color */
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.p-n-btn:hover {
+  background-color: #D6E9FD;
+  color: #0C66D4;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+.col-status {
+  min-width: 60px;
+  margin-left: 10px;
+}
+
+.col-title {
+  max-width: 500px;
+  width: 100%;
+  min-width: 260px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-difficulty {
+  min-width: 100px;
+}
+
+.col-acceptance {
+  min-width: 120px;
+  text-align: center;
+}

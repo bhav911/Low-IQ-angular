@@ -1,0 +1,104 @@
+<div class="border b3 p-2 px-sm-3 px-2 mb-sm-3" [class.b-secondary]="request().hasSeen">
+    <div>
+        <div class="w-100">
+            <div>
+                <div class="d-flex justify-content-between mb-2 link"
+                    [routerLink]="'/quiz/' + request().quizId._id + '/details'">
+                    <span class="f-md t-blue">{{
+                        request().quizId.title| titlecase }}</span>
+                    <div class="d-flex flex-column align-items-end">
+                        <span class="t-gray f-xs text-nowrap">{{ createdAt }}</span>
+                    </div>
+                </div>
+                <div class="t-gray d-flex justify-content-between align-items-end">
+                    @if(request().messageCount > 0){
+                    <span class="f-xs link more-option" (click)="$event.stopPropagation()"
+                        (click)="toggleFeedbacksVisibility()">
+                        <i class="fa-regular fa-comment"></i>
+                        Feedbacks
+                    </span>
+                    }
+                    <div (click)="$event.stopPropagation()" class="ms-auto d-flex gap-2 ms-3 f-xs">
+                        @for(type of request().type; track $index){
+                        <span>{{ type | titlecase
+                            }}</span>
+                        <span class="t-l-gray">|</span>
+                        }
+                        <span class="">
+                            <span [ngClass]="getStatusClass()">{{ request().status | titlecase }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(ShowFeedbacks){
+<div class="m-3 reviews-holder p-3 rounded-3" [class.loading-background]="!feedbacksFetched">
+    @for(message of request().conversation; track message._id){
+    <div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column mb-2">
+                <span class="t-blue fw-lbold">{{ message.userId.role === 'creator' ? 'You' : 'Admin'
+                    }}</span>
+                <span class="t-gray f-xs">{{ message.createdAt }}</span>
+            </div>
+            @if(message.status){
+            <span class="t-gray f-xs"> status:
+                <span [ngClass]="getFeedbackStatusClass(message._id)">
+                    {{ message.status | titlecase }}</span>
+            </span>
+            }
+        </div>
+        <div>
+            <span>{{ message.message }}</span>
+        </div>
+    </div>
+    @if(!$last){
+    <hr class="my-2">
+    }
+    }
+</div>
+}
+
+<!-- <div class="border b3 p-2 px-sm-3 px-2 link" (click)="toggleFeedbacksVisibility()">
+    <div class="d-flex justify-content-between mb-2">
+        <span class="f-3md t-blue">{{ request().quizTitle | titlecase }}</span>
+        <div class="d-flex flex-column align-items-end">
+            <span class="t-gray f-xs">{{ request().updatedOn.split('+')![0] }}</span>
+            <span class="t-gray f-xs">{{ request().updatedOn.split('+')![1] }}</span>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <span class="t-gray f-sm">type:
+            <span class="t-d-gray">{{ request().type.split('-').join(' ') | titlecase }}</span>
+        </span>
+        <span class="f-sm t-gray">latest status:
+            <span [ngClass]="getStatusClass()">{{ request().status | titlecase }}</span>
+        </span>
+    </div>
+</div>
+
+@if(ShowFeedbacks){
+<div class="m-3 reviews-holder p-3 rounded-3" [class.loading-background]="!feedbacksFetched">
+    @for(feedback of request().feedback; track feedback.feedbackId){
+    <div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column mb-2">
+                <span class="t-blue fw-lbold">Admin</span>
+                <span class="t-gray f-xs">{{feedback.createdOn.split('+')![1] + ', ' + feedback.createdOn.split('+')![0]
+                    }}</span>
+            </div>
+            <span class="t-gray f-xs"> status:
+                <span [ngClass]="getFeedbackStatusClass(feedback.feedbackId)">
+                    {{ feedback.status }}</span>
+            </span>
+        </div>
+        <div>
+            <span>{{ feedback.feedback }}</span>
+        </div>
+    </div>
+    }
+</div>
+} -->

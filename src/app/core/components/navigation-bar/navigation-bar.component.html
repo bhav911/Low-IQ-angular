@@ -1,0 +1,259 @@
+<div class="box">
+    <div class="d-flex justify-content-between navContainer py-2 align-items-center">
+        <div>
+            <p class="logo mb-0" style="cursor: pointer;" routerLink="/home">LowIQ</p>
+        </div>
+        <div class="nav-holder nav-link-item">
+            <div>
+                <p class="nav-item" routerLink="/home">Home</p>
+            </div>
+            <div>
+                <p class="nav-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">Quizzes</p>
+            </div>
+        </div>
+        <div class="position-relative gap-3 nav-link-item">
+            @if(user){
+            <div class="position-relative link" (click)="toggleNotificationPanel()">
+                <img class="notification-icon" src="/bell.png">
+                <div [class.show]="hasNewNotifications"
+                    class="notification-dot position-absolute top-0 end-0 rounded-circle"></div>
+            </div>
+            <div>
+                <img class="profile-image link" [src]="user.profilePicture?.link || '/pngegg.png'"
+                    (click)="toggleProfilePanel()">
+            </div>
+            <div [class.showProfile]="profilePanelOpen" class="sidebar-box">
+                <div class="px-3 pt-3 pb-1 position-relative sideBoxChild">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2 link align-items-center mb-2"
+                            (click)="redirectUser('/profile/' + user.username)">
+                            <div>
+                                <img class="profile-image" style="height: 60px; width: 60px;"
+                                    [src]="user.profilePicture?.link || '/pngegg.png'">
+                            </div>
+                            <div>
+                                <p class="mb-0 f-md">{{ user.username }}</p>
+                                <p class="mb-0 fst-italic t-gray f-xs">{{ user.role | titlecase }}</p>
+                            </div>
+                        </div>
+                        @if(allowAddingAnotherProfile){
+                        <div>
+                            <button (click)="toggleProfiles()" [class.rotated]="showAllProfiles" type="button"
+                                class="btn btn-sm border rounded-circle">
+                                <i class="fa-solid more-profile-btn fa-caret-down"></i>
+                            </button>
+                        </div>
+                        }
+                    </div>
+                    @if(allowAddingAnotherProfile && showAllProfiles){
+                    <div class="ms-5 ps-3 mb-3">
+                        @if(!anotherUser){
+                        <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn w-100 text-start">
+                            + add player profile
+                        </button>
+                        }
+                        @else {
+                        <div class="border rounded-3">
+                            <button (click)="switchProfile()" class="btn w-100 text-start">
+                                <div class="d-flex gap-2 align-items-center">
+                                    <img class="profile-image another-profile-image"
+                                        [src]="anotherUser.profilePicture?.link  || '/pngegg.png'">
+                                    <div class="f-xs">
+                                        <span class="t-d-gray">{{ anotherUser.username }}</span>
+                                        <span class="d-block t-gray fst-italic f-xxs">{{ user.role === 'creator' ?
+                                            'Player' :
+                                            'Creator' }}</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        }
+                    </div>
+                    }
+                    <div>
+                        <p class="link sidebar-item" (click)="redirectUser('/profile/' + user.username)">
+                            <i class="fa-solid fa-user"></i>
+                            &nbsp;&nbsp;Profile
+                        </p>
+                    </div>
+                    @if(user.role === 'creator' || user.role === "admin"){
+                    <div>
+                        <p class="link sidebar-item" (click)="redirectUser('/' + user.role +'/request-list')">
+                            <i class="fa-solid fa-palette"></i>
+                            &nbsp;&nbsp;Request List
+                        </p>
+                    </div>
+                    }
+                    <div>
+                        <p class="link sidebar-item" (click)="redirectUser('/profile')">
+                            <i class="fa-solid fa-pen"></i>
+                            &nbsp;&nbsp;Edit Profile
+                        </p>
+                    </div>
+                    <hr class="my-2">
+                    <div class="link sidebar-item logout-item" (click)="logoutUser()">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        &nbsp;&nbsp;Logout
+                    </div>
+                </div>
+            </div>
+            }
+            @else {
+            <button class="btn p-n-btn f-sm" routerLink="/login">Login</button>
+            <button class="btn p-n-btn f-sm" routerLink="/signup">Signup</button>
+            }
+        </div>
+        <div class="d-none gap-3 align-items-center hamburger-menu">
+            @if(user){
+            <div class="position-relative link" (click)="toggleNotificationPanel()">
+                <img class="notification-icon" src="/bell.png">
+                <span [class.show]="hasNewNotifications"
+                    class="notification-dot position-absolute top-0 end-0 rounded-circle"></span>
+            </div>
+            }
+            <div (click)="toggleSidebar()">
+                <img class="menu-icon" src="/menu.png">
+            </div>
+        </div>
+    </div>
+
+    <div [class.showNotification]="notificationPanelOpen" class="notification-panel fixed d-none">
+        @for(notification of notifications; track notification._id){
+        @if(!$first){
+        <hr class="my-0">
+        }
+        <app-notification-template (clicked)="toggleNotificationPanel()" [notification]="notification" />
+        }
+        @empty {
+        <div class="d-flex justify-content-center">
+            <p class="t-gray fst-italic mb-0 py-2">You have no notifications!</p>
+        </div>
+        }
+        <div #scrollAnchor></div>
+        <app-loading-spinner [isFetching]="fetchingNotifications" />
+    </div>
+
+    @if(sidebarOpen){
+    <div class="sidebar">
+        <div class="px-3 pt-3 pb-1 sideBoxChild">
+            <div class="hamburger-menu justify-content-between mb-3" (click)="toggleSidebar()">
+                <p class="logo mb-0" style="cursor: pointer;" (click)="redirectUser('/home')">LowIQ</p>
+                <img class="menu-icon" src="/close.png">
+            </div>
+            @if(user){
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-2 link align-items-center mb-2"
+                    (click)="redirectUser('/profile/' + user.username)">
+                    <div>
+                        <img class="profile-image" style="height: 60px; width: 60px;"
+                            [src]="user.profilePicture?.link || '/pngegg.png'">
+                    </div>
+                    <div>
+                        <p class="mb-0 f-2md">{{ user.username }}</p>
+                        <p class="mb-0 fst-italic t-gray f-sm">{{ user.role | titlecase }}</p>
+                    </div>
+                </div>
+                @if(allowAddingAnotherProfile){
+                <div>
+                    <button (click)="toggleProfiles()" [class.rotated]="showAllProfiles" type="button"
+                        class="btn btn-sm border rounded-circle">
+                        <i class="fa-solid more-profile-btn fa-caret-down"></i>
+                    </button>
+                </div>
+                }
+            </div>
+            @if(allowAddingAnotherProfile && showAllProfiles){
+            <div class="ms-5 ps-3 mb-3">
+                @if(!anotherUser){
+                <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn w-100 text-start">
+                    + add player profile
+                </button>
+                }
+                @else {
+                <div class="border rounded-3">
+                    <button (click)="switchProfile()" class="btn w-100 text-start">
+                        <div class="d-flex gap-2 align-items-center">
+                            <img class="profile-image another-profile-image"
+                                [src]="anotherUser.profilePicture?.link  || '/pngegg.png'">
+                            <div class="f-sm">
+                                <span class="t-d-gray">{{ anotherUser.username }}</span>
+                                <span class="d-block t-gray fst-italic f-xs">{{ user.role === 'creator' ? 'Player' :
+                                    'Creator' }}</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                }
+            </div>
+            }
+            }
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser('/home')">
+                    <i class="fa-solid fa-home"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Home
+                </p>
+            </div>
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">
+                    <i class="fa-solid fa-book"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Quizzes
+                </p>
+            </div>
+            <hr class="my-2">
+            @if(user){
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser('/profile/' + user.username)">
+                    <i class="fa-solid fa-user"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Profile
+                </p>
+            </div>
+            @if(user.role === 'creator' || user.role === 'admin'){
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser('/' + user.role +'/request-list')">
+                    <i class="fa-solid fa-palette"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Request List
+                </p>
+            </div>
+            }
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser('/profile')">
+                    <i class="fa-solid fa-pen"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Edit Profile
+                </p>
+            </div>
+            }
+            <!-- <div class="position-relative appearance-parent">
+                <p class="link sidebar-item">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Theme
+                </p>
+                <div class="appearance-box rounded-3">
+                    <div class="b3 rounded-3">
+                        <div class="link appearance-item py-2">
+                            <i class="fa-solid fa-sun"></i>
+                            &nbsp;&nbsp;Light
+                        </div>
+                        <div class="link appearance-item py-2">
+                            <i class="fa-solid fa-moon"></i>
+                            &nbsp;&nbsp;Dark
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <hr [class.hide]="!user" class="my-2">
+            @if(user){
+            <div class="link sidebar-item logout-item" (click)="logoutUser()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                &nbsp;&nbsp;&nbsp;&nbsp;Logout
+            </div>
+            }
+            @else {
+            <div class="d-flex gap-2 p-4 position-absolute bottom-0 end-0">
+                <button class="btn p-n-btn f-md" routerLink="/account/login">Login</button>
+                <button class="btn p-n-btn f-md" routerLink="/account/signup">Signup</button>
+            </div>
+            }
+        </div>
+    </div>
+    }
+</div>

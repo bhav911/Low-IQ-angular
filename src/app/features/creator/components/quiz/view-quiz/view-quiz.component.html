@@ -1,0 +1,172 @@
+@if(!loaded){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>
+}
+@else {
+
+<div class="container mt-2 position-relative">
+    <div>
+        <!-- Quiz-Meta-Details -->
+        <div>
+            <div class="mb-0 d-flex flex-column">
+                <div class="d-flex overflow-hidden align-items-baseline">
+                    <span class="t-d-gray f-3md">
+                        {{quiz.title}}
+                    </span>
+                    <span class="ms-1 f-xs fw-lbold fst-italic" [ngClass]="'difficulty-' + quiz.difficulty">
+                        {{'(' + quiz.difficulty + ')' | titlecase}}
+                    </span>
+                </div>
+                <div>
+                    <span class="f-xs t-gray link category-title" [routerLink]="'/quiz-list/'+categoryTitle">
+                        {{ quiz.categoryId.title.split('-').join(' ') }}
+                        <i class="f-xxs fa-solid fa-angle-right"></i>
+                    </span>
+                </div>
+                <div>
+                    <span [class.show]="showDescription" class="description f-xs t-gray">
+                        {{ quiz.description }}
+                    </span>
+                    <div class="text-center">
+                        <span class="f-xs link t-blue" (click)="toggleDescription()">{{ showDescription ? 'Hide' :
+                            'Show more' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question-Set -->
+        <div class="my-4">
+            <!-- question-box -->
+            <div class="mb-3">
+                <div>
+                    <div class="">
+                        <div class="f-md d-flex flex-column">
+                            <div>
+                                <span>{{ (questionIndex() + 1) + '. ' + questionObject.question }}</span>
+                                <span class="t-gray text-nowrap fst-italic f-xs">
+                                    {{ '(' + questionObject.point + ' Point)' }}
+                                </span>
+                            </div>
+                            <span class="text-center">
+                                @if(questionObject.questionImage){
+                                <img class="question-media-image" [src]="questionObject.questionImage">
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- option-box -->
+            <div>
+                <div>
+                    <div>
+                        @for(option of questionObject.options; track $index){
+                        <div class="b3 d-flex align-items-center rounded-5 p-2 mb-md-3 mb-2">
+                            <i [ngClass]="getOptionClass($index)"
+                                class="icon-wrapper-large fa-solid rounded-circle p-2 me-2"></i>
+                            <span class="f-sm text-start ps-2">{{ option.option }}</span>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Question Navigator -->
+        <div class="mb-5">
+            <div>
+                <div class="d-flex gap-2 justify-content-center">
+                    @if(questionIndex() != 0){
+                    <span class="f-sm navigator rounded-2 p-2 link text-center" (click)="previousQuestion()">
+                        <i class=" me-2 fa-solid fa-arrow-left"></i>
+                        Prev
+                    </span> }
+                    @if(questionIndex() != (quiz.questionCount - 1)){
+                    <span class="f-sm navigator rounded-2 p-2 link text-center" (click)="nextQuestion()">
+                        Next
+                        <i class=" ms-2 fa-solid fa-arrow-right"></i>
+                    </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if(user?.role === 'admin'){
+        <form class="mb-3" [formGroup]="feedbackForm!">
+            <div class="mb-1">
+                <textarea appAutoSize formControlName="feedback" rows="1" class="b3 p-2 w-100 question-field"
+                    placeholder="enter feedback here..."></textarea>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" (click)="CreateFeedback('accepted')"
+                    class="btn f-xs difficulty-easy-bg">Accept</button>
+                <button type="button" (click)="CreateFeedback('rejected')"
+                    class="btn f-xs difficulty-hard-bg">Reject</button>
+            </div>
+        </form>
+        }
+
+        <div class="mx-auto w-100 mb-3 extra-options">
+            <div class="position-relative">
+                <div class="d-flex justify-content-center gap-2 px-2">
+                    <div class="py-1 link f-md text-center w-100 extra-option-panel b3 rounded-3"
+                        [routerLink]="'/creator/quiz/' + quizId +  '/edit'">
+                        <span class="f-md t-blue">Edit</span>
+                    </div>
+                    <div class="f-md py-1 question-panel-btn text-center w-100 extra-option-panel b3 link rounded-3"
+                        (click)="toggleQuestionPanel()">
+                        <span class="">
+                            <i class="fa-lg fa-solid fa-circle-info"></i>
+                        </span>
+                    </div>
+                    <!-- <div class="link text-center py-1 w-100 extra-option-panel b3 rounded-3">
+                        <div>
+                            <span class="f-md" [ngClass]="{
+                                    'difficulty-hard': quiz.isEnabled,
+                                    'difficulty-easy': !quiz.isEnabled,
+                                }">{{ quiz.isEnabled ? 'Disable' : 'Enable' }}</span>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QuestionPanel -->
+<div (click)="toggleQuestionPanel()" [class.active]="questionPanelOpen"
+    class="backdrop position-fixed top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100">
+    <div (click)="$event.stopPropagation()" [class.active]="questionPanelOpen"
+        class="position-fixed top-0 end-0 question-panel h-100 w-75 bg-white b3">
+
+        <!-- Header -->
+        <div class="position-relative top-0 end-0 w-100 rounded-bottom-5 b3 border-top-0">
+            <div class="py-3 f-2md text-center">
+                <span>Question Panel</span>
+            </div>
+            <div>
+                <i (click)="toggleQuestionPanel()"
+                    class="fa-lg pe-3 pe-sm-5 translate-middle-y top-50 end-0 position-absolute fa-solid fa-xmark"></i>
+            </div>
+        </div>
+
+        <!-- Question-Panel-Question-list -->
+        <div class="px-3">
+            <div class="mt-4">
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    @for(option of quiz.questions; track $index){
+                    <button class="icon-wrapper-large question-icon rounded-circle"
+                        [class.current-question]="questionIndex()=== $index" (click)="jumpToQuestion($index)">
+                        {{ $index + 1 }}
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

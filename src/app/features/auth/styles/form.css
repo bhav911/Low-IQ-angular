@@ -1,0 +1,63 @@
+.login-form {
+    width: 20rem;
+    max-width: 90%;
+    margin: auto;
+    display: block;
+}
+
+.login-item {
+    width: 20rem;
+    max-width: 95%;
+    margin: 1rem;
+}
+
+.login__title {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.login__price {
+    text-align: center;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.login__description {
+    text-align: center;
+}
+
+.form-control {
+    margin: 1rem 0;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: none;
+}
+
+.form-control label,
+.form-control input,
+.form-control textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.25rem;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+    outline-color: #00695c;
+}
+
+.user-message{
+    margin: auto;
+    padding: 0.5rem 2rem;
+    width: fit-content;
+    border: 1px solid #4771fa;
+    border-radius: 3px;
+    background-color: #b9c9ff;
+    text-align: center;
+}
+
+.user-message--error{
+    border-color: red;
+    color: red;
+    background-color: rgb(255, 176, 176);
+}

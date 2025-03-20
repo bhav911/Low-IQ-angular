@@ -1,0 +1,152 @@
+.difficulty-easy:hover {
+    background-color: #E8F5E9;
+    color: #34A853;
+}
+
+.section1 {
+    height: fit-content;
+    background: linear-gradient(45deg, #86c3ff, #c1e0ff, #86c3ff);
+    background-size: 300% 300%;
+    animation: gradient-move 10s ease infinite;
+    overflow: hidden;
+    /* Ensures nothing overflows outside the section */
+}
+
+@keyframes gradient-move {
+    0% {
+        background-position: 0% 100%;
+    }
+
+    50% {
+        background-position: 100% 0%;
+    }
+
+    100% {
+        background-position: 0% 100%;
+    }
+}
+
+.section1-box {
+    height: 100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section1-image {
+    width: 100%;
+    max-width: 440px;
+}
+
+.tag-line {
+    color: #1A73E8;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.tag-line-description {
+    font-style: italic;
+    color: white
+}
+
+.section1-text-box p {
+    color: #1A73E8;
+    font-size: 40px;
+}
+
+.curve-holder {
+    position: relative;
+    height: fit-content;
+}
+
+.curve {
+    position: absolute;
+    /* bottom: 0%;
+    left: 0px;
+    width: 100vw;
+    z-index: 1; */
+}
+
+.section2 {
+    margin: 5rem 0px;
+}
+
+.featured-box-holder {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+}
+
+.featured-item-box {
+    z-index: 99;
+    height: fit-content;
+    max-width: 300px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: #c1e0ff;
+}
+
+.featured-item-box-icon-holder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.featured-item-box-icon {
+    max-width: 120px;
+    width: 100%;
+}
+
+.featured-item-box-text {
+    height: 100px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 20px;
+    font-style: italic;
+}
+
+.call-to-action {
+    margin: 30px 0px;
+}
+
+.call-to-action-text {
+    font-style: italic;
+}
+
+.call-to-action-for-creator {
+    background: #c1e0ff
+}
+
+@media(max-width:680px) {
+    .featured-box-holder {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .section1-box {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+    }
+
+    .section1-image {
+        image-orientation: flip();
+        max-width: 330px;
+    }
+
+    .featured-item-box-icon-holder {
+        height: 130px;
+    }
+
+    .featured-item-box-icon {
+        max-width: 80px;
+    }
+
+    .featured-item-box-text {
+        height: 75px;
+    }
+}

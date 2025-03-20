@@ -1,0 +1,11 @@
+<div class="notification-item link" [class.b-l-gray]="notification().hasSeen" (click)="notificationClicked()">
+    <div class="notification-icon-holder">
+        <img class="notification-icon" [src]="notification().iconLink">
+    </div>
+    <div class="notification-content-holder">
+        <div class="notification-content-aligner">
+            <div class="fs-sm t-gray pe-3">{{ notification().content }}</div>
+            <div class="f-xs t-gray text-nowrap">{{ createdAt}}</div>
+        </div>
+    </div>
+</div>

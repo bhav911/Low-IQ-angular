@@ -1,0 +1,65 @@
+.option-field {
+    border: none;
+    outline: none;
+}
+
+.option-number {
+    background-color: #b4dcff;
+    color: #1A73E8;
+    border: 0.8px solid #1A73E8;
+}
+
+.new-btn:hover{
+    color: #1A73E8;
+}
+
+.question-media-image {
+    max-height: 200px; 
+    max-width: 400px;  
+    width: 100%;       
+    height: auto;      
+    object-fit: contain;
+}
+
+.question-icon {
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.correct-answer {
+    background-color: #B2F2BB;
+    color: #2E7D32;
+    border: 0.8px solid #2E7D32;
+}
+
+.delete-btn {
+    background-color: #ffb8b8;
+    color: #ed4444;
+}
+
+.clear-btn {
+    background-color: #FFD580;
+    color: #FFFFFF;
+}
+
+.point-btn {
+    background-color: #E0E0E0;
+    color: #616161;
+}
+
+.option-text textarea {
+    border: none;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.option-text textarea:focus {
+    border: none;
+    outline: none;
+}

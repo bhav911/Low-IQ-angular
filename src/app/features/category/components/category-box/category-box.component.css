@@ -1,0 +1,18 @@
+.category-box {
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 20px;
+    padding: 6px 18px;
+    border: 1px solid #c6c6c6;
+    transition: transform 0.3s ease;
+    background-color: #F0F0F0;
+    color: #333333;
+}
+
+.category-box:hover {
+    background-color: #e3e3e3;
+}
+
+.quiz-count{
+    color: #1A73E8;
+}

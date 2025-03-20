@@ -1,0 +1,105 @@
+.notification-icon-holder {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.notification-icon {
+    width: 30px;
+    /* Scale the image to fill the parent width */
+    height: 30px;
+    /* Scale the image to fill the parent height */
+    object-fit: contain;
+    /* Maintain the aspect ratio of the image */
+}
+
+.notification-item {
+    padding: 13px 0px;
+    padding-left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-content-holder {
+    width: 85%;
+    padding-right: 12px;
+}
+
+.notification-content-aligner {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-badge {
+    height: 150px;
+}
+
+/* Backdrop */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Achievement Box */
+.achievement-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Header */
+.achievement-header h2 {
+    margin-bottom: 20px;
+}
+
+/* Content */
+.achievement-content p {
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+/* Close Button */
+.close-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #dadada;
+    color: #616161;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: #E0E0E0;
+    color: #424242;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

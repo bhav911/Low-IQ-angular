@@ -1,0 +1,12 @@
+<div [routerLink]="'/quiz-list/' + category()?._id" class="category-box">
+    <div class="d-flex text-nowrap f-md" [class.gap-2]="quizCount != 0">
+        <!-- <div class="m-auto">
+            <i [className]="'fa-solid ' + category()?.icon"></i>
+        </div> -->
+        <p class="mb-0">{{ category()?.title }}</p>
+        @if(quizCount != 0){
+        |
+        <span class="quiz-count">{{ quizCount }}</span>
+        }
+    </div>
+</div>

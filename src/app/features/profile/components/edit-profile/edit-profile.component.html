@@ -1,0 +1,360 @@
+<div class="container my-sm-5">
+    @if(!loaded){
+    <div class="loader-position">
+        <div class="loader"></div>
+    </div>
+    }
+    @else {
+    <div
+        class="header b-secondary rounded-3 d-flex flex-column flex-sm-row gap-4 p-sm-5 p-0 py-4   align-items-center mx-0">
+        <div class="ps-md-5 ps-sm-3 p-0">
+            <div class="position-relative">
+                <img class="profile-image rounded-3" [src]="imagePreview || '/pngegg.png'">
+                <div class="position-absolute bottom-0 start-50 profile-edit-btn d-flex gap-2">
+                    @if(!activeComponents[0]){
+                    <label for="profilePicture">
+                        <i class="fa-solid fa-pen btn btn-secondary rounded-circle p-2">
+                        </i>
+                    </label>
+                    @if(user?.profilePicture?.link){
+                    <i class="fa-solid fa-trash btn btn-danger rounded-circle p-2"
+                        (click)="editImageComponent('delete')"></i>
+                    }
+                    }
+                    @else {
+                    @if(inProcess){
+                    <div
+                        class="animation-holder position-relative start-50 translate-middle-x animation-holder rounded-circle p-1">
+                        <div class="username-loader"></div>
+                    </div>
+                    }
+                    @else {
+                    <i class="fa-solid fa-check btn btn-success rounded-circle p-2"
+                        (click)="editImageComponent('confirm')"></i>
+                    <i class="fa-regular fa-circle-xmark btn btn-danger rounded-circle p-2"
+                        (click)="editImageComponent('cancel')"></i>
+                    }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <p class="f-3md text-primary-emphasis d-inline me-2">{{ user!.name ?? user?.username }}</p>
+            <span>
+                <i class="fa-solid f-xs fa-up-right-from-square text-primary"
+                    [routerLink]="'/profile/' + user?.username"></i>
+            </span>
+        </div>
+    </div>
+    <div class="position-relative">
+        <p [ngClass]="{'error-holder': !backendSuccess,'success-holder': backendSuccess }" [class.show]="alertMessage">
+            <span [ngClass]="{'error-icon': !backendSuccess,'success-icon': backendSuccess }">i</span>
+            {{backendMessage}}
+        </p>
+    </div>
+    <div class="mt-sm-5 mt-3 position-relative">
+        <form (ngSubmit)="myForm" [formGroup]="myForm">
+            <div>
+                <input (change)="imageSelected($event)" accept="image/*" class="d-none" id="profilePicture" type="file">
+            </div>
+            <div>
+                <div class="d-flex align-items-center flex-wrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Username</p>
+                    </div>
+                    <div class="child-box d-flex align-items-center">
+                        <div class="field-value w-100 position-relative">
+                            @if(!activeComponents[1]){
+                            <p class="f-sm">{{ user!.username }}</p>
+                            }
+                            @else {
+                            <input class="form-control f-sm mb-2" (blur)="invalidUsername()" formControlName="username">
+                            @if(checkingUsername){
+                            <div class="animation-holder">
+                                <div class="username-loader"></div>
+                            </div>
+                            }
+                            @if(errorMessage.invalidUsernameMessage){
+                            <p class="error-msg">{{ errorMessage.invalidUsernameMessage}} </p>
+                            }
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary f-sm" [disabled]="usernameAlreadyTaken"
+                                    (click)="updateUsername()">Save</button>
+                                <button class="btn b-secondary f-sm" (click)="editComponent(1)">Cancel</button>
+                            </div>
+                            }
+                        </div>
+                        @if(!activeComponents[1]){
+                        <div class="edit-btn-holder"><button class="btn f-sm py-0 py-md-2 t-blue me-0 me-md-2"
+                                (click)="editComponent(1)">Edit</button>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="d-flex align-items-center flex-wrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Name</p>
+                    </div>
+                    <div class="child-box d-flex align-items-center">
+                        <div class="field-value w-100">
+                            @if(!activeComponents[2]){
+                            <p class="f-sm" [ngClass]="{'t-gray fst-italic':!user!.name}">
+                                {{ user!.name ?? '-- Set --' }}</p>
+                            }
+                            @else {
+                            <input (blur)="invalidName()" class="form-control f-sm mb-2" formControlName="name">
+                            @if(errorMessage.invalidNameMessage){
+                            <p class="error-msg">{{ errorMessage.invalidNameMessage }}</p>
+                            }
+                            <div class="d-flex gap-2">
+                                <button class="btn p-n-btn f-sm" (click)="updateDetail('name')">Save</button>
+                                <button class="btn b-secondary f-sm" (click)="editComponent(2)">Cancel</button>
+                            </div>
+                            }
+                        </div>
+                        @if(!activeComponents[2]){
+                        <div class="edit-btn-holder"><button class="btn f-sm py-0 py-md-2  t-blue me-0 me-md-2"
+                                (click)="editComponent(2)">Edit</button>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="d-flex align-items-center flex-wrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Phone Number</p>
+                    </div>
+                    <div class="child-box d-flex align-items-center">
+                        <div class="field-value w-100">
+                            @if(!activeComponents[3]){
+                            <p class="f-sm" [ngClass]="{'t-gray fst-italic':!user!.phoneNumber}">
+                                {{ user!.phoneNumber ?? '-- Set --' }}</p>
+                            }
+                            @else {
+                            <input (blur)="invalidPhoneNumber()" class="form-control mb-2 f-sm"
+                                formControlName="phoneNumber">
+                            @if(errorMessage.invalidPhoneNumberMessage){
+                            <p class="error-msg">{{ errorMessage.invalidPhoneNumberMessage}}</p>
+                            }
+                            <div class="d-flex gap-2">
+                                <button class="btn p-n-btn f-sm" (click)="updateDetail('phoneNumber')">Save</button>
+                                <button class="btn b-secondary f-sm" (click)="editComponent(3)">Cancel</button>
+                            </div>
+                            }
+                        </div>
+                        @if(!activeComponents[3]){
+                        <div class="edit-btn-holder"><button class="btn f-sm py-0 py-md-2  t-blue me-0 me-md-2"
+                                (click)="editComponent(3)">Edit</button>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- <div>
+                <div class="d-flex align-items-center flex-wrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Address</p>
+                    </div>
+                    <div class="child-box d-flex align-items-center">
+                        <div class="field-value w-100">
+                            @if(!activeComponents[2]){
+                            <p class="f-sm" [ngClass]="{'t-gray fst-italic':!user?.city && !user?.state}">
+                                {{
+                                !user?.city && !user?.state ?
+                                '-- Set --' :
+                                user?.city ? getCity?.city + ', ' + getState?.state : getState?.state
+                                }}</p>
+                            }
+                            @else {
+                            <div class="d-flex gap-2 mb-2">
+                                <select class="form-control f-sm" formControlName="state" (change)="fetchCities()">
+                                    @if(!user?.state){
+                                    <option selected disabled value="null">Select a state</option>
+                                    }
+                                    @for(state of states; track state.sid){
+                                    <option [selected]="state.sid === user?.state" [value]="state.sid">{{ state.state }}
+                                    </option>
+                                    }
+                                </select>
+                                <select class="form-control f-sm" formControlName="city">
+                                    @if(!user?.city){
+                                    <option selected disabled value="null">Select a city</option>
+                                    }
+                                    @for(city of cities; track $index){
+                                    <option [selected]="city.cid === user?.city" [value]="city.cid">{{ city.city }}
+                                    </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn p-n-btn f-sm" (click)="updateAddress()">Save</button>
+                                <button class="btn b-secondary f-sm" (click)="editComponent(2)">Cancel</button>
+                            </div>
+                            }
+                        </div>
+                        @if(!activeComponents[2]){
+                        <div class="edit-btn-holder"><button class="btn f-sm py-0 py-md-2  t-blue me-0 me-md-2"
+                                (click)="editComponent(2)">Edit</button>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div> -->
+            <!-- <hr> -->
+            <div>
+                <div class="d-flex align-items-center flex-wrap flex-md-nowrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Email</p>
+                    </div>
+                    <div class="child-box d-flex align-items-center">
+                        <div class="field-value email-field w-100">
+                            @if(!activeComponents[4]){
+                            <div class=" d-flex gap-3 align-items-baseline">
+                                <div class="d-flex gap-1 align-items-center">
+                                    <p class="f-sm">{{ user!.email }}</p>
+                                    @if(user?.emailVerified){
+                                    <img class="verify-icon" src="/verified.png" title="verified">
+                                    }
+                                </div>
+                                @if(showOtpComponent){
+                                <button id="sendOtpBtn" class="btn btn-sm p-n-btn" (click)="sendOTPforEmail()">send
+                                    otp</button>
+                                <button class="btn btn-sm cancel-btn" (click)="openOTPComponent()">cancel</button>
+                                }
+                            </div>
+                            @if(showOtpComponent){
+                            <div class="d-flex gap-3 align-items-center">
+                                <div class="otp-container mt-2 my-3">
+                                    @for(index of getRange(4); track $index; let i = $index){
+                                    <input class="otp-input" maxlength="1" type="text" (input)="onInput($event, i)"
+                                        (keydown)="onKeydown($event, i)" />
+                                    }
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm difficulty-easy-bg" [disabled]="inProcess || !otpSent"
+                                        (click)="submitOtp()">Submit</button>
+                                </div>
+                            </div>
+                            }
+                            }
+                            @else {
+                            <input (blur)="invalidEmail()" class="form-control f-sm mb-2" formControlName="email">
+                            @if(errorMessage.invalidEmailMessage){
+                            <p class="error-msg">{{ errorMessage.invalidEmailMessage }}</p>
+                            }
+                            <div formGroupName="password">
+                                <input (blur)="invalidPassword()" class="form-control mb-2"
+                                    formControlName="currentPassword" placeholder="Please Enter Password">
+                            </div>
+                            @if(errorMessage.invalidPasswordMessage){
+                            <div class="position-relative">
+                                <p class="error-msg">{{ errorMessage.invalidPasswordMessage }}</p>
+                            </div>
+                            }
+                            <div class="d-flex gap-2">
+                                <button class="btn p-n-btn f-sm" (click)="updateEmail()">Save</button>
+                                <button class="btn b-secondary f-sm" (click)="editComponent(4)">Cancel</button>
+                            </div>
+                            @if(emailUpdateError){
+                            <p class="text-danger mt-2">{{ '*' + errorMessage | titlecase }}</p>
+                            }
+                            }
+                        </div>
+                        @if(!activeComponents[4] && !showOtpComponent){
+                        <div class="d-flex w-100 justify-content-end"><button class="btn f-sm py-0 py-md-2  t-blue"
+                                (click)="editComponent(4)">Edit</button>
+                            @if(!user?.emailVerified){
+                            <button class="btn btn-sm p-n-btn" (click)="openOTPComponent()">Verify </button>
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                @if(!activeComponents[5]){
+                <div>
+                    <button class="btn t-blue f-sm px-0" (click)="editComponent(5)">Change password</button>
+                </div>
+                }
+                @else {
+                <div class="d-flex flex-wrap fields-holder gap-md-0 gap-1 ">
+                    <div class="field-label t-gray f-sm">
+                        <p>Password</p>
+                    </div>
+                    <div class="child-box d-flex flex-column gap-2" formGroupName="password">
+                        <div class="password-holder">
+                            <input (blur)="invalidPassword()" [type]="passwordVisibility[0] ? 'text' : 'password'"
+                                class="form-control f-sm password-input" placeholder="Current Password"
+                                formControlName="currentPassword">
+                            <i class="fa-solid" (click)="makePasswordVisible(0)" [class.fa-eye]="passwordVisibility[0]"
+                                [class.fa-eye-slash]="!passwordVisibility[0]"></i>
+                        </div>
+                        @if(errorMessage.invalidPasswordMessage){
+                        <div class="position-relative">
+                            <p class="error-msg">{{ errorMessage.invalidPasswordMessage }}</p>
+                        </div>
+                        }
+                        <div class="password-holder">
+                            <input (blur)="invalidNewPassword()" [type]="passwordVisibility[1] ? 'text' : 'password'"
+                                class="form-control f-sm password-input" (keyup)="invalidNewPassword()"
+                                placeholder="New Password" formControlName="newPassword">
+                            <i class="fa-solid" (click)="makePasswordVisible(1)" [class.fa-eye]="passwordVisibility[1]"
+                                [class.fa-eye-slash]="!passwordVisibility[1]"></i>
+                        </div>
+                        @if(errorMessage.invalidNewPasswordMessage){
+                        <div class="position-relative">
+                            <p class="error-msg">{{ errorMessage.invalidNewPasswordMessage }}</p>
+                        </div>
+                        }
+                        <div class="password-holder">
+                            <input (blur)="invalidConfirmPassword()"
+                                [type]="passwordVisibility[2] ? 'text' : 'password'"
+                                class="form-control f-sm password-input" placeholder="Confirm New Password"
+                                formControlName="confirmPassword">
+                            <i class="fa-solid" (click)="makePasswordVisible(2)" [class.fa-eye]="passwordVisibility[2]"
+                                [class.fa-eye-slash]="!passwordVisibility[2]"></i>
+                        </div>
+                        @if(errorMessage.invalidConfirmPasswordMessage){
+                        <div class="position-relative">
+                            <p class="error-msg">{{ errorMessage.invalidConfirmPasswordMessage }}</p>
+                        </div>
+                        }
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button class="btn p-n-btn f-sm" (click)="updatePassword()">Save</button>
+                            <button class="btn b-secondary f-sm" (click)="editComponent(5)">Cancel</button>
+                        </div>
+                    </div>
+                    @if(passwordUpdateError){
+                    <div class="col">
+                        <p class="text-danger">{{ '*' + errorMessage | titlecase }}</p>
+                    </div>
+                    }
+                </div>
+                }
+                <div>
+                    @if(!activeComponents[6]){
+                    <button class="btn t-blue f-sm px-0 pt-0" (click)="editComponent(6)">Forgot password?</button>
+                    }
+                    @else{
+                    <div>
+                        <p>Send password reset mail to <span class="t-blue">&#64;{{ user?.email }}</span></p>
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="btn btn-sm p-n-btn" (click)="sendPasswordResetMail()">Send</button>
+                            <button class="btn btn-sm cancel-btn" (click)="editComponent(6)">Cancel</button>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+    }
+</div>

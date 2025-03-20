@@ -1,0 +1,28 @@
+.quiz-title {
+  cursor: pointer;
+  margin-bottom: 0px;
+  display: inline;
+}
+
+.quiz-title:hover {
+  color: #0062ff;
+}
+
+button {
+  color: white;
+  z-index: 10;
+}
+
+.row-item{
+  padding: 18px 0px;
+}
+
+i.fa-check{
+  color: rgb(6, 151, 6);
+}
+
+@media(max-width:720px) {
+  .list-item{
+    border-radius: 0px !important;
+  }
+}

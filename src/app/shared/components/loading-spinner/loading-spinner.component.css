@@ -1,0 +1,17 @@
+.show-spinner {
+    animation: spinner 1s linear infinite;
+}
+
+.show{
+    display: block !important;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

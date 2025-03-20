@@ -1,0 +1,56 @@
+@if(message){
+<div class="user-message user-message--error my-3">
+    <span>{{ message }}</span>
+</div>
+}
+<form class="login-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <div class="form-control">
+        <label for="username">Username</label>
+        <input (blur)="invalidUsername()" type="text" name="username" id="username"
+            [formControl]="formControls.username" [ngClass]="{'is-invalid': errorMessage.invalidUsernameMessage}">
+        @if(errorMessage.invalidUsernameMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidUsernameMessage }}</p>
+        </div>
+        }
+    </div>
+    <div class="form-control">
+        <label for="email">Email</label>
+        <input (blur)="invalidEmail()" type="text" name="email" id="email" [formControl]="formControls.email"
+            [ngClass]="{'is-invalid': errorMessage.invalidEmailMessage}">
+        @if(errorMessage.invalidEmailMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidEmailMessage }}</p>
+        </div>
+        }
+    </div>
+    <div class="form-control">
+        <label for="password">Password</label>
+        <input (blur)="invalidEmail()" type="password" name="password" id="password"
+            [formControl]="formControlsOfPassword.password"
+            [ngClass]="{'is-invalid': errorMessage.invalidPasswordMessage}">
+        @if(errorMessage.invalidPasswordMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidPasswordMessage }}</p>
+        </div>
+        }
+    </div>
+    <div class="form-control">
+        <label for="confirm-password">Confirm Password</label>
+        <input (blur)="invalidConfirmPassword()" type="password" name="confirmPassword" id="confirmPassword"
+            [formControl]="formControlsOfPassword.confirmPassword"
+            [ngClass]="{'is-invalid': errorMessage.invalidConfirmPasswordMessage}">
+        @if(errorMessage.invalidConfirmPasswordMessage){
+        <div class="position-relative">
+            <p class="error-msg">{{ errorMessage.invalidConfirmPasswordMessage }}</p>
+        </div>
+        }
+    </div>
+
+    <button class="btn btn-primary" type="submit">Signup</button>
+
+    <div class="mt-4">
+        <span class="me-1">Already have an account?</span>
+        <span class="text-primary link" (click)="redirectToLogin()">Login</span>
+    </div>
+</form>

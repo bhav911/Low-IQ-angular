@@ -1,0 +1,134 @@
+@if(!loaded){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>}
+@else {
+<div class="iContainer my-lg-5 my-md-4 my-3">
+    <div class="b3 rounded-3 first-box p-3">
+        <div class="category-meta mt-2">
+            <div>
+                <i class="icon b3 rounded-3 fa-solid f-lg fa-icons"></i>
+            </div>
+            <p class="f-lg fw-lbold t-blue mt-2 mb-0">{{ category()!.title }}</p>
+            <p class="f-sm t-gray">{{ metaStat }} Quizzes</p>
+            <div>
+
+                @if(user?.role === 'creator'){
+                <button routerLink="/creator/quiz/create-quiz" class="btn p-n-btn f-sm">Create</button>
+                }
+                @else {
+                @if(firstNotAttemptedQuiz != undefined){
+                <button [title]="firstNotAttemptedQuiz.title"
+                    [routerLink]="'/quiz/'+firstNotAttemptedQuiz._id+'/details'" class="btn p-n-btn f-sm">Start</button>
+                }
+                @else {
+                <p class="f-sm">Yaay! All Quiz Completed!!!</p>
+                }
+                }
+            </div>
+        </div>
+        <hr class="border border-dark my-3 partition">
+        <div class="user-progress">
+            <p class="f-md t-gray">Progress</p>
+            @if(user){
+            @if(user && user.role === 'creator'){
+            <div class="mb-2">
+                <div class="d-flex gap-1">
+                    <div [class.b-l-gray]="quizStatus === 0" (click)="changeQuizStatus(0)"
+                        class="status-dot-holder border border-1 rounded-3 d-flex justify-content-center align-items-center">
+                        <span class="f-xs">All</span>
+                    </div>
+                    <div [class.b-l-gray]="quizStatus === 1" (click)="changeQuizStatus(1)"
+                        class="status-dot-holder border border-1 rounded-3 d-flex justify-content-center align-items-center">
+                        <div class="status-dot-published rounded-circle"></div>
+                    </div>
+                    <div [class.b-l-gray]="quizStatus === 2" (click)="changeQuizStatus(2)"
+                        class="status-dot-holder border border-1 rounded-3 d-flex justify-content-center align-items-center">
+                        <div class="status-dot-unpublished rounded-circle"></div>
+                    </div>
+                    <div [class.b-l-gray]="quizStatus === 3" (click)="changeQuizStatus(3)"
+                        class="status-dot-holder border border-1 rounded-3 d-flex justify-content-center align-items-center">
+                        <div class="status-dot-rejected rounded-circle"></div>
+                    </div>
+                </div>
+            </div>
+            }
+            <div class="progress-box">
+                <div class="t-d-gray progress-attempted">
+                    <p class="p-0 m-0">
+                        @if(user.role === 'creator'){
+                        <span class="f-3md">{{ totalCount }}</span>
+                        }
+                        @else {
+                        <span class="f-3md">{{totalAttempted}}</span>
+                        <span>{{'/' + metaStat }}</span>
+                        }
+                    </p>
+                    <p>
+                        <span class="f-sm">
+                            @if(user.role === 'creator'){
+                            <p>{{
+                                quizStatus === 0 ? 'Quiz Created' :
+                                quizStatus === 1 ? 'Published' :
+                                quizStatus === 2 ? 'Pending Publish' :
+                                'Rejected'
+                                }}</p>
+                            }
+                            @else {
+                            <i class="fa-solid fa-check fa-lg difficulty-easy"></i>&nbsp;Attempted
+                            }
+                        </span>
+                    </p>
+                </div>
+                <div class="progress-difficuty-holder f-xs">
+                    <div class="progress-difficuty t-d-gray">
+                        <p class="difficulty-easy">Easy</p>
+                        @if(user.role === 'creator'){
+                        <p>{{ easyCount }}</p>
+                        }
+                        @else {
+                        <p>{{(attempted?.easy ?? 0) + '/' + meta!.easy }}</p>
+                        }
+                    </div>
+                    <div class="progress-difficuty t-d-gray">
+                        <p class="difficulty-medium">Medium</p>
+                        @if(user.role === 'creator'){
+                        <p>{{ mediumCount }}</p>
+                        }
+                        @else {
+                        <p>{{ (attempted?.medium ?? 0) + '/' + meta!.medium }}</p>
+                        }
+                    </div>
+                    <div class="progress-difficuty t-d-gray">
+                        <p class="difficulty-hard">Hard</p>
+                        @if(user.role === 'creator'){
+                        <p>{{ hardCount }}</p>
+                        }
+                        @else {
+                        <p>{{ (attempted?.hard ?? 0) + '/' + meta!.hard}}</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+            @else{
+            <div class="">
+                <p class="f-xs t-gray fst-italic">Login now to track down your progress!</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="second-box">
+        <div class="quiz-table">
+            @for(quiz of quizzes(); track quiz._id){
+            <list-template [index]="$index" [quiz]="quiz" />
+            }
+        </div>
+        @if(hasMoreQuiz){
+        <div class="text-center my-3">
+            <p class="t-blue link f-2sm" (click)="fetchQuizzes()">&#11167; Load more</p>
+        </div>
+        }
+    </div>
+</div>
+}

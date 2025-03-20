@@ -1,0 +1,22 @@
+<div class="rounded-3 list-item" [class.b-secondary]="quizData()?.$index! % 2 != 0">
+    <div class="quizlist-header f-sm">
+        <div class="row-item col-status">
+            @if(quizData()?.quiz?.isAttempted){
+            <i class="fa-solid fa-check ps-3"></i>
+            }
+        </div>
+        <div class="row-item col-title">
+            <p class="quiz-title" (click)="redirectUser()">{{ quizData()!.quiz.title }}</p>
+        </div>
+        <div class="row-item col-difficulty" [ngClass]="{
+            'difficulty-easy': quiz?.difficulty ==='easy',
+            'difficulty-medium': quiz?.difficulty ==='medium',
+            'difficulty-hard': quiz?.difficulty ==='hard',
+        }">
+            <p class="mb-0 ps-3">{{ quizData()!.quiz.difficulty | titlecase }}</p>
+        </div>
+        <div class="row-item col-acceptance">
+            <p class="mb-0 ps-3">{{ passingRate }}</p>
+        </div>
+    </div>
+</div>
