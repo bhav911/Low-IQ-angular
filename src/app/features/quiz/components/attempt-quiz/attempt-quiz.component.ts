@@ -1,23 +1,31 @@
-import { CommonModule } from "@angular/common";
-import { Component, computed, ElementRef, inject, Input, OnInit, Renderer2, signal, ViewChild } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
-import { HeaderComponent } from "./header/header.component";
-import { QuizService } from "../../../../core/services/quiz.service";
-import { AuthService } from "../../../../core/services/auth.service";
-import { question, quiz } from "../../../../core/models/quiz.model";
-import { User } from "../../../../core/models/User.model";
-import { Router } from "@angular/router";
-
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  Renderer2,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from './header/header.component';
+import { QuizService } from '../../../../core/services/quiz.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { question, quiz } from '../../../../core/models/quiz.model';
+import { User } from '../../../../core/models/User.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-attempt-quiz',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, HeaderComponent],
   templateUrl: './attempt-quiz.component.html',
-  styleUrl: './attempt-quiz.component.css'
+  styleUrl: './attempt-quiz.component.css',
 })
 export class AttemptQuizComponent implements OnInit {
-
   private quizService = inject(QuizService);
   private authService = inject(AuthService);
   private route = inject(Router);
@@ -25,31 +33,31 @@ export class AttemptQuizComponent implements OnInit {
 
   @Input() quizId!: string;
   quiz: quiz | null = null;
-  user: User | null | undefined = undefined
+  user: User | null | undefined = undefined;
   questionIndex = signal<number>(0);
   userSelectedOptions: {
-    [questionId: string]: string
+    [questionId: string]: string;
   } = {};
   questionStatus = signal<number[]>([]);
 
   cssClasses = [
     {
       css: 'not-visited',
-      text: 'Not Visited Yet'
+      text: 'Not Visited Yet',
     },
     {
       css: 'current-question',
-      text: 'Current Question'
+      text: 'Current Question',
     },
     {
       css: 'attempted',
-      text: 'Attempted'
+      text: 'Attempted',
     },
     {
       css: 'not-attempted',
-      text: 'Visited but not attempted'
+      text: 'Visited but not attempted',
     },
-  ]
+  ];
   quizInvalid = false;
   submittingQuiz = false;
   allAttempted = false;
@@ -62,32 +70,38 @@ export class AttemptQuizComponent implements OnInit {
   @ViewChild('progressBar', { static: false }) progressBar!: ElementRef;
 
   ngOnInit(): void {
-    this.authService.userValue
-      .subscribe(user => {
-        this.user = user;
-      })
+    this.authService.userValue.subscribe((user) => {
+      this.user = user;
+    });
 
-    const fields = "_id title difficulty questionCount questions { _id question questionImage point options { _id option } }";
+    const fields =
+      '_id title difficulty questionCount questions { _id question questionImage point options { _id option } }';
     this.quizService.getQuiz(this.quizId, fields).subscribe({
       next: (quizData: any) => {
         this.quiz = quizData;
         this.questionStatus.set(new Array(this.quiz?.questionCount).fill(0));
 
-        this.quiz?.questions.forEach(question => {
-          this.userSelectedOptions[question._id] = ""
-        })
+        this.quiz?.questions.forEach((question) => {
+          this.userSelectedOptions[question._id] = '';
+        });
 
         setTimeout(() => {
           this.loaded.set(true);
           this.updateQuestionStatus(0, 2);
         }, 2000);
-      }
-    })
+      },
+    });
   }
 
-  panel_notVisited = computed(() => this.questionStatus().filter((val) => val === 0).length)
-  panel_attempted = computed(() => this.questionStatus().filter((val) => val === 1).length)
-  panel_visitedNotAttempted = computed(() => this.questionStatus().filter((val) => val === 2).length)
+  panel_notVisited = computed(
+    () => this.questionStatus().filter((val) => val === 0).length
+  );
+  panel_attempted = computed(
+    () => this.questionStatus().filter((val) => val === 1).length
+  );
+  panel_visitedNotAttempted = computed(
+    () => this.questionStatus().filter((val) => val === 2).length
+  );
   questionPanelList = computed(() => {
     switch (this.filterType()) {
       case -1:
@@ -119,31 +133,39 @@ export class AttemptQuizComponent implements OnInit {
   });
   filterName = computed(() => {
     switch (this.filterType()) {
-      case 0: return 'Not visited';
-      case 1: return 'Attempted';
-      case 2: return 'Visited but not attempted';
-      default: return 'All';
+      case 0:
+        return 'Not visited';
+      case 1:
+        return 'Attempted';
+      case 2:
+        return 'Visited but not attempted';
+      default:
+        return 'All';
     }
-  })
+  });
 
   get currentQuestionObject() {
     return this.quiz!.questions!.at(this.questionIndex()) as question;
   }
 
   selectedOption(optionId: string) {
-    if (this.userSelectedOptions[this.currentQuestionObject?._id] === optionId) {
-      this.userSelectedOptions[this.currentQuestionObject?._id] = "";
+    if (
+      this.userSelectedOptions[this.currentQuestionObject?._id] === optionId
+    ) {
+      this.userSelectedOptions[this.currentQuestionObject?._id] = '';
       this.updateQuestionStatus(this.questionIndex(), 0);
-      this.modifyProgressBar()
+      this.modifyProgressBar();
       this.allAttempted = false;
-    }
-    else {
-      this.userSelectedOptions[this.currentQuestionObject?._id] = optionId
+    } else {
+      this.userSelectedOptions[this.currentQuestionObject?._id] = optionId;
       this.updateQuestionStatus(this.questionIndex(), 1);
-      this.modifyProgressBar()
-      const attemptedQuestions = Object.values(this.userSelectedOptions).reduce((prev, cur) => {
-        return prev + (cur === "" ? 0 : 1)
-      }, 0)
+      this.modifyProgressBar();
+      const attemptedQuestions = Object.values(this.userSelectedOptions).reduce(
+        (prev, cur) => {
+          return prev + (cur === '' ? 0 : 1);
+        },
+        0
+      );
       if (attemptedQuestions === this.quiz!.questionCount) {
         setTimeout(() => {
           this.allAttempted = true;
@@ -153,12 +175,18 @@ export class AttemptQuizComponent implements OnInit {
   }
 
   modifyProgressBar() {
-    const questionAttempted = Object.values(this.userSelectedOptions).reduce((prev, cur) => {
-      return prev + (cur === "" ? 0 : 1)
-    }, 0)
-    const progressWidth =
-      (questionAttempted / this.quiz?.questionCount!) * 100;
-    this.renderer.setStyle(this.progressBar.nativeElement, 'width', `${progressWidth}%`);
+    const questionAttempted = Object.values(this.userSelectedOptions).reduce(
+      (prev, cur) => {
+        return prev + (cur === '' ? 0 : 1);
+      },
+      0
+    );
+    const progressWidth = (questionAttempted / this.quiz?.questionCount!) * 100;
+    this.renderer.setStyle(
+      this.progressBar.nativeElement,
+      'width',
+      `${progressWidth}%`
+    );
   }
 
   updateQuestionStatus(index: number, newValue: number) {
@@ -178,7 +206,10 @@ export class AttemptQuizComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.submittingQuiz || this.questionStatus().some((status) => status === 2 || status === 0)) {
+    if (
+      this.submittingQuiz ||
+      this.questionStatus().some((status) => status === 2 || status === 0)
+    ) {
       this.quizInvalid = true;
       setTimeout(() => {
         this.quizInvalid = false;
@@ -188,19 +219,25 @@ export class AttemptQuizComponent implements OnInit {
 
     this.submittingQuiz = true;
 
-    const userAnswers = Object.entries(this.userSelectedOptions).map(([questionId, optionId]) => {
-      return {
-        questionId,
-        optionId
+    const userAnswers = Object.entries(this.userSelectedOptions).map(
+      ([questionId, optionId]) => {
+        return {
+          questionId,
+          optionId,
+        };
       }
-    });
+    );
 
-    this.quizService.submitQuiz(this.quizId, userAnswers)
-      .subscribe(resultId => {
+    this.quizService.submitQuiz(this.quizId, userAnswers).subscribe({
+      next: (resultId) => {
         this.route.navigate(['result', resultId], {
-          replaceUrl: true
+          replaceUrl: true,
         });
-      })
+      },
+      error: (err) => {
+        this.submittingQuiz = false;
+      },
+    });
   }
 
   checkIfNotAttempted() {
@@ -210,22 +247,22 @@ export class AttemptQuizComponent implements OnInit {
   }
 
   nextQuestion() {
-    this.questionIndex.update(q => q + 1);
-    this.checkIfNotAttempted()
+    this.questionIndex.update((q) => q + 1);
+    this.checkIfNotAttempted();
   }
 
   previousQuestion() {
-    this.questionIndex.update(q => q - 1);
+    this.questionIndex.update((q) => q - 1);
     this.checkIfNotAttempted();
   }
 
   userRegistered(status: boolean) {
-    this.onSubmit()
+    this.onSubmit();
   }
 
   filterQuestionPanel(index: number) {
     this.toggleFilterOptions();
-    this.filterType.set(index)
+    this.filterType.set(index);
   }
 
   toggleQuestionPanel() {
@@ -239,6 +276,6 @@ export class AttemptQuizComponent implements OnInit {
   }
 
   toggleLoginModal() {
-    this.showLoginModal = !this.showLoginModal
+    this.showLoginModal = !this.showLoginModal;
   }
 }

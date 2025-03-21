@@ -6,9 +6,9 @@
 <div class="iContainer mx-auto" id="div1">
     <div class="box-1">
         <div class="mb-4">
-            <div class="p-xl-5 p-lg-4 p-md-5 card-holder">
+            <div class="card-holder p-lg-4 p-md-5 p-xl-5">
                 <div>
-                    <h2 class="quiz-title f-lg">{{ quiz?.title }}</h2>
+                    <h2 class="f-lg quiz-title">{{ quiz?.title }}</h2>
                 </div>
                 <div>
                     <p class="description f-sm">{{ quiz?.description }}</p>
@@ -16,7 +16,7 @@
                 <div class="">
                     <div class="f-sm">
                         <span class="description">Creator:&nbsp;</span>
-                        <span class="t-blue link" [routerLink]="'/profile/' + quiz?.creatorId?.username">
+                        <span class="link t-blue" [routerLink]="'/profile/' + quiz?.creatorId?.username">
                             &#64;{{ quiz?.creatorId?.username }}
                         </span>
                     </div>
@@ -43,23 +43,23 @@
                     </div>
                 </div>
                 <!-- @if(quiz?.quizStatus === "pending") {
-                <p class="text-danger mt-2 f-xs">*This quiz is taken down!</p>
+                <p class="text-danger f-xs mt-2">*This quiz is taken down!</p>
                 } -->
                 @if(user && user!.userId === quiz?.creatorId!._id && quiz?.quizStatus !== "accepted" ) {
-                <p class="text-danger mt-2 f-xs">*Your quiz is not approved by admin yet! Players may not be able to
+                <p class="text-danger f-xs mt-2">*Your quiz is not approved by admin yet! Players may not be able to
                     attempt it.</p>
                 }
-                <div class="mt-md-5 mt-3">
+                <div class="mt-3 mt-md-5">
                     @if(user && (user.role === 'creator' && (user!.userId === quiz?.creatorId!._id) || user.role ===
                     'admin')) {
                     <div class="d-flex gap-3">
-                        <button class="w-100 btn p-n-btn f-sm" (click)="redirectUser()">
+                        <button class="btn p-n-btn w-100 f-sm" (click)="redirectUser()">
                             View
                         </button>
-                        <button class="w-100 btn p-n-btn f-sm" [routerLink]="'/creator/quiz/' + quizId + '/edit'">
+                        <button class="btn p-n-btn w-100 f-sm" [routerLink]="'/creator/quiz/' + quizId + '/edit'">
                             Edit
                         </button>
-                        <!-- <button class="w-100 btn f-sm" (click)="enDisableQuiz()" [ngClass]="{
+                        <!-- <button class="btn w-100 f-sm" (click)="enDisableQuiz()" [ngClass]="{
                     'difficulty-easy-bg' : !quiz?.isEnabled,
                     'difficulty-hard-bg' : quiz?.isEnabled,
                   }">
@@ -68,12 +68,12 @@
                     </div>
                     } @else {
                     @if(quiz?.resultId) {
-                    <button class="w-100 btn p-n-btn f-sm" (click)="startQuiz()">
+                    <button class="btn p-n-btn w-100 f-sm" (click)="startQuiz()">
                         Result
                     </button>
                     } @else if(quiz?.quizStatus === "accepted") {
                     @if(user?.role === 'player' || !user) {
-                    <button class="w-100 btn p-n-btn f-sm" (click)="startQuiz()">
+                    <button class="btn p-n-btn w-100 f-sm" (click)="startQuiz()">
                         {{
                         user
                         ? "Start"
@@ -81,7 +81,7 @@
                         }}
                     </button>
                     } @else {
-                    <p class="text-danger mt-2 f-xs">
+                    <p class="text-danger f-xs mt-2">
                         *Create a player account to attempt this quiz!
                     </p>
                     }
@@ -92,53 +92,53 @@
         </div>
     </div>
     <div class="">
-        <div class="pb-5 card-holder user-review">
-            <div class="pt-xl-5 pt-lg-4 px-xl-5 px-lg-4">
-                <div class="stats t-gray f-xs">
+        <div class="card-holder pb-5 user-review">
+            <div class="pt-lg-4 pt-xl-5 px-lg-4 px-xl-5">
+                <div class="f-xs stats t-gray">
                     <div>
                         <p>
                             Submitted:&nbsp;
                             <span class="t-blue">{{ quiz?.meta?.attempted }}</span>
                         </p>
                     </div>
-                    <span class="t-l-gray partition">|</span>
+                    <span class="partition t-l-gray">|</span>
                     <div>
                         <p>
                             Passed:&nbsp;
                             <span class="t-blue">{{ quiz?.meta?.passed }}</span>
                         </p>
                     </div>
-                    <span class="t-l-gray partition">|</span>
+                    <span class="partition t-l-gray">|</span>
                     <div>
                         <p>
                             Passing Rate:&nbsp;
                             <span class="t-blue">{{ passingRate }}</span>
                         </p>
                     </div>
-                    <span class="t-l-gray extra-partition">|</span>
-                    <div class="d-flex gap-1 t-gray like-dislike">
+                    <span class="extra-partition t-l-gray">|</span>
+                    <div class="d-flex gap-1 like-dislike t-gray">
                         @if(user && user.role !== 'creator') {
-                        <div class="cancel-btn rounded-3">
-                            <button class="btn t-gray f-sm" (click)="updateQuizReaction('liked')">
+                        <div class="rounded-3 cancel-btn">
+                            <button class="btn f-sm t-gray" (click)="updateQuizReaction('liked')">
                                 <i class="fa-regular fa-thumbs-up me-2"
                                     [class.fa-solid]="quiz?.reaction === 'liked'"></i>
                                 <span>{{ quiz?.meta?.liked ?? 0 }}</span>
                             </button>
                         </div>
-                        <div class="cancel-btn rounded-3">
-                            <button class="btn t-gray f-sm" (click)="updateQuizReaction('disliked')">
+                        <div class="rounded-3 cancel-btn">
+                            <button class="btn f-sm t-gray" (click)="updateQuizReaction('disliked')">
                                 <i class="fa-regular fa-thumbs-down"
                                     [class.fa-solid]="quiz?.reaction === 'disliked'"></i>
                             </button>
                         </div>
                         } @else {
-                        <div class="d-flex f-sm align-content-center justify-content-center">
-                            <i class="fa-regular fa-thumbs-up me-2 pt-1 fa-solid"></i>
+                        <div class="d-flex align-content-center justify-content-center f-sm">
+                            <i class="fa-regular fa-solid fa-thumbs-up me-2 pt-1"></i>
                             <span class="">{{ quiz?.meta?.liked }}</span>
                         </div>
                         @if(user && user.role === 'creator' && user!.userId === quiz?.creatorId!._id) {
-                        <div class="ms-3 d-flex f-sm align-content-center justify-content-center">
-                            <i class="fa-regular fa-thumbs-down me-2 pt-1 fa-solid"></i>
+                        <div class="d-flex align-content-center justify-content-center f-sm ms-3">
+                            <i class="fa-regular fa-solid fa-thumbs-down me-2 pt-1"></i>
                             <span class="">{{ quiz?.meta?.disliked ?? 0 }}</span>
                         </div>
                         }
@@ -147,46 +147,46 @@
                 </div>
                 <hr />
             </div>
-            <div class="px-xl-5 px-lg-4">
+            <div class="px-lg-4 px-xl-5">
                 <p class="f-3md t-gray">Discuss</p>
                 <div class="new-comment-box" [formGroup]="discussForm">
                     @if(user) {
-                    <textarea #topOfComments appAutoSize class="t-gray f-sm" placeholder="Type your comment here..."
+                    <textarea #topOfComments appAutoSize class="f-sm t-gray" placeholder="Type your comment here..."
                         formControlName="comment"></textarea>
-                    <div class="d-flex gap-2 justify-content-end mt-3">
+                    <div class="d-flex justify-content-end gap-2 mt-3">
                         <button type="button" (click)="createComment()" class="btn p-n-btn f-sm">
-                            <i class="me-1 fa-solid fa-arrow-up-from-bracket"></i>
+                            <i class="fa-arrow-up-from-bracket fa-solid me-1"></i>
                             Post
                         </button>
                     </div>
                     } @else {
-                    <p class="f-xs t-gray fst-italic">
-                        <span class="t-blue link" routerLink="/login">Login</span>
+                    <p class="f-xs fst-italic t-gray">
+                        <span class="link t-blue" (click)="startQuiz()">signup</span>
                         now to share your views and learn more from the community.
                     </p>
                     }
                 </div>
                 <div class="mt-5">
                     @if(quiz?.comments!.length > 0) {
-                    <div class="mb-3 position-relative">
+                    <div class="position-relative mb-3">
                         <div class="d-flex gap-2">
                             <span class="f-xs t-gray">Sort by:</span>
-                            <div class="link f-xs" (click)="$event.stopPropagation()" (click)="toggleSortingOptions()">
+                            <div class="f-xs link" (click)="$event.stopPropagation()" (click)="toggleSortingOptions()">
                                 <span>
                                     {{ sortOrder == -1 ? "New first" : "Old first" }}&nbsp;
                                 </span>
                                 <span class="t-gray" [class.rotated]="showSortingOption">
-                                    <i class="fa-solid fa-angle-down"></i>
+                                    <i class="fa-angle-down fa-solid"></i>
                                 </span>
                             </div>
                         </div>
-                        <div class="accordion-dropdown p-2" [class.show]="showSortingOption">
-                            <div class="d-flex flex-column gap-1 f-xs">
-                                <span class="link p-1" (click)="!activeSort[-1] && fetchComments(-1)"
+                        <div class="p-2 accordion-dropdown" [class.show]="showSortingOption">
+                            <div class="d-flex flex-column f-xs gap-1">
+                                <span class="p-1 link" (click)="!activeSort[-1] && fetchComments(-1)"
                                     [class.t-blue]="activeSort[-1]">
                                     New first
                                 </span>
-                                <span class="link p-1" (click)="!activeSort[1] && fetchComments(1)"
+                                <span class="p-1 link" (click)="!activeSort[1] && fetchComments(1)"
                                     [class.t-blue]="activeSort[1]">
                                     Old first
                                 </span>
@@ -197,7 +197,7 @@
                     @if(!user) {
                     <p class="f-xs">
                         An account is needed to interact with the community. Please click
-                        <span routerLink="/login" class="t-blue link">here</span>
+                        <span routerLink="/login" class="link t-blue">here</span>
                         to create an account.
                     </p>
                     }
@@ -206,7 +206,7 @@
                         <app-comment-box (deleted)="removeComment($event)" [comment]="comment" [quizId]="quizId" />
                     </div>
                     } @empty {
-                    <p class="t-gray f-sm">
+                    <p class="f-sm t-gray">
                         No comments yet... <br />
                         Let's Start a Discussion!
                     </p>

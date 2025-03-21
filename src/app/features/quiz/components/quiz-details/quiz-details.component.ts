@@ -238,7 +238,7 @@ export class QuizDetailsComponent implements OnInit {
       if (this.user) {
         return this.router.navigate(['quiz', this.quiz!._id, 'attempt']);
       } else {
-        return this.router.navigate(['/login'], {
+        return this.router.navigate(['/signup'], {
           state: {
             redirectTo: `/quiz/${this.quiz?._id}/details`,
           },

@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   message = '';
   isFormSubmitted = false;
   private allowLogin = false;
+  private redirectTo = '';
 
   loginForm = new FormGroup({
     email: new FormControl('', {
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.redirectTo = history.state['redirectTo'];
     const email = history.state['email'];
     this.allowLogin = history.state['allowLogin'];
 
@@ -97,6 +99,7 @@ export class LoginComponent implements OnInit {
     return this.router.navigate(['/signup'], {
       state: {
         allowLogin: this.allowLogin,
+        redirectTo: this.redirectTo,
       },
     });
   }

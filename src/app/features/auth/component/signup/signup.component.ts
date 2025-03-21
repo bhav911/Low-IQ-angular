@@ -37,6 +37,7 @@ export class SignupComponent implements OnInit {
   checkingUsername = false;
   private role = 'player';
   private allowLogin = false;
+  private redirectTo = '';
 
   errorMessage = {
     invalidEmailMessage: '',
@@ -74,6 +75,7 @@ export class SignupComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.redirectTo = history.state['redirectTo'];
     this.role = history.state.role || 'player';
     this.allowLogin = history.state.allowLogin;
 
@@ -145,9 +147,8 @@ export class SignupComponent implements OnInit {
 
     this.authService.registerUser(user).subscribe({
       next: (saved) => {
-        const redirectTo = history.state['redirectTo'];
-        if (redirectTo) {
-          return this.router.navigate([redirectTo], {
+        if (this.redirectTo) {
+          return this.router.navigate([this.redirectTo], {
             replaceUrl: true,
           });
         }
@@ -168,6 +169,7 @@ export class SignupComponent implements OnInit {
     return this.router.navigate(['/login'], {
       state: {
         allowLogin: this.allowLogin,
+        redirectTo: this.redirectTo,
       },
     });
   }

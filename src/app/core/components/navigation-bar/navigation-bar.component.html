@@ -1,5 +1,5 @@
 <div class="box">
-    <div class="d-flex justify-content-between navContainer py-2 align-items-center">
+    <div class="d-flex navContainer align-items-center justify-content-between py-2">
         <div>
             <p class="logo mb-0" style="cursor: pointer;" routerLink="/home">LowIQ</p>
         </div>
@@ -11,56 +11,56 @@
                 <p class="nav-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">Quizzes</p>
             </div>
         </div>
-        <div class="position-relative gap-3 nav-link-item">
+        <div class="nav-link-item position-relative gap-3">
             @if(user){
             <div class="position-relative link" (click)="toggleNotificationPanel()">
                 <img class="notification-icon" src="/bell.png">
                 <div [class.show]="hasNewNotifications"
-                    class="notification-dot position-absolute top-0 end-0 rounded-circle"></div>
+                    class="position-absolute rounded-circle end-0 notification-dot top-0"></div>
             </div>
             <div>
-                <img class="profile-image link" [src]="user.profilePicture?.link || '/pngegg.png'"
+                <img class="link profile-image" [src]="user.profilePicture?.link || '/pngegg.png'"
                     (click)="toggleProfilePanel()">
             </div>
             <div [class.showProfile]="profilePanelOpen" class="sidebar-box">
-                <div class="px-3 pt-3 pb-1 position-relative sideBoxChild">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex gap-2 link align-items-center mb-2"
+                <div class="position-relative pb-1 pt-3 px-3 sideBoxChild">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2 link mb-2"
                             (click)="redirectUser('/profile/' + user.username)">
                             <div>
                                 <img class="profile-image" style="height: 60px; width: 60px;"
                                     [src]="user.profilePicture?.link || '/pngegg.png'">
                             </div>
                             <div>
-                                <p class="mb-0 f-md">{{ user.username }}</p>
-                                <p class="mb-0 fst-italic t-gray f-xs">{{ user.role | titlecase }}</p>
+                                <p class="f-md mb-0">{{ user.username }}</p>
+                                <p class="f-xs fst-italic mb-0 t-gray">{{ user.role | titlecase }}</p>
                             </div>
                         </div>
                         @if(allowAddingAnotherProfile){
                         <div>
                             <button (click)="toggleProfiles()" [class.rotated]="showAllProfiles" type="button"
                                 class="btn btn-sm border rounded-circle">
-                                <i class="fa-solid more-profile-btn fa-caret-down"></i>
+                                <i class="fa-caret-down fa-solid more-profile-btn"></i>
                             </button>
                         </div>
                         }
                     </div>
                     @if(allowAddingAnotherProfile && showAllProfiles){
-                    <div class="ms-5 ps-3 mb-3">
+                    <div class="mb-3 ms-5 ps-3">
                         @if(!anotherUser){
-                        <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn w-100 text-start">
+                        <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn text-start w-100">
                             + add player profile
                         </button>
                         }
                         @else {
                         <div class="border rounded-3">
-                            <button (click)="switchProfile()" class="btn w-100 text-start">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <img class="profile-image another-profile-image"
+                            <button (click)="switchProfile()" class="btn text-start w-100">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img class="another-profile-image profile-image"
                                         [src]="anotherUser.profilePicture?.link  || '/pngegg.png'">
                                     <div class="f-xs">
                                         <span class="t-d-gray">{{ anotherUser.username }}</span>
-                                        <span class="d-block t-gray fst-italic f-xxs">{{ user.role === 'creator' ?
+                                        <span class="d-block f-xxs fst-italic t-gray">{{ user.role === 'creator' ?
                                             'Player' :
                                             'Creator' }}</span>
                                     </div>
@@ -79,20 +79,20 @@
                     @if(user.role === 'creator' || user.role === "admin"){
                     <div>
                         <p class="link sidebar-item" (click)="redirectUser('/' + user.role +'/request-list')">
-                            <i class="fa-solid fa-palette"></i>
+                            <i class="fa-palette fa-solid"></i>
                             &nbsp;&nbsp;Request List
                         </p>
                     </div>
                     }
                     <div>
                         <p class="link sidebar-item" (click)="redirectUser('/profile')">
-                            <i class="fa-solid fa-pen"></i>
+                            <i class="fa-pen fa-solid"></i>
                             &nbsp;&nbsp;Edit Profile
                         </p>
                     </div>
                     <hr class="my-2">
-                    <div class="link sidebar-item logout-item" (click)="logoutUser()">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <div class="link logout-item sidebar-item" (click)="logoutUser()">
+                        <i class="fa-arrow-right-from-bracket fa-solid"></i>
                         &nbsp;&nbsp;Logout
                     </div>
                 </div>
@@ -103,12 +103,12 @@
             <button class="btn p-n-btn f-sm" routerLink="/signup">Signup</button>
             }
         </div>
-        <div class="d-none gap-3 align-items-center hamburger-menu">
+        <div class="d-none align-items-center gap-3 hamburger-menu">
             @if(user){
             <div class="position-relative link" (click)="toggleNotificationPanel()">
                 <img class="notification-icon" src="/bell.png">
                 <span [class.show]="hasNewNotifications"
-                    class="notification-dot position-absolute top-0 end-0 rounded-circle"></span>
+                    class="position-absolute rounded-circle end-0 notification-dot top-0"></span>
             </div>
             }
             <div (click)="toggleSidebar()">
@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <div [class.showNotification]="notificationPanelOpen" class="notification-panel fixed d-none">
+    <div [class.showNotification]="notificationPanelOpen" class="d-none fixed notification-panel">
         @for(notification of notifications; track notification._id){
         @if(!$first){
         <hr class="my-0">
@@ -126,7 +126,7 @@
         }
         @empty {
         <div class="d-flex justify-content-center">
-            <p class="t-gray fst-italic mb-0 py-2">You have no notifications!</p>
+            <p class="fst-italic mb-0 py-2 t-gray">You have no notifications!</p>
         </div>
         }
         <div #scrollAnchor></div>
@@ -135,49 +135,49 @@
 
     @if(sidebarOpen){
     <div class="sidebar">
-        <div class="px-3 pt-3 pb-1 sideBoxChild">
-            <div class="hamburger-menu justify-content-between mb-3" (click)="toggleSidebar()">
+        <div class="pb-1 pt-3 px-3 sideBoxChild">
+            <div class="justify-content-between hamburger-menu mb-3" (click)="toggleSidebar()">
                 <p class="logo mb-0" style="cursor: pointer;" (click)="redirectUser('/home')">LowIQ</p>
                 <img class="menu-icon" src="/close.png">
             </div>
             @if(user){
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-2 link align-items-center mb-2"
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 link mb-2"
                     (click)="redirectUser('/profile/' + user.username)">
                     <div>
                         <img class="profile-image" style="height: 60px; width: 60px;"
                             [src]="user.profilePicture?.link || '/pngegg.png'">
                     </div>
                     <div>
-                        <p class="mb-0 f-2md">{{ user.username }}</p>
-                        <p class="mb-0 fst-italic t-gray f-sm">{{ user.role | titlecase }}</p>
+                        <p class="f-2md mb-0">{{ user.username }}</p>
+                        <p class="f-sm fst-italic mb-0 t-gray">{{ user.role | titlecase }}</p>
                     </div>
                 </div>
                 @if(allowAddingAnotherProfile){
                 <div>
                     <button (click)="toggleProfiles()" [class.rotated]="showAllProfiles" type="button"
                         class="btn btn-sm border rounded-circle">
-                        <i class="fa-solid more-profile-btn fa-caret-down"></i>
+                        <i class="fa-caret-down fa-solid more-profile-btn"></i>
                     </button>
                 </div>
                 }
             </div>
             @if(allowAddingAnotherProfile && showAllProfiles){
-            <div class="ms-5 ps-3 mb-3">
+            <div class="mb-3 ms-5 ps-3">
                 @if(!anotherUser){
-                <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn w-100 text-start">
+                <button (click)="redirectCreatorForAddingProfile()" class="btn btn-sm p-n-btn text-start w-100">
                     + add player profile
                 </button>
                 }
                 @else {
                 <div class="border rounded-3">
-                    <button (click)="switchProfile()" class="btn w-100 text-start">
-                        <div class="d-flex gap-2 align-items-center">
-                            <img class="profile-image another-profile-image"
+                    <button (click)="switchProfile()" class="btn text-start w-100">
+                        <div class="d-flex align-items-center gap-2">
+                            <img class="another-profile-image profile-image"
                                 [src]="anotherUser.profilePicture?.link  || '/pngegg.png'">
                             <div class="f-sm">
                                 <span class="t-d-gray">{{ anotherUser.username }}</span>
-                                <span class="d-block t-gray fst-italic f-xs">{{ user.role === 'creator' ? 'Player' :
+                                <span class="d-block f-xs fst-italic t-gray">{{ user.role === 'creator' ? 'Player' :
                                     'Creator' }}</span>
                             </div>
                         </div>
@@ -189,13 +189,13 @@
             }
             <div>
                 <p class="link sidebar-item" (click)="redirectUser('/home')">
-                    <i class="fa-solid fa-home"></i>
+                    <i class="fa-home fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Home
                 </p>
             </div>
             <div>
                 <p class="link sidebar-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">
-                    <i class="fa-solid fa-book"></i>
+                    <i class="fa-book fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Quizzes
                 </p>
             </div>
@@ -210,31 +210,31 @@
             @if(user.role === 'creator' || user.role === 'admin'){
             <div>
                 <p class="link sidebar-item" (click)="redirectUser('/' + user.role +'/request-list')">
-                    <i class="fa-solid fa-palette"></i>
+                    <i class="fa-palette fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Request List
                 </p>
             </div>
             }
             <div>
                 <p class="link sidebar-item" (click)="redirectUser('/profile')">
-                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-pen fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Edit Profile
                 </p>
             </div>
             }
             <!-- <div class="position-relative appearance-parent">
                 <p class="link sidebar-item">
-                    <i class="fa-solid fa-circle-half-stroke"></i>
+                    <i class="fa-circle-half-stroke fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Theme
                 </p>
-                <div class="appearance-box rounded-3">
-                    <div class="b3 rounded-3">
-                        <div class="link appearance-item py-2">
+                <div class="rounded-3 appearance-box">
+                    <div class="rounded-3 b3">
+                        <div class="appearance-item link py-2">
                             <i class="fa-solid fa-sun"></i>
                             &nbsp;&nbsp;Light
                         </div>
-                        <div class="link appearance-item py-2">
-                            <i class="fa-solid fa-moon"></i>
+                        <div class="appearance-item link py-2">
+                            <i class="fa-moon fa-solid"></i>
                             &nbsp;&nbsp;Dark
                         </div>
                     </div>
@@ -242,15 +242,15 @@
             </div> -->
             <hr [class.hide]="!user" class="my-2">
             @if(user){
-            <div class="link sidebar-item logout-item" (click)="logoutUser()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <div class="link logout-item sidebar-item" (click)="logoutUser()">
+                <i class="fa-arrow-right-from-bracket fa-solid"></i>
                 &nbsp;&nbsp;&nbsp;&nbsp;Logout
             </div>
             }
             @else {
-            <div class="d-flex gap-2 p-4 position-absolute bottom-0 end-0">
-                <button class="btn p-n-btn f-md" routerLink="/account/login">Login</button>
-                <button class="btn p-n-btn f-md" routerLink="/account/signup">Signup</button>
+            <div class="d-flex p-4 position-absolute bottom-0 end-0 gap-2">
+                <button class="btn p-n-btn f-md" (click)="redirectUser('/login')">Login</button>
+                <button class="btn p-n-btn f-md" (click)="redirectUser('/signup')">Signup</button>
             </div>
             }
         </div>

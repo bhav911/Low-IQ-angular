@@ -269,6 +269,8 @@ export class AccountService {
           this.user!.profilePicture!.link = profileUrl;
         }),
         catchError((err) => {
+          console.log(err);
+
           return this.handleError(err);
         })
       );

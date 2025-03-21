@@ -10,8 +10,6 @@ export const resultGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
 
   const green = route.paramMap.get('green');
-  console.log(green);
-
   if (green) {
     return true;
   }

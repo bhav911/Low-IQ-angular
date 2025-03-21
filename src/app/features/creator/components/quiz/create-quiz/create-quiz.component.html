@@ -1,10 +1,10 @@
-<div class="container mt-2 f-sm">
+<div class="container f-sm mt-2">
     <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
 
-        <div class="f-md d-flex justify-content-between mb-2 link" (click)="toggleQuizMeta()">
+        <div class="d-flex justify-content-between f-md link mb-2" (click)="toggleQuizMeta()">
             <p class="mb-0">Quiz Details</p>
             <span [class.rotated]="!hideQuizMeta">
-                <i class="fa-lg fa-solid fa-angle-down "></i>
+                <i class="fa-angle-down fa-lg fa-solid"></i>
             </span>
         </div>
         <hr class="mt-0">
@@ -49,41 +49,41 @@
                     </label>
                 </div>
             </div>
-            <div class="d-flex gap-3 my-3 flex-wrap">
+            <div class="d-flex flex-wrap gap-3 my-3">
                 <div class="position-relative f-sm">
                     <div>
-                        <button class="form-control filter-btn btn f-sm" type="button"
+                        <button class="btn form-control f-sm filter-btn" type="button"
                             (click)="!quizId() && toggleRotation(1)" [ngClass]="{'is-invalid': categoryErrorMessage}">
                             {{ currectCategory | titlecase }}&nbsp;
                             @if(!quizId()){
                             <span [class.rotated]="isRotated[1]">
-                                <i class="fa-solid fa-angle-down"></i>
+                                <i class="fa-angle-down fa-solid"></i>
                             </span>
                             }
                         </button>
                     </div>
-                    <div class="accordion-dropdown p-2" [class.show]="!disableFields && isRotated[1]">
-                        <div class="d-flex dropdown-box flex-column gap-1">
+                    <div class="p-2 accordion-dropdown" [class.show]="!disableFields && isRotated[1]">
+                        <div class="d-flex flex-column dropdown-box gap-1">
                             @if(showNewCategoryField){
                             <div class="d-flex">
-                                <input #newCategoryValue type="text" class="t-blue new-category"
+                                <input #newCategoryValue type="text" class="new-category t-blue"
                                     placeholder="+ New category" />
                                 <div>
                                     <button type="button" (click)="addNewCategory(newCategoryValue.value)"
-                                        class="btn btn-sm f-sm p-n-btn rounded-3">+</button>
+                                        class="btn btn-sm p-n-btn rounded-3 f-sm">+</button>
                                 </div>
                             </div>
                             }
                             @for(category of categories; track $index){
-                            <div class="d-flex gap-2 justify-content-between">
+                            <div class="d-flex justify-content-between gap-2">
                                 <span (click)="updateFilter('category',category._id)"
-                                    class="link category-dropdown-item p-1"
+                                    class="p-1 category-dropdown-item link"
                                     [ngClass]="{'t-blue':qf['category'].value === category._id}">{{
                                     category.title.split('-').join(' ') | titlecase
                                     }}</span>
                                 @if(category.creatorId === 'new'){
                                 <button type="button" class="btn btn-sm" (click)="editNewCategory(category._id)">
-                                    <i class="fa-solid fa-pen fa-sm t-blue"></i>
+                                    <i class="fa-pen fa-sm fa-solid t-blue"></i>
                                 </button>
                                 }
                             </div>
@@ -93,25 +93,25 @@
                 </div>
                 <div class="position-relative f-sm">
                     <div>
-                        <button class="form-control filter-btn btn f-sm" type="button"
+                        <button class="btn form-control f-sm filter-btn" type="button"
                             (click)="!quizId() && toggleRotation(0)" [ngClass]="{'is-invalid': difficultyErrorMessage}"
                             [ngClass]="'difficulty-'+quizForm.controls['difficulty'].value">
                             {{ quizForm.controls['difficulty'].value| titlecase }}&nbsp;
                             @if(!quizId()){
                             <span [class.rotated]="isRotated[0]">
-                                <i class="fa-solid fa-angle-down"></i>
+                                <i class="fa-angle-down fa-solid"></i>
                             </span>
                             }
                         </button>
                     </div>
-                    <div class="accordion-dropdown p-2" [class.show]="isRotated[0]">
-                        <div class="d-flex dropdown-box flex-column gap-1">
+                    <div class="p-2 accordion-dropdown" [class.show]="isRotated[0]">
+                        <div class="d-flex flex-column dropdown-box gap-1">
                             <span (click)="updateFilter('difficulty','easy')"
-                                class="difficulty-item p-1 difficulty-easy">Easy</span>
+                                class="p-1 difficulty-easy difficulty-item">Easy</span>
                             <span (click)="updateFilter('difficulty','medium')"
-                                class="difficulty-item p-1 difficulty-medium">Medium</span>
+                                class="p-1 difficulty-item difficulty-medium">Medium</span>
                             <span (click)="updateFilter('difficulty','hard')"
-                                class="difficulty-item p-1 difficulty-hard">Hard</span>
+                                class="p-1 difficulty-hard difficulty-item">Hard</span>
                         </div>
                     </div>
                 </div>
@@ -127,15 +127,15 @@
 
         @if(showGeminiPrompt){
         <div>
-            <textarea #geminiQuizDescription class="w-100 description-field form-control"
-                placeholder="Information related to quiz..."></textarea>
-            <span class="text-danger mb-2 f-xs">*AI can make mistake, make sure you recheck the quiz details</span>
+            <textarea #geminiQuizDescription class="form-control w-100 description-field"
+                placeholder="Enter topic for quiz"></textarea>
+            <span class="text-danger f-xs mb-2">*AI can make mistake, make sure you recheck the quiz details</span>
             <div class="d-flex justify-content-between">
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex align-items-center gap-2">
                     <span class="t-gray">Questions count: </span>
-                    <input class="w-25 form-control object-fit-contain" #geminiNumOfQuestion type="number" value="10" />
+                    <input class="form-control w-25 object-fit-contain" #geminiNumOfQuestion type="number" value="10" min="1" max="10"/>
                 </div>
-                <button class="ms-2 btn difficulty-easy-bg" type="button"
+                <button class="btn difficulty-easy-bg ms-2" type="button"
                     (click)="generateGeminiQuiz(geminiQuizDescription.value, +geminiNumOfQuestion.value)">
                     <span [class.submitLoader]="quizGenerationInProcess">
                         {{ quizGenerationInProcess ? '' : 'Generate' }}
@@ -146,11 +146,11 @@
         }
 
 
-        <div class="f-md mb-2 mt-4 d-flex justify-content-between">
+        <div class="d-flex justify-content-between f-md mb-2 mt-4">
             <p class="mb-0">Question Details</p>
             @if(!disableFields){
             <span (click)="addQuestion()" class="link new-btn">
-                <i class="fa-solid fa-plus fa-sm me-1"></i>
+                <i class="fa-plus fa-sm fa-solid me-1"></i>
                 <span>New</span>
             </span>
             }
@@ -158,18 +158,18 @@
         <hr class="mt-0">
         <!-- question-details -->
         <div>
-            <div class="mb-4 position-relative">
+            <div class="position-relative mb-4">
                 @if(activeQuestionIndex() !== null){
                 @if(activeQuestionIndex()! > 0){
-                <div class="link position-absolute start-0 top-0" (click)="swipeQuestion(-1)">
-                    <i class="fa-solid fa-caret-left t-gray fa-xl mt-4 pt-1"></i>
+                <div class="position-absolute link start-0 top-0" (click)="swipeQuestion(-1)">
+                    <i class="fa-caret-left fa-solid fa-xl mt-4 pt-1 t-gray"></i>
                 </div>
                 }
                 <app-quiz-template [highLightError]="highLightError" [questionForm]="getQuestion()"
                     [$index]="activeQuestionIndex()!" (deleteChild)="removeChild($event)" />
                 @if(questions.length > activeQuestionIndex()! + 1){
-                <div class="link position-absolute end-0 top-0" (click)="swipeQuestion(+1)">
-                    <i class="fa-solid fa-caret-right t-gray fa-xl mt-4 pt-1"></i>
+                <div class="position-absolute end-0 link top-0" (click)="swipeQuestion(+1)">
+                    <i class="fa-caret-right fa-solid fa-xl mt-4 pt-1 t-gray"></i>
                 </div>
                 }
                 }
@@ -179,7 +179,7 @@
 
 
         <div class="d-flex justify-content-end gap-2 my-4">
-            <button type="submit" class="btn text-center f-sm mb-5 rounded-3 option-number submit-btn">
+            <button type="submit" class="btn rounded-3 text-center f-sm mb-5 option-number submit-btn">
                 <span [class.submitLoader]="formSubmissionInProcess">
                     {{ formSubmissionInProcess ? '' : quizId() ? 'Update Quiz' : 'Add Quiz' }}
                 </span>

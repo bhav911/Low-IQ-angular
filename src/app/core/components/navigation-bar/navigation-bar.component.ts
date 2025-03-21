@@ -101,6 +101,8 @@ export class NavigationBarComponent implements OnInit, AfterViewInit {
           this.allowAddingAnotherProfile = true;
         },
       });
+    } else {
+      this.anotherUser = null;
     }
     if (!token && this.user?.role === 'creator') {
       this.allowAddingAnotherProfile = true;
@@ -203,6 +205,10 @@ export class NavigationBarComponent implements OnInit, AfterViewInit {
   }
 
   redirectCreatorForAddingProfile() {
+    this.profilePanelOpen = false;
+    this.notificationPanelOpen = false;
+    this.sidebarOpen = false;
+    this.showAllProfiles = false;
     this.router.navigate(['/signup'], {
       state: {
         allowLogin: true,

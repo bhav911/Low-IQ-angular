@@ -4,18 +4,18 @@
         <div class="loader"></div>
     </div>
     } @else{ @if(userNotFound){
-    <div class="d-flex flex-column justify-content-center align-items-center data-not-found t-gray">
-        <i class="fa-regular fa-face-frown"></i>
+    <div class="d-flex flex-column align-items-center justify-content-center data-not-found t-gray">
+        <i class="fa-face-frown fa-regular"></i>
         <p>user not found</p>
     </div>
     } @else{
-    <div class="dashboard-holder d-flex gap-4">
+    <div class="d-flex dashboard-holder gap-4">
         <!-- left-size box -->
-        <div class="box-1 p-3 rounded-3 b3">
+        <div class="p-3 rounded-3 b3 box-1">
             <!-- Userdata box -->
-            <div class="userdata-box flex-column gap-0 flex-sm-row d-flex gap-sm-2 mb-3">
+            <div class="d-flex flex-column flex-sm-row gap-0 gap-sm-2 mb-3 userdata-box">
                 <div>
-                    <img class="profile-image rounded-3 mb-sm-4 mb-1"
+                    <img class="rounded-3 mb-1 mb-sm-4 profile-image"
                         [src]="profileUser.user.profilePicture?.link || '/pngegg.png'" />
                 </div>
                 <div>
@@ -23,40 +23,40 @@
                         <p class="f-sm mb-0">
                             {{ profileUser.user.name ?? profileUser.user.username }}
                         </p>
-                        <p class="text-dark-emphasis mb-2 mb-sm-3 f-xs">
+                        <p class="text-dark-emphasis f-xs mb-2 mb-sm-3">
                             &#64;{{ profileUser.user.username }}
                         </p>
                     </div>
-                    <div>
+                    <!-- <div>
                         <p class="f-sm mb-0 t-gray">
                             Rank&nbsp;
-                            <span class="fw-lbold f-md">
+                            <span class="f-md fw-lbold">
                                 {{ rank === 0 ? "NA" : rank }}
                             </span>
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             @if(user && user.userId === profileUser. user.userId){
             <div>
-                <button class="btn w-100 p-n-btn f-sm" type="button" routerLink="/profile">
+                <button class="btn p-n-btn w-100 f-sm" type="button" routerLink="/profile">
                     Edit Profile
                 </button>
             </div>
             }
         </div>
-        <div class="box-2 w-100 d-flex flex-column gap-4">
+        <div class="d-flex flex-column w-100 box-2 gap-4">
             @if(profileUser.user.role === 'player'){
-            <div class="box-2-1 p-3 rounded-3 b3">
+            <div class="p-3 rounded-3 b3 box-2-1">
                 <p class="f-md t-gray">Badges</p>
-                <div (click)="$event.stopPropagation()" class="badges-holder d-flex align-items-center gap-sm-5 gap-4"
+                <div (click)="$event.stopPropagation()" class="d-flex badges-holder align-items-center gap-4 gap-sm-5"
                     [ngClass]="{
             'justify-content-between': profileUser. user.userId === user?.userId
           }">
                     @for(achievement of achievementsToDisplay; track
                     achievement._id){
                     <div class="text-center" [class.locked]="!achievement.isUnlocked">
-                        <img class="badge-icon mb-1 link" (click)="toggleAchievement(achievement._id)" [src]="
+                        <img class="badge-icon link mb-1" (click)="toggleAchievement(achievement._id)" [src]="
                 achievement.isUnlocked
                   ? achievement.iconUrl
                   : achievement.lockedIconUrl
@@ -64,28 +64,28 @@
                         <p class="f-xxs">{{ achievement.title | titlecase }}</p>
                     </div>
                     } @empty {
-                    <p class="w-100 text-center fst-italic t-gray f-sm">
+                    <p class="text-center w-100 f-sm fst-italic t-gray">
                         No Badges collected yet!
                     </p>
                     } @if(achievementsToDisplay.length < achievements.length){ <div (click)="toggleAllAchievementBox()"
-                        class="see-more t-gray text-center">
+                        class="text-center see-more t-gray">
                         <i
-                            class="fa-solid fa-caret-down border border-secondary-subtle btn t-gray rounded-circle mb-1 py-2"></i>
+                            class="btn border border-secondary-subtle rounded-circle fa-caret-down fa-solid mb-1 py-2 t-gray"></i>
                         <p class="f-xxs">see more</p>
                 </div>
                 }
             </div>
         </div>
         }
-        <div class="box-2-2 p-3 rounded-3 b3">
-            <p class="f-md t-gray mb-0 mb-md-4">
+        <div class="p-3 rounded-3 b3 box-2-2">
+            <p class="f-md mb-0 mb-md-4 t-gray">
                 {{ profileUser.user!.role === "player" ? "Progress" : "Publishments" }}
             </p>
-            <div class="user-progress d-flex" [ngClass]="getProgressBoxClass()">
-                <div class="progress-box d-flex gap-2">
+            <div class="d-flex user-progress" [ngClass]="getProgressBoxClass()">
+                <div class="d-flex gap-2 progress-box">
                     <div
-                        class="t-d-gray progress-attempted w-100 link rounded-3 d-flex flex-column align-items-center justify-content-center b3">
-                        <p class="p-0 m-0">
+                        class="d-flex flex-column align-items-center justify-content-center rounded-3 w-100 b3 link progress-attempted t-d-gray">
+                        <p class="m-0 p-0">
                             @if(profileUser.user!.role === 'creator'){
                             <span class="f-3md">{{ totalPublished }}</span>
                             } @else {
@@ -98,13 +98,13 @@
                                 @if(profileUser.user!.role === 'creator'){
                                 <p>Quiz Created</p>
                                 } @else {
-                                <i class="fa-solid fa-check fa-lg difficulty-easy"></i>&nbsp;Attempted }
+                                <i class="difficulty-easy fa-check fa-lg fa-solid"></i>&nbsp;Attempted }
                             </span>
                         </p>
                     </div>
-                    <div class="progress-difficuty-holder d-flex gap-2 justify-content-between f-xs">
+                    <div class="d-flex justify-content-between f-xs gap-2 progress-difficuty-holder">
                         <div level="easy"
-                            class="progress-difficuty link rounded-3 d-flex align-items-center justify-content-center h-100 t-d-gray b3">
+                            class="d-flex align-items-center h-100 justify-content-center rounded-3 b3 link progress-difficuty t-d-gray">
                             <p class="difficulty-easy">Easy</p>
                             @if(profileUser.user!.role === 'creator'){
                             <p>
@@ -117,7 +117,7 @@
                             }
                         </div>
                         <div level="medium"
-                            class="progress-difficuty link rounded-3 d-flex align-items-center justify-content-center h-100 t-d-gray b3">
+                            class="d-flex align-items-center h-100 justify-content-center rounded-3 b3 link progress-difficuty t-d-gray">
                             <p class="difficulty-medium">Medium</p>
                             @if(profileUser.user!.role === 'creator'){
                             <p>
@@ -130,7 +130,7 @@
                             }
                         </div>
                         <div level="hard"
-                            class="progress-difficuty link rounded-3 d-flex align-items-center justify-content-center h-100 t-d-gray b3">
+                            class="d-flex align-items-center h-100 justify-content-center rounded-3 b3 link progress-difficuty t-d-gray">
                             <p class="difficulty-hard">Hard</p>
                             @if(profileUser.user!.role === 'creator'){
                             <p>
@@ -145,25 +145,25 @@
                     </div>
                 </div>
                 @if(profileUser.user.role === 'player' || profileUser.user.userId === user?.userId){
-                <div class="partition border border-light-subtle"></div>
-                <div class="progress-box d-flex gap-2 piechart mx-auto position-relative w-auto">
-                    <div class="chart w-100 position-relative">
+                <div class="border border-light-subtle partition"></div>
+                <div class="d-flex position-relative w-auto gap-2 mx-auto piechart progress-box">
+                    <div class="position-relative w-100 chart">
                         <ngx-charts-pie-chart class="text-start" [results]="data" [labels]="showLabels"
                             [doughnut]="true" [animations]="true" [customColors]="customColors">
                         </ngx-charts-pie-chart>
-                        <div class="acceptance-ratio position-absolute top-50 start-50 translate-middle text-center">
+                        <div class="position-absolute text-center acceptance-ratio start-50 top-50 translate-middle">
                             @if(showChart){ @if(profileUser.user!.role != 'creator'){
                             <p class="mb-0 t-gray">
                                 {{ acceptanceRate == -1 ? "NA" : acceptanceRate + "%" }}
                             </p>
                             }
-                            <p class="mb-0 f-xs text-nowrap" [ngClass]="'difficulty-' + chartDifficultyType">
+                            <p class="text-nowrap f-xs mb-0" [ngClass]="'difficulty-' + chartDifficultyType">
                                 {{ chartDifficultyType | titlecase }}
                             </p>
 
                             } @else if(profileUser.user.role === 'player' || !showChart){
                             <div class="no-data">
-                                <p class="t-gray f-sm fst-italic mb-0 text-nowrap">
+                                <p class="text-nowrap f-sm fst-italic mb-0 t-gray">
                                     No quiz
                                     {{
                                     profileUser.user!.role === "player" ? "attempted" : "created"
@@ -183,8 +183,8 @@
                 }
             </div>
         </div>
-        <div class="box-2-3 p-3 rounded-3 b3">
-            <p class="f-md t-gray mb-4">
+        <div class="p-3 rounded-3 b3 box-2-3">
+            <p class="f-md mb-4 t-gray">
                 Recent
                 {{ profileUser.user!.role === "player" ? "Submissions" : "Publishments" }}
             </p>
@@ -211,18 +211,18 @@
 } }
 
 <div [class.show]="showAllAchievementBox"
-    class="backdrop achievement-wall align-items-center justify-content-center d-none position-fixed top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100">
-    <div (click)="$event.stopPropagation()" class="bg-light overflow-hidden rounded-3 p-4 text-center b3 mx-4">
+    class="d-flex d-none align-items-center h-100 justify-content-center position-fixed w-100 achievement-wall backdrop start-0 top-0">
+    <div (click)="$event.stopPropagation()" class="bg-light p-4 rounded-3 text-center b3 mx-4 overflow-hidden">
         <div class="position-relative">
-            <p class="mx-auto d-inline-block f-md">Badges Wall</p>
-            <span (click)="toggleAllAchievementBox()" class="link position-absolute top-0 end-0"><i
-                    class="fa-solid fa-xmark fa-lg"></i></span>
+            <p class="d-inline-block f-md mx-auto">Badges Wall</p>
+            <span (click)="toggleAllAchievementBox()" class="position-absolute end-0 link top-0"><i
+                    class="fa-lg fa-solid fa-xmark"></i></span>
         </div>
         <div>
-            <div class="all-badges-holder overflow-auto d-flex gap-5 align-items-center">
+            <div class="d-flex align-items-center all-badges-holder gap-5 overflow-auto">
                 @for(achievement of achievements; track achievement._id){
                 <div class="text-center" [class.locked]="!achievement.isUnlocked">
-                    <img class="badge-icon mb-1 link" (click)="toggleAchievement(achievement._id)" [src]="
+                    <img class="badge-icon link mb-1" (click)="toggleAchievement(achievement._id)" [src]="
                 achievement.isUnlocked
                   ? achievement.iconUrl
                   : achievement.lockedIconUrl
@@ -237,8 +237,8 @@
 
 @if(activeAchievement){
 <!-- Backdrop and Achievement Box -->
-<div class="backdrop position-fixed top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100">
-    <div (click)="$event.stopPropagation()" class="achievement-box bg-light rounded-3 p-4 text-center b3">
+<div class="d-flex align-items-center h-100 justify-content-center position-fixed w-100 backdrop start-0 top-0">
+    <div (click)="$event.stopPropagation()" class="bg-light p-4 rounded-3 text-center achievement-box b3">
         <div [class.locked]="!activeAchievement.isUnlocked">
             <img class="achievement-badge" [src]="
             activeAchievement.isUnlocked
@@ -247,15 +247,15 @@
           " />
         </div>
         <div class="achievement-content">
-            <p class="t-golden f-md fw-lbold d-inline-block my-1 mx-0">
+            <p class="d-inline-block f-md fw-lbold mx-0 my-1 t-golden">
                 {{ activeAchievement.title | titlecase }}
             </p>
             @if(user?.userId !== profileUser. user.userId){
-            <p class="t-gray f-sm my-1 mx-0">
+            <p class="f-sm mx-0 my-1 t-gray">
                 {{ activeAchievement.secondPersonDescription }}
             </p>
             } @else {
-            <p class="t-gray f-sm my-1 mx-0">
+            <p class="f-sm mx-0 my-1 t-gray">
                 {{
                 activeAchievement.isUnlocked
                 ? activeAchievement.description
@@ -264,7 +264,7 @@
             </p>
             }
         </div>
-        <button class="cancel-btn link f-sm mt-3 py-2 px-4 border-0 rounded-2" (click)="$event.stopPropagation()"
+        <button class="border-0 rounded-2 cancel-btn f-sm link mt-3 px-4 py-2" (click)="$event.stopPropagation()"
             (click)="toggleAchievement()">
             Close
         </button>

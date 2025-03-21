@@ -1,6 +1,24 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, computed, DestroyRef, ElementRef, inject, input, OnInit, signal, ViewChild, viewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  OnInit,
+  signal,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Observable, of, Subject, take } from 'rxjs';
 import { Router } from '@angular/router';
 import { QuizTemplateComponent } from './quiz-template/quiz-template.component';
@@ -17,10 +35,9 @@ import { genQuestionModel } from '../../../../../core/models/generatedQuestion.m
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, QuizTemplateComponent],
   templateUrl: './create-quiz.component.html',
-  styleUrl: './create-quiz.component.css'
+  styleUrl: './create-quiz.component.css',
 })
 export class CreateQuizComponent implements OnInit {
-
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private categoryService = inject(CategoryService);
@@ -29,8 +46,10 @@ export class CreateQuizComponent implements OnInit {
 
   private destroy$ = new Subject<void>();
 
-  @ViewChild('descriptionField') descriptionField!: ElementRef<HTMLTextAreaElement>;
-  @ViewChild('newCategoryValue') newCategoryField!: ElementRef<HTMLInputElement>;
+  @ViewChild('descriptionField')
+  descriptionField!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('newCategoryValue')
+  newCategoryField!: ElementRef<HTMLInputElement>;
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -39,18 +58,18 @@ export class CreateQuizComponent implements OnInit {
 
   minimunQuestions = 5;
   quizForm = this.fb.group({
-    title: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(150)]],
-    description: ['', [Validators.required, Validators.minLength(40), Validators.maxLength(500)]],
+    title: ['', [Validators.required, Validators.maxLength(250)]],
+    description: ['', [Validators.required, Validators.maxLength(500)]],
     note: ['', [Validators.maxLength(500)]],
     difficulty: ['Difficulty', [Validators.required]],
     category: ['Category', [Validators.required]],
-    questions: this.fb.array([])
+    questions: this.fb.array([]),
   });
   quiz: quiz | null = null;
   categories: category[] = [];
   isRotated = [false, false];
   formInvalid = signal(false);
-  activeQuestionIndex = signal<number | null>(null)
+  activeQuestionIndex = signal<number | null>(null);
 
   quizId = input<string | null>(null);
   toEdit = false;
@@ -59,41 +78,44 @@ export class CreateQuizComponent implements OnInit {
   hideQuizMeta = false;
   highLightError = false;
   showGeminiPrompt = false;
-  formSubmissionInProcess = false
+  formSubmissionInProcess = false;
   quizGenerationInProcess = false;
   showNewCategoryField = true;
 
   // Error-Messages
-  titleErrorMessage: string | null = null
-  descriptionErrorMessage: string | null = null
-  difficultyErrorMessage: string | null = null
-  categoryErrorMessage: string | null = null
+  titleErrorMessage: string | null = null;
+  descriptionErrorMessage: string | null = null;
+  difficultyErrorMessage: string | null = null;
+  categoryErrorMessage: string | null = null;
 
   constructor() {
     this.qf['title'].valueChanges.subscribe(() => {
       this.invalidQuizTitle();
-    })
+    });
     this.qf['description'].valueChanges.subscribe(() => {
       this.adjustHeight();
       this.invalidQuizDescription();
-    })
+    });
     this.qf['difficulty'].valueChanges.subscribe(() => {
       this.invalidQuizDifficulty();
-    })
+    });
     this.qf['category'].valueChanges.subscribe(() => {
       this.invalidQuizCategory();
-    })
+    });
   }
 
   ngOnInit(): void {
-    this.categoryService.getAllCategories("_id title", "create").subscribe((next: any) => {
-      if (next) {
-        this.categories = next;
-      }
-    })
+    this.categoryService
+      .getAllCategories('_id title', 'create')
+      .subscribe((next: any) => {
+        if (next) {
+          this.categories = next;
+        }
+      });
     if (this.quizId()) {
       this.toEdit = true;
-      const fields = "_id title questionCount meta { attempted } categoryId { _id title } description difficulty questions { _id question point questionImage options { _id isCorrect option } }"
+      const fields =
+        '_id title questionCount meta { attempted } categoryId { _id title } description difficulty questions { _id question point questionImage options { _id isCorrect option } }';
       this.quizService.getQuiz(this.quizId()!, fields).subscribe({
         next: (quizData: any) => {
           if (quizData) {
@@ -104,7 +126,9 @@ export class CreateQuizComponent implements OnInit {
               this.quizForm.controls['questions'].disable();
             }
             this.quiz = quizData;
-            this.quizForm.controls['category'].patchValue(this.quiz?.categoryId._id!)
+            this.quizForm.controls['category'].patchValue(
+              this.quiz?.categoryId._id!
+            );
             for (let i = 0; i < quizData.questionCount; i++) {
               this.addQuestion(quizData.questions.at(i));
             }
@@ -112,8 +136,8 @@ export class CreateQuizComponent implements OnInit {
             this.activeQuestionIndex.set(0);
             this.quizForm.patchValue(this.quiz!);
           }
-        }
-      })
+        },
+      });
     }
   }
 
@@ -127,15 +151,19 @@ export class CreateQuizComponent implements OnInit {
     return this.quizForm.get('questions') as FormArray;
   }
 
-  getQuestion = computed(() => this.questions.at(this.activeQuestionIndex()!) as FormGroup<QuestionStruct>)
+  getQuestion = computed(
+    () =>
+      this.questions.at(
+        this.activeQuestionIndex()!
+      ) as FormGroup<QuestionStruct>
+  );
 
   removeChild(index: number) {
     this.questions.removeAt(index);
     if (this.questions.length === 0) {
       this.activeQuestionIndex.set(null);
-    }
-    else {
-      this.activeQuestionIndex.set(index === 0 ? index + 1 : index - 1)
+    } else {
+      this.activeQuestionIndex.set(index === 0 ? index + 1 : index - 1);
     }
   }
 
@@ -166,16 +194,20 @@ export class CreateQuizComponent implements OnInit {
   }
 
   isQuizMetaInvalid() {
-    let invalidTitle = this.invalidQuizTitle(true)
+    let invalidTitle = this.invalidQuizTitle(true);
     let invalidDescription = this.invalidQuizDescription(true);
     let invalidCategory = this.invalidQuizCategory();
     let invalidDifficulty = this.invalidQuizDifficulty();
 
-    let isInvalid = invalidTitle || invalidDescription || invalidCategory || invalidDifficulty
+    let isInvalid =
+      invalidTitle ||
+      invalidDescription ||
+      invalidCategory ||
+      invalidDifficulty;
     if (isInvalid) {
       this.hideQuizMeta = false;
     }
-    return isInvalid
+    return isInvalid;
   }
 
   addQuestion(question?: question) {
@@ -184,38 +216,49 @@ export class CreateQuizComponent implements OnInit {
     }
 
     const questionForm = this.fb.group({
-      question: [question?.question ?? '', [Validators.required, Validators.minLength(5), Validators.maxLength(400)]],
+      question: [
+        question?.question ?? '',
+        [Validators.required, Validators.maxLength(500)],
+      ],
       options: this.fb.array([
         this.fb.group({
-          option: ['', [Validators.required, Validators.maxLength(180)]],
-          isCorrect: [false, Validators.required]
+          option: ['', [Validators.required, Validators.maxLength(250)]],
+          isCorrect: [false, Validators.required],
         }),
         this.fb.group({
-          option: ['', [Validators.required, Validators.maxLength(180)]],
-          isCorrect: [false, Validators.required]
+          option: ['', [Validators.required, Validators.maxLength(250)]],
+          isCorrect: [false, Validators.required],
         }),
         this.fb.group({
-          option: ['', [Validators.required, Validators.maxLength(180)]],
-          isCorrect: [false, Validators.required]
+          option: ['', [Validators.required, Validators.maxLength(250)]],
+          isCorrect: [false, Validators.required],
         }),
         this.fb.group({
-          option: ['', [Validators.required, Validators.maxLength(180)]],
-          isCorrect: [false, Validators.required]
-        })
+          option: ['', [Validators.required, Validators.maxLength(250)]],
+          isCorrect: [false, Validators.required],
+        }),
       ]),
-      point: [question?.point ?? 1, [Validators.required, Validators.min(1), Validators.max(10)]],
-      questionImage: [question?.questionImage ?? '']
-    })
+      point: [
+        question?.point ?? 1,
+        [Validators.required, Validators.min(1), Validators.max(10)],
+      ],
+      questionImage: [question?.questionImage ?? ''],
+    });
 
     if (question) {
       const optionsArray = questionForm.get('options') as FormArray;
       optionsArray.clear();
 
-      question.options.forEach(option => {
-        optionsArray.push(this.fb.group({
-          option: [option.option, [Validators.required, Validators.maxLength(100)]],
-          isCorrect: [option.isCorrect, Validators.required]
-        }));
+      question.options.forEach((option) => {
+        optionsArray.push(
+          this.fb.group({
+            option: [
+              option.option,
+              [Validators.required, Validators.maxLength(100)],
+            ],
+            isCorrect: [option.isCorrect, Validators.required],
+          })
+        );
       });
     }
 
@@ -232,7 +275,12 @@ export class CreateQuizComponent implements OnInit {
 
   get currectCategory() {
     let category = this.qf.category.value;
-    return this.categories.find(c => c._id === category)?.title.split('-').join(' ') ?? 'Category'
+    return (
+      this.categories
+        .find((c) => c._id === category)
+        ?.title.split('-')
+        .join(' ') ?? 'Category'
+    );
   }
 
   onSubmit() {
@@ -254,9 +302,9 @@ export class CreateQuizComponent implements OnInit {
       categoryId: this.qf.category.value!,
       description: this.qf.description.value!.trim(),
       note: this.qf.note.value!.trim() ?? undefined,
-      difficulty: this.qf.difficulty.value as ('easy' | 'medium' | 'hard'),
+      difficulty: this.qf.difficulty.value as 'easy' | 'medium' | 'hard',
       questions: [],
-    }
+    };
 
     for (let i = 0; i < questionCount; i++) {
       const question = questions.at(i) as FormGroup<QuestionStruct>;
@@ -264,72 +312,72 @@ export class CreateQuizComponent implements OnInit {
       for (const option of question.controls.options.controls) {
         options.push({
           option: option.value.option!,
-          isCorrect: option.value.isCorrect!
-        })
+          isCorrect: option.value.isCorrect!,
+        });
       }
 
       quizObject.questions.push({
         question: question.get('question')?.value!,
         options: options,
         point: question.get('point')?.value!,
-        questionImage: question.get('questionImage')?.value!
-      })
+        questionImage: question.get('questionImage')?.value!,
+      });
     }
 
-
     this.addOrEdit(quizObject).subscribe({
-      next: quizId => {
-        this.router.navigate(['/creator', 'quiz', this.quizId() ? this.quizId() : quizId, 'view'], {
-          replaceUrl: true,
-        })
+      next: (quizId) => {
+        this.router.navigate(
+          ['/creator', 'quiz', this.quizId() ? this.quizId() : quizId, 'view'],
+          {
+            replaceUrl: true,
+          }
+        );
       },
-      error: err => {
+      error: (err) => {
         this.formSubmissionInProcess = false;
         console.log(err);
-      }
+      },
     });
   }
 
   addOrEdit(quizData: quiz): Observable<any> {
-    return quizData._id ? this.quizService.updateQuiz(quizData) : this.quizService.createQuiz(quizData);
+    return quizData._id
+      ? this.quizService.updateQuiz(quizData)
+      : this.quizService.createQuiz(quizData);
   }
 
   invalidQuizTitle(highlight?: boolean) {
     const title = this.qf.title;
-    const hasError = title.touched && title.dirty && title.invalid || this.isFormSubmitted && title.invalid || title.invalid && highlight;
+    const hasError =
+      (title.touched && title.dirty && title.invalid) ||
+      (this.isFormSubmitted && title.invalid) ||
+      (title.invalid && highlight);
     if (hasError) {
-      if (title.hasError('minlength')) {
-        this.titleErrorMessage = "Title is too short"
+      if (title.hasError('maxlength')) {
+        this.titleErrorMessage = 'Title is too long';
+      } else if (title.hasError('required')) {
+        this.titleErrorMessage = 'Title is required';
       }
-      else if (title.hasError('maxlength')) {
-        this.titleErrorMessage = "Title is too long"
-      }
-      else if (title.hasError('required')) {
-        this.titleErrorMessage = "Title is required"
-      }
-    }
-    else {
-      this.titleErrorMessage = null
+    } else {
+      this.titleErrorMessage = null;
     }
     return hasError;
   }
 
   invalidQuizDescription(highlight?: boolean) {
     const description = this.qf.description;
-    const hasError = description.touched && description.dirty && description.invalid || this.isFormSubmitted && description.invalid || description.invalid && highlight;
+    const hasError =
+      (description.touched && description.dirty && description.invalid) ||
+      (this.isFormSubmitted && description.invalid) ||
+      (description.invalid && highlight);
     if (hasError) {
-      if (description.hasError('minlength')) {
-        this.descriptionErrorMessage = "Description is too short"
+      if (description.hasError('maxlength')) {
+        this.descriptionErrorMessage = 'Description is too long';
+      } else if (description.hasError('required')) {
+        this.descriptionErrorMessage = 'Description is required';
       }
-      else if (description.hasError('maxlength')) {
-        this.descriptionErrorMessage = "Description is too long"
-      }
-      else if (description.hasError('required')) {
-        this.descriptionErrorMessage = "Description is required"
-      }
-    }
-    else {
-      this.descriptionErrorMessage = null
+    } else {
+      this.descriptionErrorMessage = null;
     }
     return hasError;
   }
@@ -337,26 +385,23 @@ export class CreateQuizComponent implements OnInit {
   invalidQuizDifficulty() {
     const difficulty = this.qf.difficulty.value!;
     if (!['easy', 'medium', 'hard'].includes(difficulty)) {
-      this.difficultyErrorMessage = "Please Select Difficulty"
+      this.difficultyErrorMessage = 'Please Select Difficulty';
       return true;
-    }
-    else {
-      this.difficultyErrorMessage = null
+    } else {
+      this.difficultyErrorMessage = null;
       return false;
     }
   }
 
   invalidQuizCategory() {
     const category = this.qf.category.value;
-    let exist = this.categories.find(c => c._id === category) || category === 'new'
-    this.categoryErrorMessage = exist ? null : "Please Select Category"
+    let exist =
+      this.categories.find((c) => c._id === category) || category === 'new';
+    this.categoryErrorMessage = exist ? null : 'Please Select Category';
     if (this.categoryErrorMessage) {
       this.isRotated.fill(false);
-      // setTimeout(() => {
-      //   this.isRotated[1] = true;
-      // }, 10);
     }
-    return !exist
+    return !exist;
   }
 
   toggleRotation(index: number): void {
@@ -371,46 +416,47 @@ export class CreateQuizComponent implements OnInit {
 
   updateFilter(type: 'difficulty' | 'category', value: string) {
     this.qf[type].setValue(value);
-    this.isRotated.fill(false)
+    this.isRotated.fill(false);
   }
 
   generateGeminiQuiz(quizDescription: string, numberOfQuestion: number) {
     if (this.quizGenerationInProcess || quizDescription.length === 0) {
-      return
+      return;
     }
     numberOfQuestion = numberOfQuestion > 10 ? 10 : numberOfQuestion;
     this.quizGenerationInProcess = true;
-    this.quizService.generateQuiz(quizDescription, numberOfQuestion)
-      .subscribe((quiz: genQuestionModel) => {  
+    this.quizService
+      .generateQuiz(quizDescription, numberOfQuestion)
+      .subscribe((quiz: genQuestionModel) => {
         this.qf.title.setValue(quiz.title);
         this.qf.description.setValue(quiz.description);
         this.qf.difficulty.setValue(quiz.difficulty);
         for (let questionData of quiz.questions) {
-          this.addQuestion(questionData)
+          this.addQuestion(questionData);
         }
         this.quizGenerationInProcess = false;
         this.toggleGeminiPromt();
-      })
+      });
   }
 
   addNewCategory(newCategory: string) {
     this.categories.unshift({
       _id: `new-->${newCategory}`,
       title: newCategory,
-      icon: "",
-      creatorId: "new",
-    })
+      icon: '',
+      creatorId: 'new',
+    });
     this.showNewCategoryField = false;
-    this.updateFilter('category', `new-->${newCategory}`)
+    this.updateFilter('category', `new-->${newCategory}`);
   }
 
   editNewCategory(categoryId: string) {
-    this.updateFilter('category', '')
-    let category = this.categories.find(c => c._id === categoryId);
-    this.categories = this.categories.filter(c => c._id !== categoryId);
+    this.updateFilter('category', '');
+    let category = this.categories.find((c) => c._id === categoryId);
+    this.categories = this.categories.filter((c) => c._id !== categoryId);
     this.showNewCategoryField = true;
     setTimeout(() => {
-      this.newCategoryField.nativeElement.value = category?.title!
+      this.newCategoryField.nativeElement.value = category?.title!;
     }, 10);
   }
 

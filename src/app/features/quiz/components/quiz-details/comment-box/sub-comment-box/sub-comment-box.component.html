@@ -1,27 +1,27 @@
-<div class="d-flex flex-column gap-2 text-wrap comment-item" [formGroup]="subCommentForm">
+<div class="d-flex flex-column text-wrap comment-item gap-2" [formGroup]="subCommentForm">
     <div class="d-flex">
         <div class="">
-            <img [src]="subComment().userId.profilePicture?.link" class="profile-image me-2 link"
+            <img [src]="subComment().userId.profilePicture?.link || '/pngegg.png'" class="link me-2 profile-image"
                 [routerLink]="'/profile/' + subComment().userId.username">
         </div>
         @if(!showInput){
         <div class="w-100">
-            <div class="b-secondary px-3 py-2 rounded-4">
+            <div class="rounded-4 b-secondary px-3 py-2">
                 <div class="d-flex justify-content-between">
-                    <p class="t-d-gray d-inline mb-0 link f-sm"
+                    <p class="d-inline f-sm link mb-0 t-d-gray"
                         [routerLink]="'/profile/' + subComment().userId.username">{{
                         subComment().userId.username }}</p>
-                    <span class="icon-gray f-xs">{{createdAt}}</span>
+                    <span class="f-xs icon-gray">{{createdAt}}</span>
                 </div>
                 <div>
-                    <p class="t-gray mb-0 f-sm" [innerHTML]="subComment().text">
+                    <p class="f-sm mb-0 t-gray" [innerHTML]="subComment().text">
                     </p>
                 </div>
             </div>
-            <div class="d-flex gap-4 align-items-center icon-gray f-xs my-2">
-                <div class="d-flex gap-2 align-items-center">
+            <div class="d-flex align-items-center f-xs gap-4 icon-gray my-2">
+                <div class="d-flex align-items-center gap-2">
                     <div>
-                        <i class="fa-regular fa-thumbs-up me-1 highlight" [class.fa-solid]="subComment().reaction === 'liked'"
+                        <i class="fa-regular fa-thumbs-up highlight me-1" [class.fa-solid]="subComment().reaction === 'liked'"
                             (click)="user && subComment().userId._id !== user.userId && updateCommentReaction('liked')"></i>
                         <span>{{ subComment().reactionCount.liked }}</span>
                     </div>
@@ -32,31 +32,31 @@
                 </div>
                 @if(user){
                 <div class="highlight" (click)="toggleReplyBox()">
-                    <i class="fa-solid fa-reply me-1"></i>
+                    <i class="fa-reply fa-solid me-1"></i>
                     <span>Reply</span>
                 </div>
                 <div class="highlight more-opt more-parent">
-                    <i class="fa-solid fa-ellipsis fa-lg" (click)="toggleMoreOption()"></i>
+                    <i class="fa-ellipsis fa-lg fa-solid" (click)="toggleMoreOption()"></i>
                     @if(showMoreOptions){
                     <div class="more-child" (mouseleave)="toggleDeleteConfirmation(false)">
                         <div class="border border-secondary-subtle p-1 rounded-2 more-child-parent">
                             @if(subComment().userId._id === user.userId){
-                            <div class="d-flex gap-1 align-items-center dropdown-item" (click)="editcomment()"
+                            <div class="d-flex dropdown-item align-items-center gap-1" (click)="editcomment()"
                                 (mouseenter)="toggleDeleteConfirmation(false)">
-                                <i class="fa-regular fa-pen-to-square "></i>
+                                <i class="fa-pen-to-square fa-regular"></i>
                                 <span class="">Edit</span>
                             </div>
                             <hr class="my-1">
                             }
                             @if(subComment().userId._id === user.userId){
-                            <div class="d-flex gap-1 align-items-center dropdown-item"
+                            <div class="d-flex dropdown-item align-items-center gap-1"
                                 (mouseenter)="toggleDeleteConfirmation(true)">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span class="">Delete</span>
                             </div>
                             <hr class="my-1">
                             }
-                            <div class="d-flex gap-1 align-items-center dropdown-item"
+                            <div class="d-flex dropdown-item align-items-center gap-1"
                                 (mouseenter)="toggleDeleteConfirmation(false)">
                                 <i class="fa-solid fa-warning"></i>
                                 <span class="">Report</span>
@@ -64,11 +64,11 @@
                         </div>
                         <div [class.show]="showDeleteOptions"
                             class="border border-secondary-subtle p-1 rounded-2 more-child-child">
-                            <div class="d-flex gap-1 align-items-center dropdown-item">
+                            <div class="d-flex dropdown-item align-items-center gap-1">
                                 <span class="difficulty-hard" (click)="deleteComment()">Confirm</span>
                             </div>
                             <hr class="my-1">
-                            <div class="d-flex gap-1 align-items-center dropdown-item">
+                            <div class="d-flex dropdown-item align-items-center gap-1">
                                 <span (click)="toggleDeleteConfirmation(false)">Cancel</span>
                             </div>
                         </div>
@@ -81,18 +81,18 @@
         }
         @else {
         <div class="w-100">
-            <div class="d-flex gap-2 align-items-center mb-2">
+            <div class="d-flex align-items-center gap-2 mb-2">
                 <div class="new-comment-box">
-                    <textarea rows="1" appAutoSize class="t-gray f-sm" placeholder="Type your reply here..."
+                    <textarea rows="1" appAutoSize class="f-sm t-gray" placeholder="Type your reply here..."
                         formControlName="editedComment">
                     </textarea>
                 </div>
             </div>
-            <div class="d-flex gap-2 justify-content-end">
-                <button type="button" (click)="saveEditedComment()" class="f-sm btn btn-sm p-n-btn">
+            <div class="d-flex justify-content-end gap-2">
+                <button type="button" (click)="saveEditedComment()" class="btn btn-sm p-n-btn f-sm">
                     save
                 </button>
-                <button type="button" (click)="toggleInput()" class="f-sm btn btn-sm cancel-btn">
+                <button type="button" (click)="toggleInput()" class="btn btn-sm cancel-btn f-sm">
                     cancel
                 </button>
             </div>
@@ -100,23 +100,23 @@
         }
     </div>
     @if(showReplyInput){
-    <div class="ms-md-4 ms-3">
+    <div class="ms-3 ms-md-4">
         <div class="d-flex gap-2 mb-2">
             <div>
-                <img [src]="user?.profilePicture!.link || '/pngegg.png'" class="profile-image link"
+                <img [src]="user?.profilePicture!.link || '/pngegg.png'" class="link profile-image"
                     [routerLink]="'/profile/' + user?.userId">
             </div>
-            <div class="new-comment-box bg-white">
-                <textarea rows="1" appAutoSize class="t-gray f-sm bg-white" placeholder="Type your reply here..."
+            <div class="bg-white new-comment-box">
+                <textarea rows="1" appAutoSize class="bg-white f-sm t-gray" placeholder="Type your reply here..."
                     formControlName="subComment" autofocus>
                 </textarea>
             </div>
         </div>
-        <div class="d-flex gap-2 justify-content-end">
-            <button type="button" (click)="createReply()" class="f-sm btn btn-sm p-n-btn">
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" (click)="createReply()" class="btn btn-sm p-n-btn f-sm">
                 reply
             </button>
-            <button type="button" (click)="toggleReplyBox()" class="f-sm btn btn-sm cancel-btn">
+            <button type="button" (click)="toggleReplyBox()" class="btn btn-sm cancel-btn f-sm">
                 cancel
             </button>
         </div>

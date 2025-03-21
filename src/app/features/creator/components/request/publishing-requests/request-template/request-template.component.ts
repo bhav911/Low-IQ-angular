@@ -52,11 +52,13 @@ export class RequestTemplateComponent implements OnInit {
       .subscribe({
         next: messages => {
           this.fetchingFeedbacks = false
+          this.feedbacksFetched = true
           this.request().conversation = messages;
           this.request().hasSeen = true;
         },
         error: err => {
           this.fetchingFeedbacks = false
+          this.feedbacksFetched = true
         },
         complete: () => {
           this.feedbacksFetched = true
