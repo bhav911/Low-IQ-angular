@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { User } from '../models/User.model';
 import { environment } from '../../../environment/environment';
+import { SocketService } from './socket.service';
 
 @Injectable({
   providedIn: 'root',
@@ -74,7 +75,7 @@ export class AuthService {
     );
   }
 
-  validateToken(token: string) {    
+  validateToken(token: string) {
     const gqlQuery = {
       query: `
                 query Query($token: String!){

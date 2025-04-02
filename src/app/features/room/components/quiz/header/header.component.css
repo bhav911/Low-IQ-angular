@@ -1,0 +1,124 @@
+.box {
+    background-color: #F8FAFC;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.quiz-title {
+    max-width: 600px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.players-panel {
+    z-index: 999;
+    background-color: white;
+    position: absolute;
+    width: 470px;
+    top: 60px;
+    --padding-x: 5%;
+    right: calc(56px + var(--padding-x));
+    height: 0;
+    max-height: 400px;
+    overflow: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.showPlayers {
+    height: fit-content;
+    display: block !important;
+}
+
+
+.nav-link-item {
+    display: flex;
+    align-items: center;
+}
+
+.navContainer {
+    gap: 100px;
+}
+
+.nav-holder {
+    display: flex;
+    gap: 80px;
+}
+
+.nav-item {
+    margin-bottom: 0px;
+    font-size: 20px;
+    color: #1A73E8;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+.logo {
+    font-size: 1.8rem;
+    color: #1A73E8;
+}
+
+.profile-image {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    overflow: hidden;
+    border: 2px solid #FFFFFF
+}
+
+.group-icon {
+    height: 30px;
+    width: 30px;
+}
+
+@media(max-width:890px) {
+    .logo-holder {
+        display: none;
+    }
+}
+
+@media(max-width:768px) {
+    .title-decorator {
+        display: none;
+    }
+}
+
+@media(max-width:680px) {
+    .nav-link-item {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: flex !important;
+    }
+
+    .players-panel.fixed {
+        border-radius: 0px;
+        max-height: 100%;
+        position: fixed;
+        left: 0px;
+        top: 60px;
+        height: calc(100vh - 60px);
+        width: 100vw;
+    }
+}
+
+
+@media(max-width:560px) {
+    .username {
+        display: none;
+    }
+
+    .navContainer {
+        gap: 50px;
+    }
+}

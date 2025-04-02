@@ -55,12 +55,17 @@ export class QuizService {
       );
   }
 
-  generateQuiz(quizDescription: string, numberOfQuestion: number) {
+  generateQuiz(
+    quizDescription: string,
+    numberOfQuestion: number,
+    difficulty: string
+  ) {
     return this.httpClient
       .get<genQuestionModel>(environment.backendUrl + '/quiz/generateQuiz', {
         params: {
           quizDescription,
           numberOfQuestion,
+          difficulty: difficulty ?? 'easy',
         },
       })
       .pipe(

@@ -65,12 +65,12 @@
                     <div class="p-2 accordion-dropdown" [class.show]="!disableFields && isRotated[1]">
                         <div class="d-flex flex-column dropdown-box gap-1">
                             @if(showNewCategoryField){
-                            <div class="d-flex">
-                                <input #newCategoryValue type="text" class="new-category t-blue"
+                            <div class="">
+                                <input #newCategoryValue type="text" class="w-100 new-category t-blue"
                                     placeholder="+ New category" />
-                                <div>
+                                <div class="mt-1">
                                     <button type="button" (click)="addNewCategory(newCategoryValue.value)"
-                                        class="btn btn-sm p-n-btn rounded-3 f-sm">+</button>
+                                        class="btn btn-sm p-n-btn rounded-3 w-100 f-sm">add</button>
                                 </div>
                             </div>
                             }
@@ -130,13 +130,26 @@
             <textarea #geminiQuizDescription class="form-control w-100 description-field"
                 placeholder="Enter topic for quiz"></textarea>
             <span class="text-danger f-xs mb-2">*AI can make mistake, make sure you recheck the quiz details</span>
-            <div class="d-flex justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="t-gray">Questions count: </span>
-                    <input class="form-control w-25 object-fit-contain" #geminiNumOfQuestion type="number" value="10" min="1" max="10"/>
+            <div class="d-flex justify-content-between align-items-end">
+                <div class="d-flex flex-wrap text-nowrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="t-gray">Questions count: </span>
+                        <input class="form-control" #geminiNumOfQuestion type="number" value="10" min="1" max="10" />
+                    </div>
+                    <div class="position-relative f-sm">
+                        <div>
+                            <select #difficulty class="btn text-start form-control f-sm filter-btn"
+                                [ngClass]="'difficulty-' + difficulty.value">
+                                <option disabled selected>Difficulty</option>
+                                <option value="easy" class="difficulty-easy">Easy</option>
+                                <option value="medium" class="difficulty-medium">Medium</option>
+                                <option value="hard" class="difficulty-hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <button class="btn difficulty-easy-bg ms-2" type="button"
-                    (click)="generateGeminiQuiz(geminiQuizDescription.value, +geminiNumOfQuestion.value)">
+                    (click)="generateGeminiQuiz(geminiQuizDescription.value, +geminiNumOfQuestion.value, difficulty.value)">
                     <span [class.submitLoader]="quizGenerationInProcess">
                         {{ quizGenerationInProcess ? '' : 'Generate' }}
                     </span>

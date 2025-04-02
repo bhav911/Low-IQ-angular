@@ -44,6 +44,11 @@ export const routes: Routes = [
     component: DashboardComponent,
   },
   {
+    path: 'rooms',
+    loadChildren: () =>
+      import('./features/room/room.routes').then((mod) => mod.route),
+  },
+  {
     path: 'quizset',
     loadComponent: () =>
       import('./features/quiz/components/quiz-list/quiz-list.component').then(

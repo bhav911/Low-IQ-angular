@@ -1,0 +1,18 @@
+<div class="d-flex gap-3 align-items-center justify-content-between player-btn rounded-2 p-2 f-sm px-3">
+    <div class="d-flex gap-2 align-items-center">
+        <div>
+            <img [src]="player().profilePhoto  || '/pngegg.png'" class="link profile-image">
+        </div>
+        <div>
+            <span class="f-sm">{{ player().username }}</span>
+            @if(player().isAdmin){
+            <span class="f-xxs ms-1 text-black">(Admin)</span>
+            }
+        </div>
+    </div>
+    <div class="me-3">
+        <span class="f-xs fst-italic" [ngClass]="{'fw-bold f-sm':player().score !== undefined}">{{ player().score ??
+            'In-Progress'
+            }}</span>
+    </div>
+</div>

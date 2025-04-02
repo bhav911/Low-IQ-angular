@@ -67,7 +67,7 @@ export class CreateQuizComponent implements OnInit {
   });
   quiz: quiz | null = null;
   categories: category[] = [];
-  isRotated = [false, false];
+  isRotated = [false, false, false];
   formInvalid = signal(false);
   activeQuestionIndex = signal<number | null>(null);
 
@@ -419,14 +419,18 @@ export class CreateQuizComponent implements OnInit {
     this.isRotated.fill(false);
   }
 
-  generateGeminiQuiz(quizDescription: string, numberOfQuestion: number) {
+  generateGeminiQuiz(
+    quizDescription: string,
+    numberOfQuestion: number,
+    difficulty: string
+  ) {
     if (this.quizGenerationInProcess || quizDescription.length === 0) {
       return;
     }
     numberOfQuestion = numberOfQuestion > 10 ? 10 : numberOfQuestion;
     this.quizGenerationInProcess = true;
     this.quizService
-      .generateQuiz(quizDescription, numberOfQuestion)
+      .generateQuiz(quizDescription, numberOfQuestion, difficulty)
       .subscribe((quiz: genQuestionModel) => {
         this.qf.title.setValue(quiz.title);
         this.qf.description.setValue(quiz.description);
@@ -451,7 +455,7 @@ export class CreateQuizComponent implements OnInit {
   }
 
   editNewCategory(categoryId: string) {
-    this.updateFilter('category', '');
+    // this.qf['category'].setValue('');
     let category = this.categories.find((c) => c._id === categoryId);
     this.categories = this.categories.filter((c) => c._id !== categoryId);
     this.showNewCategoryField = true;

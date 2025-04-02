@@ -4,30 +4,18 @@
 </div>
 }
 @else {
+<app-header [quizData]="quiz!" [result]="true" [roomId]="roomId" />
 
 <div class="container mt-2 position-relative">
-    <div>
 
-        <!-- Quiz-Meta-Details -->
-        <div>
-            <div class="mb-0 d-flex flex-column">
-                <div class="d-flex overflow-hidden align-items-baseline">
-                    <span class="t-d-gray f-3md">
-                        {{result?.quizId?.title}}
-                    </span>
-                    <span class="ms-1 f-xs fw-lbold fst-italic" [ngClass]="'difficulty-' + result?.quizId?.difficulty">
-                        {{'(' + result?.quizId?.difficulty + ')' | titlecase}}
-                    </span>
-                </div>
-                <div>
-                    <span class="f-xs t-gray link category-title"
-                        [routerLink]="'/quiz-list/'+result?.quizId?.categoryId?._id">
-                        {{ result?.quizId?.categoryId?.title}}
-                        <i class="f-xxs fa-solid fa-angle-right"></i>
-                    </span>
-                </div>
-            </div>
-        </div>
+    <div class="position-relative">
+        <p class="error-holder" [class.show]="serverError">
+            <span class="error-icon">i</span>
+            {{serverError}}
+        </p>
+    </div>
+
+    <div>
 
         <!-- Question-Set -->
         <div class="my-4">
@@ -75,7 +63,7 @@
                     <i (click)="previousQuestion()"
                         class="fa-solid fa-arrow-left link navigator rounded-circle p-2"></i>
                     }
-                    @if(questionIndex() != (result!.quizId!.questionCount - 1)){
+                    @if(questionIndex() != (quiz!.questionCount - 1)){
                     <i (click)="nextQuestion()" class="fa-solid fa-arrow-right link navigator rounded-circle p-2"></i>
                     }
                 </div>
@@ -89,36 +77,37 @@
                     <div class="d-flex justify-content-between">
                         <div class="f-md t-gray text-center w-100 b3 px-3 py-2">
                             <span class="">Score </span>
-                            <span class="fw-bold">{{result?.score + ' / ' + result?.quizId?.totalPoints}}</span>
+                            <span class="fw-bold">{{quiz?.score + ' / ' + quiz?.totalPoints}}</span>
                         </div>
                         <div class="f-md text-center  w-100 b3 px-3 py-2">
-                            <span [ngClass]="{
-                                         'difficulty-easy':result?.status === 'passed' ,
-                                         'difficulty-hard':result?.status === 'failed'
-                                     }">{{ result?.status === 'passed' ? 'Pass' : 'Fail' }}</span>
+                            <span class="t-gray">Rank <span class="t-blue fw-bold"> {{ rank }}</span></span>
                         </div>
                         <div class="f-md text-center w-100 b3 link px-3 py-2 question-panel-btn"
                             (click)="toggleQuestionPanel()">
                             <span class="f-md t-gray">
-                                {{ 'Q' + (questionIndex() + 1) + ' of ' + result?.quizId?.questionCount }}
+                                {{ 'Q' + (questionIndex() + 1) + ' of ' + quiz?.questionCount }}
                             </span>
                             <i class="fa-sm fa-solid fa-circle-info"></i>
                         </div>
                     </div>
-
-                    @if(result?.status === 'previewed'){
-                    <div class="tooltip-container text-danger fw-bold" style="font-size: 12px;">
-                        Only for insight
-                        <span class="error-icon">
-                            i
-                            <p class="tooltip-text bg-secondary-subtle text-dark-emphasis">
-                                This score will not be counted in your progress as you have seen the
-                                solution before attempting on
-                                <span class="text-primary">{{ result?.createdAt }}</span>
-                            </p>
-                        </span>
+                    <div class="f-md text-center w-100 px-3 py-2 new-submission" [class.show]="newSubmission">
+                        @if(newSubmission){
+                        <div class="d-flex justify-content-center gap-1 px-2 f-sm align-items-center">
+                            <div class="d-flex gap-2 align-items-center">
+                                <div>
+                                    <img [src]="newSubmissionPlayer.profilePhoto" class="profile-image">
+                                </div>
+                                <span class="t-blue">{{ '@' + newSubmissionPlayer.username }}</span>
+                            </div>
+                            <div class="f-sm">
+                                Scored
+                                <span class="fw-bold ">
+                                    {{ newSubmissionPlayer.score }}
+                                </span>
+                            </div>
+                        </div>
+                        }
                     </div>
-                    }
                 </div>
             </div>
         </div>

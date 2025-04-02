@@ -1,0 +1,53 @@
+<div class="box">
+    <div class="d-flex justify-content-between navContainer p-2 px-lg-5 px-2 align-items-center">
+        <div class="d-flex gap-5 align-items-center overflow-hidden">
+            <div class="logo-holder">
+                <p class="logo mb-0">LowIQ</p>
+            </div>
+            <div class="mb-0 f-md d-flex flex-md-row flex-column overflow-hidden align-items-md-baseline">
+                <span class="quiz-title t-d-gray">
+                    <span class="t-blue fw-lbold f-2md title-decorator">|</span>
+                    {{quizData().title}}</span>
+                <span class="ms-md-1 f-xs fw-lbold fst-italic" [ngClass]="'difficulty-' + quizData().difficulty">
+                    {{'(' + quizData().difficulty + ')' | titlecase}}
+                </span>
+            </div>
+        </div>
+        <div class="d-flex gap-3 align-items-center flex-nowrap">
+            <div class="link" (click)="togglePlayersPanel()">
+                <img class="profile-image group-icon" src="/group.png">
+                <span class="f-sm username t-d-gray">&nbsp;&nbsp;Members</span>
+            </div>
+            <div (click)="openSidebar()" class="position-relative link">
+                <img class="profile-image" [src]="user?.profilePicture?.link || '/pngegg.png'">
+                <span class="f-sm username t-d-gray">&nbsp;&nbsp;{{ user?.username }}</span>
+                @if(sideBarOpened){
+                <div class="position-absolute bg-light b3 rounded-3" style="top: 50px; left: -40px; z-index: 9999;">
+                    <div class="link difficulty-hard p-1 px-2 text-nowrap f-sm" (click)="exitRoom()">
+                        <span>Exit room</span>
+                    </div>
+                    @if(result()){
+                    <hr class="my-0">
+                    <div class="link p-1 px-2 text-nowrap f-sm" (click)="backToLobby()">
+                        <span>Lobby</span>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+        </div>
+
+        <div [class.showPlayers]="openPlayersPanel" class="d-none fixed players-panel">
+            <div class="p-2 pb-0">
+                <span class="f-sm fw-lbold t-blue">Players</span>
+            </div>
+            <div class="p-2">
+                @for(player of room.players; track player.userId){
+                <div [class.mb-2]="!$last">
+                    <app-player-template [player]="player" />
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

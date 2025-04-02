@@ -1,0 +1,135 @@
+@if(!loaded()){
+<div class="loader-position">
+    <div class="loader"></div>
+</div>
+}
+@else {
+<app-header [quizData]="quiz!" [roomId]="roomId" />
+<div class="container my-5 position-relative">
+
+    <div class="position-relative">
+        <p class="error-holder" [class.show]="serverError">
+            <span class="error-icon">i</span>
+            {{serverError}}
+        </p>
+    </div>
+
+    <!-- progress-bar -->
+    <div class="mx-auto mb-5">
+        <div class="position-relative">
+            <div class="progress-container rounded-3 b3">
+                <div class="position-absolute translate-middle-y top-50 end-0">
+                    <span [class.progress-bar]="allAttempted"
+                        class="link f-md d-flex align-items-center justify-content-center border border-dark rounded-circle question-tracker">
+                        {{ (questionIndex() + 1) + '/' + quiz?.questionCount }}
+                    </span>
+                </div>
+                <div #progressBar class="progress-bar" style="width: 0%;" role="progressbar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end align-items-center mb-2 f-sm">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="difficulty-hard"> {{ formattedTime }}</span>
+    </div>
+
+
+    <!-- Question-Set -->
+    <div class="mb-4">
+        <!-- question-box -->
+        <div class="mb-3">
+            <div>
+                <div class="">
+                    <p class="f-md mb-0">{{ currentQuestionObject.question }}
+                        <span class="t-gray text-nowrap fst-italic f-xs">
+                            {{ '(' + currentQuestionObject.point + ' Point)' }}</span>
+                    </p>
+                    <div class="text-center">
+                        @if(currentQuestionObject.questionImage){
+                        <img class="question-media-image" [src]="currentQuestionObject.questionImage">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- option-box -->
+        <div>
+            <div>
+                <div>
+                    @for(option of currentQuestionObject.options; track option._id){
+                    <div (click)="selectedOption(option._id)"
+                        class="option-text b3 link d-flex align-items-center rounded-5 p-2 mb-md-3 mb-2">
+                        <i [class.hide]="userSelectedOptions[currentQuestionObject._id] == option._id"
+                            class="fa-solid option-number rounded-circle p-2 me-2"
+                            [ngClass]="'fa-'+convertIndexToLetter($index)"></i>
+                        <span class="f-sm text-start ps-2"
+                            [class.t-blue]="userSelectedOptions[currentQuestionObject._id] == option._id">{{
+                            option.option
+                            }}</span>
+                        <i [class.show]="userSelectedOptions[currentQuestionObject._id] == option._id"
+                            class="d-none fa-solid ms-auto fa-check text-end option-number rounded-circle p-2 ms-2"></i>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Question Navigator -->
+    <div class="mb-5">
+        <div>
+            <div class="d-flex gap-2 justify-content-center">
+                @if(questionIndex() != (quiz!.questionCount - 1)){
+                <span class="f-sm navigator rounded-2 p-2 link text-center" (click)="nextQuestion()">
+                    Next
+                    <i class=" ms-2 fa-solid fa-arrow-right"></i>
+                </span>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Submit Button -->
+    <div>
+        <div>
+            <div class="text-center">
+                @if(questionIndex() == (this.quiz!.questionCount - 1)){
+                <button type="button" class="btn rounded-3 option-number submit-btn" (click)="onSubmit()">
+                    <span [class.submitLoader]="submittingQuiz">{{ submittingQuiz ? '' : 'Submit' }}</span>
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Data -->
+    <div class="position-fixed result-data w-100 bottom-0 start-0">
+        <div class="mx-auto">
+            <div class="position-relative">
+                <div class="f-md text-center w-100 px-3 py-2 new-submission" [class.shw]="newSubmission">
+                    @if(newSubmission){
+                    <div class="d-flex justify-content-center gap-1 px-2 f-sm align-items-center">
+                        <div class="d-flex gap-2 align-items-center">
+                            <div>
+                                <img [src]="newSubmissionPlayer.profilePhoto" class="profile-image">
+                            </div>
+                            <span class="t-blue">{{ '@' + newSubmissionPlayer.username }}</span>
+                        </div>
+                        <div class="f-sm">
+                            Scored
+                            <span class="fw-bold ">
+                                {{ newSubmissionPlayer.score }}
+                            </span>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

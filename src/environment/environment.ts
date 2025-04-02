@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  backendUrl: 'https://low-iq-node.vercel.app',
+  backendUrl: 'http://localhost:3000',
+  // backendUrl: 'https://low-iq-node.vercel.app',
 };

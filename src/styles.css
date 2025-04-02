@@ -414,8 +414,10 @@ a {
 }
 
 .p-n-btn:disabled {
-  background-color: #cfd8dc; /* Muted blue/grey */
-  color: #6e90a0; /* Softer text color */
+  background-color: #cfd8dc;
+  /* Muted blue/grey */
+  color: #6e90a0;
+  /* Softer text color */
   cursor: not-allowed;
   opacity: 0.8;
 }
@@ -452,4 +454,36 @@ a {
 .col-acceptance {
   min-width: 120px;
   text-align: center;
+}
+
+.error-icon {
+  padding: 0px 6px;
+  border-radius: 50%;
+  font-weight: 700;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  margin-right: 3px;
+}
+
+.error-holder {
+  opacity: 0;
+  color: red;
+  z-index: 999;
+  padding: 6px 12px;
+  background-color: rgb(250, 210, 210);
+  display: block;
+  width: fit-content;
+  border-radius: 10px;
+  border: 0.8px solid red;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: opacity 0.5s ease-in-out, top 1s ease-in-out;
+}
+
+.error-holder.show {
+  opacity: 1;
+  top: 10px;
 }

@@ -10,6 +10,9 @@
             <div>
                 <p class="nav-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">Quizzes</p>
             </div>
+            <div>
+                <p class="nav-item" routerLink="/rooms">Rooms</p>
+            </div>
         </div>
         <div class="nav-link-item position-relative gap-3">
             @if(user){
@@ -197,6 +200,12 @@
                 <p class="link sidebar-item" (click)="redirectUser(user?.role == 'creator' ? 'quizset' : '/quizset')">
                     <i class="fa-book fa-solid"></i>
                     &nbsp;&nbsp;&nbsp;&nbsp;Quizzes
+                </p>
+            </div>
+            <div>
+                <p class="link sidebar-item" (click)="redirectUser('/rooms')">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Rooms
                 </p>
             </div>
             <hr class="my-2">

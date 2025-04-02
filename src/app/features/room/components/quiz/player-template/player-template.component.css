@@ -1,0 +1,14 @@
+.profile-image {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    overflow: hidden;
+}
+
+.player-btn {
+    background-color: #E3F2FD;
+    color: #1A73E8;
+}

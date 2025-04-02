@@ -1,0 +1,178 @@
+<div class="position-relative">
+    <p class="error-holder" [class.show]="serverError">
+        <span class="error-icon">i</span>
+        {{serverError}}
+    </p>
+</div>
+<div class="iContainer gap-lg-5 mx-auto" id="div1">
+    <div class="box-1">
+        <div class="mb-4">
+            <div class="card-holder p-lg-4 p-md-5 p-xl-5">
+                <div>
+                    <h2 class="f-lg quiz-title">{{ room.title }}</h2>
+                </div>
+                <div class="">
+                    <div class="f-sm d-flex justify-content-between align-items-center">
+                        @if(openModifyDifficulty){
+                        <div class="position-relative f-sm difficulty-box">
+                            <div class="d-flex gap-2 align-items-center">
+                                <label class="t-gray">Difficulty</label>
+                                <button class="btn btn-sm f-sm filter-btn" type="button"
+                                    (click)="toggleDifficultyPanel()" [ngClass]="'difficulty-'+crf.difficulty.value">
+                                    {{ crf.difficulty.value| titlecase }}&nbsp;
+                                    <span class="d-inline-block"
+                                        [ngClass]="showDifficultyPanel ? 'rotated' : 'default'">
+                                        <i class="fa-angle-down fa-solid"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="p-1 accordion-dropdown" [class.show]="showDifficultyPanel">
+                                <div class="d-flex flex-column dropdown-box gap-1">
+                                    <span (click)="updateDifficulty('easy')"
+                                        class="link p-1 difficulty-easy difficulty-item">Easy</span>
+                                    <span (click)="updateDifficulty('medium')"
+                                        class="link p-1 difficulty-item difficulty-medium">Medium</span>
+                                    <span (click)="updateDifficulty('hard')"
+                                        class="link p-1 difficulty-hard difficulty-item">Hard</span>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        @else {
+                        <div>
+                            <span class="description">Difficulty:&nbsp;</span>
+                            <span [ngClass]="{
+                                    'difficulty-easy': crf.difficulty.value === 'easy',
+                                    'difficulty-medium': crf.difficulty.value === 'medium',
+                                    'difficulty-hard': crf.difficulty.value === 'hard'
+                  }">
+                                {{ crf.difficulty.value| titlecase }}
+                            </span>
+                        </div>
+                        }
+                        @if(room.adminId === user?.userId){
+                        @if(openModifyDifficulty){
+                        <div>
+                            <button class="btn btn-sm cancel-btn" (click)="toggleDifficulty()">Close</button>
+                        </div>
+                        }
+                        @else {
+                        <div (click)="toggleDifficulty()">
+                            <i class="fa fa-pen fa-solid fa-sm t-blue link"></i>
+                        </div>
+                        }
+                        }
+                    </div>
+                    <hr class="my-2" />
+                    <div class="f-sm  d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="t-gray">Number of questions:&nbsp;</span>
+                            @if(openModifyNumOfQuestion){
+                            <div class="d-flex align-items-center justify-content-around border rounded-2 p-1 my-1"
+                                style="width: 115px;">
+                                <button class="btn btn-sm point-btn rounded-circle p-1 py-0" type="button"
+                                    (click)="incrementCount('questionCount',-1)">
+                                    <i class="fa-solid fa-minus fa-sm"></i>
+                                </button>
+                                <input type="tel"
+                                    class="bg-white border border-0 mx-1 f-sm fw-lbold w-25 text-center t-blue"
+                                    [value]="crf.questionCount.value" [formControl]="roomForm.controls.questionCount"
+                                    (input)="invalidQuestionCount()" style="background-color:#F5F5F5;">
+                                <button class="btn btn-sm point-btn rounded-circle p-1 py-0" type="button"
+                                    (click)="incrementCount('questionCount',1)">
+                                    <i class="fa-solid fa-plus fa-sm"></i>
+                                </button>
+                            </div>
+                            @if(questionCountErrorMessage){
+                            <div class="position-relative">
+                                <p class="error-msg f-xs mb-0">{{ questionCountErrorMessage }}</p>
+                            </div>
+                            }
+                            }
+                            @else {
+                            <span>{{ crf.questionCount.value }}</span>
+                            }
+                        </div>
+                        @if(room.adminId === user?.userId){
+                        @if(openModifyNumOfQuestion){
+                        <div>
+                            <button class="btn btn-sm cancel-btn" (click)="toggleNumberOfParticipants()">Close</button>
+                        </div>
+                        }
+                        @else {
+                        <div (click)="toggleNumberOfParticipants()">
+                            <i class="fa fa-pen fa-solid fa-sm t-blue link"></i>
+                        </div>
+                        }
+                        }
+                    </div>
+                    <hr class="my-2" />
+                    <div class="d-flex gap-2 align-items-center f-sm">
+                        <i class="fa-solid fa-user-group fa-sm" style="color:#1A73E8;"></i>
+                        <div>
+                            <span class="text-dark">{{ room.currentPlayers + '/' +
+                                room.max_participants }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 border border-secondary-subtle rounded-3 p-2">
+                        <div class="f-xs">
+                            <p class="mb-2">Room Details:</p>
+                        </div>
+                        <div
+                            class="f-sm d-flex justify-content-sm-evenly justify-content-between t-gray flex-wrap gap-3">
+                            <div>
+                                <p class="mb-0">ID: #<span class="text-dark">{{ room.roomId }}</span></p>
+                            </div>
+                            <span class="t-l-gray bars">|</span>
+                            <div>
+                                <p class="mb-0">password: <span class="text-dark">{{ room.password ?? 'NA'
+                                        }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if(room.status === 'in-progress'){
+                <div>
+                    <p class="f-xs difficulty-hard p-0 mt-2">Game is in progress, wait till it ends.</p>
+                </div>
+                }
+                <div class="mt-3 mt-md-5">
+                    <div class="d-flex gap-3">
+                        <button class="btn w-100 f-sm"
+                            [ngClass]="room.adminId === user?.userId && room.status !== 'in-progress' ? 'difficulty-easy-bg' : 'cancel-btn'"
+                            [title]="room.adminId === user?.userId ? '' : 'Only admin can start'"
+                            (click)="room.status !== 'in-progress' && room.adminId === user?.userId && startQuiz()">
+                            <app-loading-spinner [isFetching]="isStarting" />
+                            {{ isStarting ? ' Just a second' : 'Start' }}
+                        </button>
+                        <button class="btn difficulty-hard-bg w-100 f-sm" (click)="leaveRoom()">
+                            Leave
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-3 d-none hr-bar">
+    <div class="w-100">
+        <div class="card-holder pb-5 user-review">
+            <div class="py-lg-2 px-lg-3">
+                <p class="t-blue mb-3 mt-2 f-md">Players in lobby</p>
+                @for(player of room.players; track player.userId){
+                <div class="d-flex  gap-2 player-btn rounded-2 p-2 mb-2">
+                    <div>
+                        <img [src]="player.profilePhoto  || '/pngegg.png'" class="link profile-image">
+                    </div>
+                    <div>
+                        <span class="f-sm">{{ player.username }}</span>
+                        @if(player.isAdmin){
+                        <span class="f-xxs ms-1 text-black">(Admin)</span>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

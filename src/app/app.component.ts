@@ -31,7 +31,9 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
       const url = router.url.substring(1).split('/');
-      this.showNavBar = url[0] !== 'quiz' || url[2] !== 'attempt';
+      this.showNavBar =
+        (url[0] !== 'quiz' && url[0] !== 'rooms') ||
+        (url[2] !== 'attempt' && url[2] !== 'in-progress' && url[2] !== 'scoreboard');
     });
   }
 

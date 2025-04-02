@@ -17,7 +17,7 @@ export const resultGuard: CanActivateFn = (route, state) => {
   return authService.$user.pipe(
     filter((u) => u !== undefined),
     switchMap((user) => {
-      if (!user) {
+      if (!user || user.role === 'creator') {
         router.navigate(['/signup']);
         return of(false);
       }
