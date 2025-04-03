@@ -127,6 +127,9 @@ export class ScoreboardComponent {
       (o) => o.isCorrect
     )?._id;
     const userSelectedOption = this.currentQuestionObject.userSelectedOption;
+    if (correctOptionId === optionId && userSelectedOption === '') {
+      return 'not-attempted-answer fa-regular fa-circle-dot';
+    }
     return {
       'fa-check correct-answer': correctOptionId === optionId,
       'fa-xmark incorrect-answer':
@@ -183,6 +186,20 @@ export class ScoreboardComponent {
         break;
       }
     }
+  }
+
+  exitRoom() {
+    this.roomService.leaveRoom(this.roomId);
+    this.router.navigate(['/rooms'], {
+      replaceUrl: true,
+    });
+  }
+
+  backToLobby() {
+    this.roomService.backToLobby();
+    this.router.navigate(['/rooms', this.roomId], {
+      replaceUrl: true,
+    });
   }
 
   toggleQuestionPanel() {

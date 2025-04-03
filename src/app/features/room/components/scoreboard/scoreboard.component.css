@@ -33,6 +33,12 @@
   border: 0.8px solid #2E7D32;
 }
 
+.not-attempted-answer {
+  background-color: #E0E0E0;
+  color: #424242;
+  border: 0.8px solid #424242;
+}
+
 .navigator {
   background-color: #b4dcff;
   color: #1A73E8;
@@ -142,4 +148,9 @@
   object-position: center;
   image-rendering: auto;
   overflow: hidden;
+}
+
+.nav-btn {
+  max-width: 400px;
+  width: 100%;
 }

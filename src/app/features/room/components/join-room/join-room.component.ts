@@ -10,6 +10,7 @@ import { RoomService } from '../../_services/room.service';
 import { Router } from '@angular/router';
 import { SocketService } from '../../../../core/services/socket.service';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-join-room',
@@ -20,6 +21,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
 export class JoinRoomComponent implements OnInit {
   private roomService = inject(RoomService);
   private socketService = inject(SocketService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   roomId = input<string>();
@@ -61,6 +63,16 @@ export class JoinRoomComponent implements OnInit {
     if (this.invalidRoomId() || this.invalidRoomPassword()) {
       return;
     }
+
+    if (!this.authService.directUserValue) {
+      this.router.navigate(['/signup'], {
+        state: {
+          redirectTo: `/rooms/${this.jrf.roomId.value}`,
+        },
+      });
+      return;
+    }
+    
     this.isJoiningRoom = true;
 
     const roomId = this.jrf.roomId.value!;

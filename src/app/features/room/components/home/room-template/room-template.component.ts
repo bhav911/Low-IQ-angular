@@ -17,6 +17,12 @@ export class RoomTemplateComponent {
   private router = inject(Router);
   isFetching = false;
 
+  ngOnInit(): void {
+    this.roomService.catchErrors().subscribe((error: any) => {
+      this.isFetching = false;
+    });
+  }
+
   async joinRoom() {
     this.isFetching = true;
     const room = await this.roomService.joinRoom(this.room()!.roomId);

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../../../core/models/User.model';
 import { AuthService } from '../../../core/services/auth.service';
-import { BehaviorSubject, filter, Observable } from 'rxjs';
+import { BehaviorSubject, filter, Observable, tap } from 'rxjs';
 import { SocketService } from '../../../core/services/socket.service';
 import { Room } from '../room.model';
 import { roomQuiz } from '../models/roomQuiz.mode';
@@ -202,7 +202,7 @@ export class RoomService {
         userId: this.user?.userId,
         userAnswers,
       }
-    );    
+    );
     const currentQuiz = { ...this.inProgressQuiz! };
 
     currentQuiz.questions.forEach((question) => {
@@ -302,6 +302,16 @@ export class RoomService {
   }
 
   catchErrors() {
-    return this.socketService.listenForEvent('error');
+    return this.socketService.listenForEvent('error').pipe(
+      tap((error: any) => {
+        if (error.msg === 'Not Authenticated') {
+          this.router.navigate(['/login'], {
+            state: {
+              redirectTo: `/rooms/${error.roomId}`,
+            },
+          });
+        }
+      })
+    );
   }
 }

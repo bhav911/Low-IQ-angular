@@ -23,15 +23,15 @@
                 <span class="f-sm username t-d-gray">&nbsp;&nbsp;{{ user?.username }}</span>
                 @if(sideBarOpened){
                 <div class="position-absolute bg-light b3 rounded-3" style="top: 50px; left: -40px; z-index: 9999;">
-                    <div class="link difficulty-hard p-1 px-2 text-nowrap f-sm" (click)="exitRoom()">
-                        <span>Exit room</span>
-                    </div>
                     @if(result()){
                     <hr class="my-0">
-                    <div class="link p-1 px-2 text-nowrap f-sm" (click)="backToLobby()">
+                    <div class="link p-1 px-2 text-nowrap f-md" (click)="backToLobby()">
                         <span>Lobby</span>
                     </div>
                     }
+                    <div class="link difficulty-hard p-1 px-2 text-nowrap f-md" (click)="exitRoom()">
+                        <span>Exit room</span>
+                    </div>
                 </div>
                 }
             </div>

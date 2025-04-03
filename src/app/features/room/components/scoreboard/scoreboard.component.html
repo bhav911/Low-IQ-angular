@@ -72,6 +72,10 @@
 
         <!-- Result Data -->
         <div class="position-fixed result-data w-100 bottom-0 start-0">
+            <div class="mb-2 d-flex gap-2 justify-content-center">
+                <button class="btn difficulty-easy-bg nav-btn" (click)="backToLobby()">Lobby</button>
+                <button class="btn difficulty-hard-bg nav-btn" (click)="exitRoom()">Exit Room</button>
+            </div>
             <div class="mx-auto">
                 <div class="position-relative">
                     <div class="d-flex justify-content-between">

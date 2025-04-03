@@ -12,6 +12,7 @@ import { Room } from '../../room.model';
 import { RoomTemplateComponent } from './room-template/room-template.component';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,7 @@ import { LoadingSpinnerComponent } from '../../../../shared/components/loading-s
 export class HomeComponent implements OnInit {
   private roomService = inject(RoomService);
   private socketService = inject(SocketService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   private isFormSubmitted = false;
@@ -77,6 +79,8 @@ export class HomeComponent implements OnInit {
     this.roomService.fetchInitialRooms();
     this.roomService.catchErrors().subscribe((error: any) => {
       this.serverError = error;
+      this.isCreatingRoom = false;
+      this.isJoiningRoom = false;
       setTimeout(() => {
         this.serverError = '';
       }, 4000);
@@ -130,6 +134,15 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    if (!this.authService.directUserValue) {
+      this.router.navigate(['/signup'], {
+        state: {
+          redirectTo: `/rooms/${this.jrf.roomId.value}`,
+        },
+      });
+      return;
+    }
+
     this.isJoiningRoom = true;
 
     const roomId = this.jrf.roomId.value!;
@@ -163,6 +176,16 @@ export class HomeComponent implements OnInit {
   }
 
   toggleCreateRoom() {
+    if (!this.showCreateRoomComponent) {
+      if (!this.authService.directUserValue) {
+        this.router.navigate(['/signup'], {
+          state: {
+            redirectTo: `/rooms`,
+          },
+        });
+        return;
+      }
+    }
     this.showCreateRoomComponent = !this.showCreateRoomComponent;
   }
 

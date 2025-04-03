@@ -48,10 +48,11 @@ export class QuizComponent {
   newSubmission = false;
   loaded = signal<boolean>(false);
   serverError = '';
+  timePerQuestion = 30;
 
   private destroy$ = new Subject<void>();
 
-  formattedTime: string = '00:30';
+  formattedTime: string = '00:00';
   timer: any;
   @ViewChild('progressBar', { static: false }) progressBar!: ElementRef;
 
@@ -75,11 +76,26 @@ export class QuizComponent {
             return;
           }
           this.quiz = quizData;
+          switch (this.quiz?.difficulty) {
+            case 'easy': {
+              this.timePerQuestion = 45;
+              break;
+            }
+            case 'medium': {
+              this.timePerQuestion = 90;
+              break;
+            }
+            case 'hard': {
+              this.timePerQuestion = 150;
+              break;
+            }
+          }
 
+          this.formattedTime = `00:${this.timePerQuestion}`;
           this.quiz?.questions.forEach((question) => {
             this.userSelectedOptions[question._id] = '';
           });
-          this.startTimer(Date.now() + 31 * 1000);
+          this.startTimer(Date.now() + (this.timePerQuestion + 1) * 1000);
           this.loaded.set(true);
         },
       });
@@ -202,9 +218,9 @@ export class QuizComponent {
 
   nextQuestion() {
     clearInterval(this.timer);
-    this.startTimer(Date.now() + 31 * 1000);
+    this.startTimer(Date.now() + (this.timePerQuestion + 1) * 1000);
     this.questionIndex.update((q) => q + 1);
-    this.formattedTime = '00:30';
+    this.formattedTime = `00:${this.timePerQuestion}`;
   }
 
   ngOnDestroy() {
