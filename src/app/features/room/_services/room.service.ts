@@ -152,7 +152,17 @@ export class RoomService {
   async fetchNewRooms() {
     this.socketService.listenForEvent('newRoom').subscribe({
       next: (newRoom: any) => {
-        const updatedRooms = [newRoom, ...this._publicRooms.value];
+        console.log(newRoom);
+
+        const roomIndex = this._publicRooms.value.findIndex(
+          (r) => r.roomId === newRoom.roomId
+        );
+        let tempRooms = [...this._publicRooms.value];
+        if (roomIndex !== -1) {
+          tempRooms[roomIndex] = newRoom;
+        }
+        const updatedRooms =
+          roomIndex !== -1 ? tempRooms : [newRoom, ...this._publicRooms.value];
         this._publicRooms.next(updatedRooms);
       },
       error: (err) => console.error('Socket error:', err),
@@ -284,11 +294,13 @@ export class RoomService {
     this.socketService.removeEventListner('playerLeft');
     this.socketService.removeEventListner('quizSubmitted');
     this.socketService.removeEventListner('quizStarted');
+    this.socketService.removeEventListner('newRoom');
   }
 
   backToLobby() {
     this._quiz.next(null);
     this._result.next(null);
+    this.fetchNewRooms();
     this.socketService.removeEventListner('quizSubmitted');
   }
 

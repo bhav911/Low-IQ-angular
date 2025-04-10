@@ -158,6 +158,7 @@ export class LobbyComponent implements OnInit {
     this.socketService.removeEventListner('playerLeft');
     this.socketService.removeEventListner('quizStarted');
     this.socketService.removeEventListner('quizFinished');
+    this.socketService.removeEventListner('newRoom');
     if (this.roomSubscription) {
       this.roomSubscription.unsubscribe();
     }

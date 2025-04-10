@@ -8,10 +8,16 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterLink,
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrl: '../../styles/form.css',
 })
@@ -26,6 +32,7 @@ export class LoginComponent implements OnInit {
   };
   message = '';
   isFormSubmitted = false;
+  inProcess = false;
   private allowLogin = false;
   private redirectTo = '';
 
@@ -65,9 +72,11 @@ export class LoginComponent implements OnInit {
     this.isFormSubmitted = true;
 
     let invalidForm = this.invalidEmail() || this.invalidPassword();
-    if (invalidForm) {
+    if (invalidForm || this.inProcess) {
       return;
     }
+
+    this.inProcess = true;
 
     let user = {
       email: this.formControls.email.value,
@@ -76,6 +85,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authenticateUser(user).subscribe({
       next: (status) => {
+        this.inProcess = false;
         const redirectTo = history.state['redirectTo'];
         if (redirectTo) {
           return this.router.navigate([redirectTo], {
@@ -87,6 +97,7 @@ export class LoginComponent implements OnInit {
         });
       },
       error: (errorMessage) => {
+        this.inProcess = false;
         this.message = errorMessage.message;
         setTimeout(() => {
           this.message = '';

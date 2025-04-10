@@ -17,13 +17,14 @@ import { debounceTime, Subject } from 'rxjs';
 import { AccountService } from '../../../../core/services/account.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { User } from '../../../../core/models/User.model';
+import { LoadingSpinnerComponent } from "../../../../shared/components/loading-spinner/loading-spinner.component";
 
 type FormKeys = keyof EditProfileComponent['myForm']['controls'];
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, LoadingSpinnerComponent],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })
@@ -236,13 +237,16 @@ export class EditProfileComponent implements OnInit {
   }
 
   updateEmail() {
-    if (this.invalidEmail() || this.invalidPassword()) {
+    if (this.invalidEmail() || this.invalidPassword() || this.inProcess) {
       return;
     }
+
+    this.inProcess = true;
     let email = this.f.email.value;
     let password = this.p.currentPassword.value;
     this.accountService.updateEmail({ email, password }).subscribe({
       next: () => {
+        this.inProcess = false;
         this.user!.email = this.f.email.value!;
         this.activeComponents.fill(false);
         this.resetPasswords();
@@ -255,22 +259,25 @@ export class EditProfileComponent implements OnInit {
 
   updateUsername() {
     let value = this.f.username.value!;
-    if (this.invalidUsername()) {
+    if (this.invalidUsername() || this.inProcess) {
       return;
     }
+    this.inProcess = true;
     this.accountService.updateUsername(value).subscribe({
       next: (success) => {
+        this.inProcess = false;
         this.user!.username = value;
         this.activeComponents.fill(false);
       },
       error: (errorMessage) => {
+        this.inProcess = false;
         this.errorMessage.invalidUsernameMessage = errorMessage;
       },
     });
   }
 
   updateDetail(field: FormKeys) {
-    if (field === 'password') {
+    if (field === 'password' || this.inProcess) {
       return;
     }
     if (
@@ -280,9 +287,12 @@ export class EditProfileComponent implements OnInit {
       return;
     }
 
+    this.inProcess = true;
+
     let value = this.f[field].value!;
     this.accountService.updateProfile(field, value).subscribe({
       next: (data) => {
+        this.inProcess = false;
         this.user![field] = this.f[field].value!;
         this.activeComponents.fill(false);
       },
@@ -297,15 +307,18 @@ export class EditProfileComponent implements OnInit {
     if (
       this.invalidNewPassword() ||
       this.invalidPassword() ||
-      this.invalidConfirmPassword()
+      this.invalidConfirmPassword() ||
+      this.inProcess
     ) {
       return;
     }
 
+    this.inProcess = true;
     this.accountService
-      .updatePassword({ currentPassword, newPassword })
-      .subscribe({
-        next: () => {
+    .updatePassword({ currentPassword, newPassword })
+    .subscribe({
+      next: () => {
+          this.inProcess = false;
           this.editComponent(5);
         },
         error: (err) => {
@@ -315,12 +328,17 @@ export class EditProfileComponent implements OnInit {
   }
 
   sendOTPforEmail() {
+    if (this.inProcess) {
+      return;
+    }
+    this.inProcess = true;
     const sendOtpBtn = this.renderer.selectRootElement(
       '#sendOtpBtn',
       true
     ) as HTMLButtonElement;
     this.authService.sendOTPforEmailVerification().subscribe({
       next: (status) => {
+        this.inProcess = false;
         this.otpSent = true;
         if (status) {
           this.otpInputs[0].focus();
@@ -347,6 +365,9 @@ export class EditProfileComponent implements OnInit {
           ele.focus();
         }
       });
+      return;
+    }
+    if (this.inProcess) {
       return;
     }
     this.inProcess = true;
@@ -377,6 +398,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   sendPasswordResetMail() {
+    if(this.inProcess){
+      return;
+    }
     if (!this.user?.emailVerified) {
       this.handleBackendMessage(
         { message: 'Please Verify Your Email Address First' },
@@ -384,8 +408,11 @@ export class EditProfileComponent implements OnInit {
       );
       return;
     }
+
+    this.inProcess = true;
     this.authService.sendPasswordResetMail(this.user.email!).subscribe({
       next: (success) => {
+        this.inProcess = true;
         if (success) {
           this.handleBackendMessage({ message: 'Mail Sent' }, true);
         }
@@ -400,6 +427,7 @@ export class EditProfileComponent implements OnInit {
     this.backendMessage = message;
     this.backendSuccess = success;
     this.alertMessage = true;
+    this.inProcess = false;
     setTimeout(() => {
       this.alertMessage = false;
       setTimeout(() => {

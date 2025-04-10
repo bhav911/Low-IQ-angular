@@ -79,7 +79,14 @@
                             }
                             <div class="d-flex gap-2">
                                 <button class="btn btn-primary f-sm" [disabled]="usernameAlreadyTaken"
-                                    (click)="updateUsername()">Save</button>
+                                    (click)="updateUsername()">
+                                    @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                    }
+                                    @else {
+                                    Save
+                                    }
+                                </button>
                                 <button class="btn b-secondary f-sm" (click)="editComponent(1)">Cancel</button>
                             </div>
                             }
@@ -110,7 +117,14 @@
                             <p class="error-msg">{{ errorMessage.invalidNameMessage }}</p>
                             }
                             <div class="d-flex gap-2">
-                                <button class="btn p-n-btn f-sm" (click)="updateDetail('name')">Save</button>
+                                <button class="btn p-n-btn f-sm" (click)="updateDetail('name')">
+                                    @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                    }
+                                    @else {
+                                    Save
+                                    }
+                                </button>
                                 <button class="btn b-secondary f-sm" (click)="editComponent(2)">Cancel</button>
                             </div>
                             }
@@ -142,7 +156,14 @@
                             <p class="error-msg">{{ errorMessage.invalidPhoneNumberMessage}}</p>
                             }
                             <div class="d-flex gap-2">
-                                <button class="btn p-n-btn f-sm" (click)="updateDetail('phoneNumber')">Save</button>
+                                <button class="btn p-n-btn f-sm" (click)="updateDetail('phoneNumber')">
+                                    @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                    }
+                                    @else {
+                                    Save
+                                    }
+                                </button>
                                 <button class="btn b-secondary f-sm" (click)="editComponent(3)">Cancel</button>
                             </div>
                             }
@@ -156,57 +177,6 @@
                 </div>
             </div>
             <hr>
-            <!-- <div>
-                <div class="d-flex align-items-center flex-wrap fields-holder gap-md-0 gap-1 ">
-                    <div class="field-label t-gray f-sm">
-                        <p>Address</p>
-                    </div>
-                    <div class="child-box d-flex align-items-center">
-                        <div class="field-value w-100">
-                            @if(!activeComponents[2]){
-                            <p class="f-sm" [ngClass]="{'t-gray fst-italic':!user?.city && !user?.state}">
-                                {{
-                                !user?.city && !user?.state ?
-                                '-- Set --' :
-                                user?.city ? getCity?.city + ', ' + getState?.state : getState?.state
-                                }}</p>
-                            }
-                            @else {
-                            <div class="d-flex gap-2 mb-2">
-                                <select class="form-control f-sm" formControlName="state" (change)="fetchCities()">
-                                    @if(!user?.state){
-                                    <option selected disabled value="null">Select a state</option>
-                                    }
-                                    @for(state of states; track state.sid){
-                                    <option [selected]="state.sid === user?.state" [value]="state.sid">{{ state.state }}
-                                    </option>
-                                    }
-                                </select>
-                                <select class="form-control f-sm" formControlName="city">
-                                    @if(!user?.city){
-                                    <option selected disabled value="null">Select a city</option>
-                                    }
-                                    @for(city of cities; track $index){
-                                    <option [selected]="city.cid === user?.city" [value]="city.cid">{{ city.city }}
-                                    </option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button class="btn p-n-btn f-sm" (click)="updateAddress()">Save</button>
-                                <button class="btn b-secondary f-sm" (click)="editComponent(2)">Cancel</button>
-                            </div>
-                            }
-                        </div>
-                        @if(!activeComponents[2]){
-                        <div class="edit-btn-holder"><button class="btn f-sm py-0 py-md-2  t-blue me-0 me-md-2"
-                                (click)="editComponent(2)">Edit</button>
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div> -->
-            <!-- <hr> -->
             <div>
                 <div class="d-flex align-items-center flex-wrap flex-md-nowrap fields-holder gap-md-0 gap-1 ">
                     <div class="field-label t-gray f-sm">
@@ -223,8 +193,14 @@
                                     }
                                 </div>
                                 @if(showOtpComponent){
-                                <button id="sendOtpBtn" class="btn btn-sm p-n-btn" (click)="sendOTPforEmail()">send
-                                    otp</button>
+                                <button id="sendOtpBtn" class="btn btn-sm p-n-btn" (click)="sendOTPforEmail()">
+                                    @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                    }
+                                    @else {
+                                    Send Otp
+                                    }
+                                </button>
                                 <button class="btn btn-sm cancel-btn" (click)="openOTPComponent()">cancel</button>
                                 }
                             </div>
@@ -238,7 +214,14 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-sm difficulty-easy-bg" [disabled]="inProcess || !otpSent"
-                                        (click)="submitOtp()">Submit</button>
+                                        (click)="submitOtp()">
+                                        @if(inProcess){
+                                        <app-loading-spinner [isFetching]="inProcess" />
+                                        }
+                                        @else {
+                                        Submit
+                                        }
+                                    </button>
                                 </div>
                             </div>
                             }
@@ -258,7 +241,14 @@
                             </div>
                             }
                             <div class="d-flex gap-2">
-                                <button class="btn p-n-btn f-sm" (click)="updateEmail()">Save</button>
+                                <button class="btn p-n-btn f-sm" (click)="updateEmail()">
+                                    @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                    }
+                                    @else {
+                                    Save
+                                    }
+                                </button>
                                 <button class="btn b-secondary f-sm" (click)="editComponent(4)">Cancel</button>
                             </div>
                             @if(emailUpdateError){
@@ -328,7 +318,14 @@
                         </div>
                         }
                         <div class="d-flex gap-2 justify-content-end">
-                            <button class="btn p-n-btn f-sm" (click)="updatePassword()">Save</button>
+                            <button class="btn p-n-btn f-sm" (click)="updatePassword()">
+                                @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                }
+                                @else {
+                                    Save
+                                }
+                            </button>
                             <button class="btn b-secondary f-sm" (click)="editComponent(5)">Cancel</button>
                         </div>
                     </div>
@@ -345,9 +342,16 @@
                     }
                     @else{
                     <div>
-                        <p>Send password reset mail to <span class="t-blue">&#64;{{ user?.email }}</span></p>
+                        <p>Send password reset mail to <span class="t-blue">{{ user?.email }}</span></p>
                         <div class="d-flex gap-2 mt-2">
-                            <button class="btn btn-sm p-n-btn" (click)="sendPasswordResetMail()">Send</button>
+                            <button class="btn btn-sm p-n-btn" (click)="sendPasswordResetMail()">
+                                @if(inProcess){
+                                    <app-loading-spinner [isFetching]="inProcess" />
+                                }
+                                @else {
+                                    Send
+                                }
+                            </button>
                             <button class="btn btn-sm cancel-btn" (click)="editComponent(6)">Cancel</button>
                         </div>
                     </div>

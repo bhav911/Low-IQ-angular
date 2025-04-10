@@ -11,6 +11,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { debounceTime } from 'rxjs';
 import { AccountService } from '../../../../core/services/account.service';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 function passwordMatch(control: AbstractControl) {
   const password = control.get('password');
@@ -24,7 +25,7 @@ function passwordMatch(control: AbstractControl) {
 
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './signup.component.html',
   styleUrl: '../../styles/form.css',
 })
@@ -34,6 +35,7 @@ export class SignupComponent implements OnInit {
   private authService = inject(AuthService);
   private accountService = inject(AccountService);
   isFormSubmitted = false;
+  inProcess = false;
   checkingUsername = false;
   private role = 'player';
   private allowLogin = false;
@@ -134,9 +136,11 @@ export class SignupComponent implements OnInit {
       this.invalidEmail() ||
       this.invalidPassword() ||
       this.invalidConfirmPassword();
-    if (invalidForm) {
+    if (invalidForm || this.inProcess) {
       return;
     }
+
+    this.inProcess = true;
 
     let user = {
       username: this.formControls.username.value,
@@ -147,6 +151,7 @@ export class SignupComponent implements OnInit {
 
     this.authService.registerUser(user).subscribe({
       next: (saved) => {
+        this.inProcess = false;
         if (this.redirectTo) {
           return this.router.navigate([this.redirectTo], {
             replaceUrl: true,
@@ -157,6 +162,7 @@ export class SignupComponent implements OnInit {
         });
       },
       error: (errorMessage) => {
+        this.inProcess = false;
         this.message = errorMessage.message;
         setTimeout(() => {
           this.message = '';

@@ -47,7 +47,14 @@
         }
     </div>
 
-    <button class="btn btn-primary" type="submit">Signup</button>
+    <button class="btn btn-primary" type="submit">
+        @if(inProcess){
+            <app-loading-spinner [isFetching]="inProcess" />
+        }
+        @else {
+            Submit
+        }
+    </button>
 
     <div class="mt-4">
         <span class="me-1">Already have an account?</span>

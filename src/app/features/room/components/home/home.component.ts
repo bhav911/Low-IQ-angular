@@ -286,11 +286,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    const url = this.router.url.split('/').slice(1);
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
-    if (url[0] === 'rooms') {
-      return;
-    }
     this.socketService.removeEventListner('newRoom');
   }
 }

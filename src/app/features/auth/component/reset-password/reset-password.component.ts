@@ -26,6 +26,7 @@ export class ResetPasswordComponent {
   passwordChange = false;
   message = '';
   isFormSubmitted = false;
+  inProcess = false;
 
   invalidMessage = '';
 
@@ -63,6 +64,9 @@ export class ResetPasswordComponent {
 
   onSubmit() {
     this.isFormSubmitted = true;
+    if (this.inProcess) {
+      return;
+    }
     if (this.passwordChange) {
       if (this.invalidPassword()) {
         return;
@@ -72,6 +76,8 @@ export class ResetPasswordComponent {
         return;
       }
     }
+
+    this.inProcess = true;
 
     let user = {
       email: this.formControls.email.value,
@@ -97,6 +103,7 @@ export class ResetPasswordComponent {
 
     Ops.subscribe({
       next: (email) => {
+        this.inProcess = false;
         if (email) {
           this.router.navigate(['/login'], {
             replaceUrl: true,
@@ -104,6 +111,7 @@ export class ResetPasswordComponent {
         }
       },
       error: ({ message }) => {
+        this.inProcess = false;
         this.message = message;
         setTimeout(() => {
           this.message = '';
